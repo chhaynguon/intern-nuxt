@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-const router = ref('')
+import { navigateTo } from '#app'
 const username = ref('')
 const password = ref('')
 
@@ -13,9 +13,10 @@ const handleLogin = async () => {
         })
 
         // Store token locally
-        localStorage.setItem('token', res.access_token)
+        localStorage.setItem('token', `Bearer ${res.access_token}`)
+
         // Redirect to dashboard
-        router.push('http://http://localhost:3000/admin/')
+        navigateTo('http://localhost:3000/admin')
     } catch (err) {
         console.error('Login failed:', err)
         alert('Invalid username or password')
@@ -27,10 +28,10 @@ const handleLogin = async () => {
 
 <template>
     <div class="min-w-full min-h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
-        <section class="w-[1000px] h-screen !mx-auto !pt-10">
+        <section class="w-[1000px] h-screen !mx-auto !py-10">
             <div class="w-[25%] place-self-center">
                 <a href="/user/">
-                    <img class="!my-10" src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
+                    <img class="!py-10" src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
                 </a>
             </div>
             <div class="w-[30%] bg-[#F15A22] rounded-lg shadow !mx-auto">
@@ -38,7 +39,7 @@ const handleLogin = async () => {
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2x">
                         Sign in to your account
                     </h1>
-                    <form class="space-y-4 md:space-y-6 !mt-[30px]" @submijbt.prevent="login">
+                    <form class="space-y-4 md:space-y-6 !mt-[30px]" @submijbt.prevent="handleLogin()">
                         <div class="relative z-0 w-full !mb-5 group">
                             <input v-model="username" type="text" name="name" id="name"
                                 class="block !py-2.5 !px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-[#002E6E] focus:outline-none focus:ring-0 focus:border-[#002E6E] peer"

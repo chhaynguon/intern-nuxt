@@ -5,7 +5,6 @@ import { ref } from "vue";
 import { reactive } from 'vue';
 
 const { data, refresh } = await useFetch(`http://localhost:8000/api/user`, {
-
 })
 const { deleteUser, reloadPage } = useUserAdminActions(refresh)
 const visible = ref(false);
