@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+
+</script>
 <template>
   <dbHeader />
   <section class="w-full flex justify-between relative top-22.5">

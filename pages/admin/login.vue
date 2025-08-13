@@ -1,63 +1,39 @@
-<!-- <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useCookie } from '#app'
-
-const username = ref('')
-const password = ref('')
-const router = useRouter()
-const accessToken = useCookie('access-token')
-
-async function login() {
-    try {
-        const { data, error } = await useFetch('http://localhost:8000/auth/login', {
-            method: 'POST',
-            body: { username: username.value, password: password.value }
-        })
-            alert('Login successfully!')
-            router.push('/admin/')
-    }
-    catch (err) {
-        alert('Login failed: ' + err.message)
-         const token = data.value?.token
-        if (!token || typeof token !== 'string') {
-            alert('Login failed: no token received')
-            return
-        }
-
-    }
-}
-</script> -->
 <script setup>
 import { ref } from 'vue'
-
+const router = ref('')
 const username = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
     try {
-        const res = await $fetch('localhost:8000/api/auth/login', {
+        const res = await $fetch('http://localhost:8000/api/auth/login', {
             method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: { username: username.value, password: password.value }
         })
 
         // Store token locally
         localStorage.setItem('token', res.access_token)
-
         // Redirect to dashboard
-        navigateTo('/admin')
+        router.push('http://http://localhost:3000/admin/')
     } catch (err) {
         console.error('Login failed:', err)
         alert('Invalid username or password')
     }
+
 }
+
 </script>
 
 <template>
     <div class="min-w-full min-h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
-        <loginHeader />
-        <section class="flex flex-col items-center justify-center !px-5 !py-6 !mx-auto h-[700px] lg:!py-0">
-            <div class="w-[18%] bg-[#F15A22] rounded-lg shadow">
+        <section class="w-[1000px] h-screen !mx-auto !pt-10">
+            <div class="w-[25%] place-self-center">
+                <a href="/user/">
+                    <img class="!my-10" src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
+                </a>
+            </div>
+            <div class="w-[30%] bg-[#F15A22] rounded-lg shadow !mx-auto">
                 <div class="!p-5 space-y-4 md:space-y-6 sm:p-8">
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2x">
                         Sign in to your account
