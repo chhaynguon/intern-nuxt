@@ -99,7 +99,7 @@ const searchInfo = async () => {
                     d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
                     clip-rule="evenodd" />
                 </svg>
-                <a href="/admin/" class="!ml-[8px]">Home</a>
+                <a href="/admin/dashboard" class="!ml-[8px]">Home</a>
               </button>
             </li>
 
@@ -128,7 +128,7 @@ const searchInfo = async () => {
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
                 </svg>
-                <a href="/admin/login" class="!ml-[8px]">Logout
+                <a href="/login" class="!ml-[8px]">Logout
                 </a>
               </button>
             </li>

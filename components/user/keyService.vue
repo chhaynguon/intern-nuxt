@@ -7,7 +7,7 @@
       <div class="grid w-full h-[180px] grid-cols-4 gap-4 place-self-center">
         <div
           class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-          <a href="user/services/holdTrust">
+          <a href="/services/holdTrust">
             <div class="absolute w-full rounded-xl">
               <img
                 class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -24,7 +24,7 @@
 
         <div
           class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-          <a href="user/services/holdPersonal">
+          <a href="/services/holdPersonal">
             <div class="absolute w-full rounded-xl">
               <img
                 class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -41,7 +41,7 @@
 
         <div
           class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-          <a href="/user/services/escrowService">
+          <a href="/services/escrowService">
             <div class="absolute w-full rounded-xl">
               <img
                 class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -58,7 +58,7 @@
 
         <div
           class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-          <a href="/user/services/salePurchase">
+          <a href="/services/salePurchase">
             <div class="absolute w-full rounded-xl">
               <img
                 class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"

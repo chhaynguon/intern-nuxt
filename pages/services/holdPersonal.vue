@@ -6,17 +6,17 @@
       class="w-full h-[100px] items-end fixed left-0 top-0 z-10 bg-gradient-to-b from-[#00275e] via-[rgba(0, 39, 94, 0)]">
       <div class="w-[65%] h-full place-self-center flex justify-between items-center">
         <div class="w-[15%]">
-          <a href="/user" class="w-[220px] z-1000">
+          <a href="/" class="w-[220px] z-1000">
             <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
           </a>
         </div>
         <div class="w-[75%]">
           <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-            <a href="/user" class="hover:text-[#F15A22]">Home</a>
-            <a href="/user/about" class="hover:text-[#F15A22]">Profile</a>
-            <a href="/user/service" class="text-[#F15A22]">Services</a>
-            <a href="/user/event" class="hover:text-[#F15A22]">Event</a>
-            <a href="/user/faqs" class="hover:text-[#F15A22]">FAQs</a>
+            <a href="" class="hover:text-[#F15A22]">Home</a>
+            <a href="/about" class="hover:text-[#F15A22]">Profile</a>
+            <a href="/service" class="text-[#F15A22]">Services</a>
+            <a href="/event" class="hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22]">FAQs</a>
           </nav>
         </div>
       </div>
@@ -188,7 +188,7 @@
         <div class="grid w-[80%] h-[200px] grid-cols-3 gap-4 ">
           <div
             class="relative w-full h-[200px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/holdProperty">
+            <a href="/services/holdProperty">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -205,7 +205,7 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/escrowService">
+            <a href="/services/escrowService">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -222,7 +222,7 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/salePurchase">
+            <a href="/services/salePurchase">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"

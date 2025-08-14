@@ -5,17 +5,17 @@
       class="w-full h-[100px] items-end fixed left-0 top-0 z-10 bg-gradient-to-b from-[#00275e] via-[rgba(0, 39, 94, 0)]">
       <div class="w-[65%] h-full place-self-center flex justify-between items-center">
         <div class="w-[15%]">
-          <a href="/user" class="w-[220px] z-1000">
+          <a href="/" class="w-[220px] z-1000">
             <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
           </a>
         </div>
         <div class="w-[75%]">
           <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-            <a href="/user" class="text-[#F15A22]">Home</a>
-            <a href="/user/about" class="hover:text-[#F15A22]">Profile</a>
-            <a href="/user/service" class="hover:text-[#F15A22]">Services</a>
-            <a href="/user/event" class="hover:text-[#F15A22]">Event</a>
-            <a href="/user/faqs" class="hover:text-[#F15A22]">FAQs</a>
+            <a href="/" class="text-[#F15A22]  font-medium rounded-xl !py-1 !px-2 bg-[#F15A22]/20">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] !p-1 ">Profile</a>
+            <a href="/service" class="hover:text-[#F15A22] !p-1">Services</a>
+            <a href="/event" class="hover:text-[#F15A22] !p-1">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] !p-1">FAQs</a>
           </nav>
         </div>
 
@@ -86,13 +86,13 @@
         <div class="grid w-full h-[180px] grid-cols-4 gap-4 place-self-center">
           <div
             class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/holdProperty">
+            <a href="/services/holdProperty">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
                   src="https://www.philliptrustee.com.kh/v2/img/key_service_img_01.jpg" alt="">
               </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 hover:bg-[#F15A22]/40"></div>
+              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
               <span class="text-white absolute top-[35%] left-[15%] font-bold">Hold Trust <br> Property</span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
@@ -103,7 +103,7 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/holdPersonal">
+            <a href="/services/holdPersonal">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -120,13 +120,13 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/escrowService">
+            <a href="/services/escrowService">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
                   src="https://www.philliptrustee.com.kh/v2/img/key_service_img_03.jpg" alt="">
               </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 hover:bg-[#F15A22]/40"></div>
+              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
               <span class="text-white absolute top-[35%] left-[15%] font-bold">Escrow Service </span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
@@ -137,13 +137,13 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/salePurchase">
+            <a href="/services/salePurchase">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
                   src="https://www.philliptrustee.com.kh/v2/img/key_service_img_04.jpg" alt="">
               </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 hover:bg-[#F15A22]/40"></div>
+              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
               <span class="text-white w-full absolute top-[25%] left-[15%] font-bold">Sales & Purchase <br> Agreement
                 (SPA)
                 <br>

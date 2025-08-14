@@ -375,7 +375,7 @@
         top: .5rem;
         left: .5rem;
         position: absolute;
-        background: url('../img/circle_thingy_shadow.svg') 50% 50% no-repeat;
+        background: url('https://www.philliptrustee.com.kh/v2/img/circle_thingy_shadow.svg') 50% 50% no-repeat;
         background-size: 100% auto;
         opacity: .25;
       }
@@ -393,7 +393,7 @@
   top: .5rem;
   left: .5rem;
   position: absolute;
-  background: url(https://www.philliptrustee.com.kh/v2/img/circle_thingy_shadow.svg) 50% 50% no-repeat;
+  background: url('https://www.philliptrustee.com.kh/v2/img/circle_thingy_shadow.svg') 50% 50% no-repeat;
   background-size: 100% auto;
   opacity: .25;
 }
@@ -439,7 +439,7 @@
   top: .5rem;
   left: .5rem;
   position: absolute;
-  background: url("../img/circle_thingy_shadow.svg") 50% 50% no-repeat;
+  background: url("https://www.philliptrustee.com.kh/v2/img/circle_thingy_shadow.svg") 50% 50% no-repeat;
   background-size: 100% auto;
   opacity: .25;
 }

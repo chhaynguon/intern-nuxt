@@ -1,28 +1,39 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { navigateTo } from '#app'
 const username = ref('')
 const password = ref('')
+// let isClient = false
+// onMounted(() =>{
+//     isClient = true
+// })
 
 const handleLogin = async () => {
     try {
+
         const res = await $fetch('http://localhost:8000/api/auth/login', {
+
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${process.env.NUXT_LOGIN_TOKEN}`
+            },
             body: { username: username.value, password: password.value }
         })
-
+        alert('Login')
+        console.log(res)
         // Store token locally
-        localStorage.setItem('token', `Bearer ${res.access_token}`)
-
-        // Redirect to dashboard
-        navigateTo('http://localhost:3000/admin')
+        localStorage.setItem('token', res.access_token)
+        
+        navigateTo('/admin/dashboard')
     } catch (err) {
-        console.error('Login failed:', err)
-        alert('Invalid username or password')
+        console.error('Login failed:', err) 
+        alert('Fail')
     }
 
 }
+
+
 
 </script>
 

@@ -7,7 +7,7 @@
       <div class="max-w-[1280px] !mx-auto h-full flex justify-between items-center !px-4 sm:px-6 lg:px-8">
         <!-- Logo -->
         <div class="w-[150px] sm:w-[180px]">
-          <a href="/user">
+          <a href="/">
             <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="Logo" class="w-full" />
           </a>
         </div>
@@ -15,11 +15,11 @@
         <!-- Navigation -->
         <div class="w-[75%]">
           <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-            <a href="/user" class="hover:text-[#F15A22]">Home</a>
-            <a href="/user/about" class="hover:text-[#F15A22]">Profile</a>
-            <a href="/user/service" class="text-[#F15A22]">Services</a>
-            <a href="/user/event" class="hover:text-[#F15A22]">Event</a>
-            <a href="/user/faqs" class="hover:text-[#F15A22]">FAQs</a>
+            <a href="" class="hover:text-[#F15A22]">Home</a>
+            <a href="/about" class="hover:text-[#F15A22]">Profile</a>
+            <a href="/service" class="text-[#F15A22]">Services</a>
+            <a href="/event" class="hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22]">FAQs</a>
           </nav>
         </div>
       </div>
@@ -163,10 +163,10 @@
 
         <div class="w-full !px-[40px] !pt-[10px] !pb-[40px] place-self-center">
           <div class="w-[1000px] place-self-center ">
-            <table class="w-full h-full  text-white text-sm border-1 border-[#F15A22] rounded-lg">
+            <table class="w-full h-full  text-white text-sm ">
               <thead class=" text-lg">
                 <tr>
-                  <th class="text-left !py-4 !px-6 font-normal">Trust Value</th>
+                  <th class="text-left !py-4 !px-6 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">Trust Value</th>
                   <th class="text-center !py-2 !px-1 bg-[#00204d] rounded-tl-lg rounded-tr-lg font-normal">
                     Administration Fee </th>
                   <th
@@ -182,28 +182,28 @@
               </thead>
               <tbody class=" font-semibold">
                 <tr>
-                  <td class="!py-4 !px-6">&lt; 100,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&lt; 100,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d]">10</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">75</td>
                   <td class="text-center !py-2 !px-0.5 bg-[#00204d] border-l-[5px] border-[#002e6e]">10</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">50</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6">100,000 - 500,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">100,000 - 500,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d]">50</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">127</td>
                   <td class="text-center !py-2 !px-0.5 bg-[#00204d] border-l-[5px] border-[#002e6e]">30</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">75</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6">&gt; 1,000,000 - 5,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&gt; 1,000,000 - 5,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d]">100</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">150</td>
                   <td class="text-center !py-2 !px-0.5 bg-[#00204d] border-l-[5px] border-[#002e6e]">50</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">100</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6 ">&gt; 1,000,000 - 5,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&gt; 1,000,000 - 5,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d]">200 </td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     200</td>
@@ -213,7 +213,7 @@
                     150</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6 ">&gt; 5,000,000 - 10,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&gt; 5,000,000 - 10,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d]">500</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     400</td>
@@ -223,7 +223,7 @@
                     300</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6 ">&gt; 10,000,000 - 20,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&gt; 10,000,000 - 20,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d] ">1000</td>
                   <td class="text-center !py-4 !px-6 bg-[#00204d]  border-l-[5px] border-[#002e6e]">
                     600</td>
@@ -233,7 +233,7 @@
                     400</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6 ">More than 20,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e] rounded-bl-xl rounded-br-xl">More than 20,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d] rounded-br-lg rounded-bl-lg">2,000</td>
                   <td
                     class="text-center !py-4 !px-6 bg-[#00204d] rounded-br-lg rounded-bl-lg border-l-[5px] border-[#002e6e]">
@@ -249,13 +249,13 @@
             </table>
 
             <div class="w-[1000px] place-self-center">
-              <h2 class="text-center text-white text-xl !pt-[40px] !pb-[30px]">Trust Registration Fee (Update on
+              <h2 class="text-center text-white text-xl !pt-[40px] !pb-[30px] ">Trust Registration Fee (Update on
                 11-01-2022)</h2>
             </div>
-            <table class="w-[80%] h-full border-collapse positin text-white text-sm !mx-auto">
+            <table class="w-[80%] h-full border-collapse positin text-white text-sm !mx-auto rounded-xl ">
               <thead class=" text-lg ">
                 <tr>
-                  <th class="text-left !py-4 !px-6 font-normal ">Trust value for Public or Social Trust</th>
+                  <th class="text-left !py-2 !px-4 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">Trust value for Public or Social Trust</th>
                   <th class="text-center !py-4 !px-6 bg-[#00204d] rounded-tl-lg rounded-tr-lg font-normal">
                     Administration Fee </th>
                   <th
@@ -265,41 +265,42 @@
               </thead>
               <tbody class=" font-semibold">
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-[#F15A22]">&lt; 100,000</td>
+                  <td class="!py-4 !px-3 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&lt; 100,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">10</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">30</td>
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-[#F15A22]">100,000 - 500,000</td>
+                  <td class="!py-4 !px-3 bg-[#F15A22] border-r-[5px] border-[#002e6e]">100,000 - 500,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">30</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">75</td>
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-[#F15A22]">&gt; 500,000 - 1,000,000</td>
+                  <td class="!py-4 !px-3 bg-[#F15A22] border-r-[5px] border-[#002e6e]">&gt; 500,000 - 1,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">50</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">100</td>
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-[#F15A22]">&gt; 1,000,000 - 5,000,000</td>
+                  <td class="!py-4 !px-3 bg-[#F15A22]  border-r-[5px]  border-[#002e6e]">&gt; 1,000,000 - 5,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">150 </td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     150</td>
                 </tr>
+                .
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-[#F15A22]">&gt; 5,000,000 - 10,000,000</td>
+                  <td class="!py-4 !px-3 bg-[#F15A22]  border-r-[5px] border-[#002e6e]">&gt; 5,000,000 - 10,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">250</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     250</td>
 
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-6 border-x-1 border-[#F15A22]">&gt; 10,000,000 - 20,000,000</td>
+                  <td class="!py-4 !px-6  bg-[#F15A22]  border-r-[5px] border-[#002e6e]">&gt; 10,000,000 - 20,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d]">375</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     500</td>
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 border-x-1 border-b-1 border-[#F15A22]">More than 20,000,000</td>
+                  <td class="!py-4 !px-3 rounded-bl-lg rounded-br-lg border-r-[5px] bg-[#F15A22] border-[#002e6e]">More than 20,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d] rounded-br-lg rounded-bl-lg">500</td>
                   <td
                     class="text-center !py-4 !px-6 bg-[#00204d] rounded-br-lg rounded-bl-lg border-l-[5px] border-[#002e6e]">
@@ -321,7 +322,7 @@
         <div class="grid w-[80%] h-[180px] grid-cols-3 gap-4 place-self-center">
           <div
             class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/holdProperty">
+            <a href="/services/holdProperty">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -338,7 +339,7 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/holdPersonal">
+            <a href="/services/holdPersonal">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
@@ -355,7 +356,7 @@
 
           <div
             class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-            <a href="/user/services/salePurchase">
+            <a href="/services/salePurchase">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"

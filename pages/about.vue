@@ -6,18 +6,18 @@
       class="w-full h-[100px] items-end fixed left-0 top-0 z-10 bg-gradient-to-b from-[#00275e] via-[rgba(0, 39, 94, 0)]">
       <div class="w-[65%] h-full place-self-center flex justify-between items-center">
         <div class="w-[15%]">
-          <a href="/user" class="w-[220px] z-1000">
+          <a href="/" class="w-[220px] z-1000">
             <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
           </a>
         </div>
         <!-- Navigation -->
         <div class="w-[75%]">
           <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-              <a href="/user" class="hover:text-[#F15A22]">Home</a>
-            <a href="/user/about" class="text-[#F15A22]">Profile</a>
-            <a href="/user/service" class="hover:text-[#F15A22]">Services</a>
-            <a href="/user/event" class="hover:text-[#F15A22]">Event</a>
-            <a href="/user/faqs" class="hover:text-[#F15A22]">FAQs</a>
+              <a href="/" class="hover:text-[#F15A22] !p-1">Home</a>
+            <a href="/about" class="text-[#F15A22] font-medium border-2 rounded-xl !py-1 !px-2 bg-[#F15A22]/10">Profile</a>
+            <a href="/service" class="hover:text-[#F15A22] !p-1">Services</a>
+            <a href="/event" class="hover:text-[#F15A22] !p-1">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] !p-1">FAQs</a>
           </nav>
         </div>
 
