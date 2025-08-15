@@ -11,12 +11,12 @@
           </a>
         </div>
         <div class="w-[75%]">
-          <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-            <a href="" class="hover:text-[#F15A22]">Home</a>
-            <a href="/about" class="hover:text-[#F15A22]">Profile</a>
-            <a href="/service" class="text-[#F15A22]">Services</a>
-            <a href="/event" class="hover:text-[#F15A22]">Event</a>
-            <a href="/faqs" class="hover:text-[#F15A22]">FAQs</a>
+          <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
+            <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
+            <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
+            <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
           </nav>
         </div>
       </div>
@@ -53,7 +53,7 @@
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
                   src="https://www.philliptrustee.com.kh/v2/img/key_service_img_01.jpg" alt="">
               </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 hover:bg-[#F15A22]/40"></div>
+              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
               <span class="text-white absolute top-[35%] left-[15%] font-bold">Hold Trust <br> Property</span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
@@ -87,7 +87,7 @@
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
                   src="https://www.philliptrustee.com.kh/v2/img/key_service_img_03.jpg" alt="">
               </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 hover:bg-[#F15A22]/40"></div>
+              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
               <span class="text-white absolute top-[35%] left-[15%] font-bold">Escrow Service </span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"

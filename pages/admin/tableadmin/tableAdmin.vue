@@ -1,6 +1,6 @@
 <script setup>
 import Dialog from 'primevue/dialog';
-import { useUserAdminActions } from '../../composables/useUserAdminActions';
+import { useUserAdminActions } from '../../../composables/useUserAdminActions';
 import { ref } from "vue";
 import { reactive } from 'vue';
 

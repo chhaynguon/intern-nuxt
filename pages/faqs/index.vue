@@ -12,12 +12,12 @@
         </div>
         <!-- Navigation -->
         <div class="w-[75%]">
-          <nav class="w-[50%] items-end place-self-end flex justify-between text-white text-lg font-normal">
-              <a href="/" class="hover:text-[#F15A22] !p-1">Home</a>
-            <a href="/about" class="hover:text-[#F15A22] !p-1">Profile</a>
-            <a href="/service" class="hover:text-[#F15A22] !p-1">Services</a>
-            <a href="/event" class="hover:text-[#F15A22] !p-1">Event</a>
-            <a href="/faqs" class="text-[#F15A22] font-medium border-2 rounded-xl !py-1 !px-2 bg-[#F15A22]/10">FAQs</a>
+          <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
+            <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
+            <a href="/services" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Services</a>
+            <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
+            <a href="/faqs" class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">FAQs</a>
           </nav>
         </div>
 

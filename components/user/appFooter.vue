@@ -1,6 +1,6 @@
 <template>
-  <footer class="w-full bg-[#F15A22]">
-    <div class="w-[80%] place-content-center place-self-center flex justfiy-between !px-[50px] !py-[30px]">
+  <footer class="max-width-[100%] bg-[#F15A22]">
+    <div class="max-w-5xl !mx-auto !px-4 !py-6 flex justify-between">
       <div class="left w-[404px]">
         <div class="social_media flex h-[46px] !mb-[37.5px] !ml-3">
           <a href="https://www.facebook.com/philliptrustee">

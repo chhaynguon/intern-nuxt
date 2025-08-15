@@ -1,6 +1,6 @@
 <template>
   <div class="w-full !mb-[70px]">
-    <div class="w-[1000px] place-self-center">
+    <div class="max-w-6xl place-self-center">
       <div class="w-full place-self-center">
         <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>
       </div>
