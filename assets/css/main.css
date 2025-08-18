@@ -182,8 +182,8 @@
   text-align: start;
 }
 
-
 .red_ball_wrap .pointer_eles {
+  width: 70%;
   height: 100%;
   position: absolute;
   right: 0;

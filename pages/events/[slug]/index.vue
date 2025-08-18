@@ -1,16 +1,13 @@
-<script setup >
+<script setup>
 import { partevents } from '~/data/Event/partevent';
 import { useRoute, useRouter } from 'vue-router'
 import { listEvents } from '~/data/Event/event';
 
-// const route = useRoute()
-// const router = useRouter()
-
-// const eventId = route.params.id
-// const listEvents = events.find(e => e.id === eventId)
+const route = useRoute()
+const router = useRouter()
 
 // If event not found, redirect or show 404
-// if (!events) router.push('/events')
+if (!events) router.push('/events')
 </script>
 <template>
     <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
@@ -39,7 +36,7 @@ import { listEvents } from '~/data/Event/event';
                 </div>
             </div>
         </div>
-        <div class="w-full h-screen bg-fixed" :style="{ backgroundImage: `url(${listEvents.image[0]})` }">
+        <div class="w-full h-screen bg-fixed" :style="{ backgroundImage: url(`{{listEvents.background}}`) }">
         </div>
         <section
             class="w-full relative bg-bottom bg-repeat-x bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')] ">

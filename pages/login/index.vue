@@ -1,12 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { navigateTo } from '#app'
 const username = ref('')
 const password = ref('')
-// let isClient = false
-// onMounted(() =>{
-//     isClient = true
-// })
 
 const handleLogin = async () => {
     try {
@@ -16,19 +12,18 @@ const handleLogin = async () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${process.env.NUXT_LOGIN_TOKEN}`
             },
-            body: { username: username.value, password: password.value }
+            body: {
+                username: username.value,
+                password: password.value
+            }
         })
-        alert('Login')
-        console.log(res)
         // Store token locally
-        localStorage.setItem('token', res.access_token)
-        
-        navigateTo('/admin/dashboard')
-    } catch (err) {
-        console.error('Login failed:', err) 
-        alert('Fail')
+        localStorage.setItem('token', `Bearer ${res.access_token}`)
+        await navigateTo('/admin/dashboard')
+    } catch (error) {
+        console.error('Login failed:', error)
+        alert('Login failed')
     }
 
 }
@@ -50,7 +45,7 @@ const handleLogin = async () => {
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2x">
                         Sign in to your account
                     </h1>
-                    <form class="space-y-4 md:space-y-6 !mt-[30px]" @submijbt.prevent="handleLogin()">
+                    <form class="space-y-4 md:space-y-6 !mt-[30px]" @submit.prevent="handleLogin">
                         <div class="relative z-0 w-full !mb-5 group">
                             <input v-model="username" type="text" name="name" id="name"
                                 class="block !py-2.5 !px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-[#002E6E] focus:outline-none focus:ring-0 focus:border-[#002E6E] peer"
@@ -80,7 +75,7 @@ const handleLogin = async () => {
                             </div>
                         </div>
                         <button type="submit" @click="handleLogin()"
-                            class="w-[100%] text-black cursor-pointer bg-white font-medium rounded-lg text-sm !px-5 !py-2.5 !mt-[15px] !mb-[15px] text-center hover:bg-[#002E6E] hover:text-white hover:transition hover:duration-300 transition duration-300">
+                            class="w-full text-black cursor-pointer bg-white font-medium rounded-lg text-sm !px-5 !py-2.5 !mt-[15px] !mb-[15px] text-center hover:bg-[#002E6E] hover:text-white hover:transition hover:duration-300 transition duration-300">
                             Sign in</button>
                     </form>
                 </div>

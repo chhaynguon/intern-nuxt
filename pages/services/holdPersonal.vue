@@ -1,3 +1,11 @@
+<script setup>
+import { computed } from "vue";
+import { keyService } from "~/data/Service/keyService";
+const allowedIds = [1, 3, 4];
+const allowedService = computed(() => {
+  return keyService.filter(s => allowedIds.includes(s.id));
+});
+</script>
 <template>
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
     <!-- <AppHeader /> -->
@@ -185,54 +193,17 @@
         <div class="w-full place-self-center">
           <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>
         </div>
-        <div class="grid w-[80%] h-[200px] grid-cols-3 gap-4 ">
-          <div
-            class="relative w-full h-[200px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/services/holdProperty">
+        <div class="grid w-[80%] h-[180px] grid-cols-3 gap-4 place-self-center">
+          <div v-for="service in allowedService" :key="service.id"
+            class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
+            <a :href="service.link">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_01.jpg" alt="">
+                  :src="service.image" alt="">
               </div>
               <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white absolute top-[35%] left-[15%] font-bold">Hold Trust <br> Property</span>
-              <span>
-                <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-              </span>
-            </a>
-          </div>
-
-          <div
-            class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/services/escrowService">
-              <div class="absolute w-full rounded-xl">
-                <img
-                  class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_03.jpg" alt="">
-              </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white absolute top-[35%] left-[15%] font-bold">Escrow Service </span>
-              <span>
-                <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-              </span>
-            </a>
-          </div>
-
-          <div
-            class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-            <a href="/services/salePurchase">
-              <div class="absolute w-full rounded-xl">
-                <img
-                  class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_04.jpg" alt="">
-              </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white w-full absolute top-[25%] left-[15%] font-bold">Sales & Purchase <br> Agreement
-                (SPA)
-                <br>
-                Service</span>
+              <span class="text-white absolute top-[35%] left-[15%] font-bold">{{ service.title }}</span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
                   src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">

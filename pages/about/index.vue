@@ -37,21 +37,21 @@
             </div>
           </div>
           <div class="w-1/2">
-            <h2 class="w-1/2 mb-6 text-3xl font-bold text-white">About Us</h2>
-            <p class="w-1/2 space-y-4 text-base text-justify text-white">
-              <span class="block my-2">
+            <h2 class="w-1/2 !mb-6 text-3xl font-bold text-white">About Us</h2>
+            <p class="w-[60%] space-y-4 text-base text-justify text-white">
+              <span class="block !my-2">
                 Phillip Trustee (Cambodia), Co Ltd. was incorporated in June
                 2022, after the Law of Trust was passed in 2019, allowing
                 foreigners to register their fixed assets with trustee companies
                 in Cambodia. Our specialised license consists of commercial,
                 social and personal trust in which has been approved by the
                 Trust Regulator. </span><br>
-              <span class="block my-2">
+              <span class="block !my-2">
                 We are the associated company of Phillip Bank, Plc, one of the
                 medium-sized commercial banks in Cambodia, part of Phillip
                 Capital group in Singapore, and a sister company of Phillip
                 General Insurance and Phillip Life Assurance Company. </span>
-              <span class="block my-2"><br>
+              <span class="block !my-2"><br>
                 At Phillip Trustee (Cambodia), Co Ltd. we believe in a financial
                 and non-financial ecosystem that can provide suitable services
                 to investors and customers throughout Cambodia such as
@@ -61,9 +61,9 @@
           </div>
         </div>
       </section>
-      <section class="w-full h-[622.28px]">
-        <div class="w-[1100px] h-[622.28px] py-12 place-self-center">
-          <div class="w-[1010px] h-[102px] pb-8">
+      <section class="w-full">
+        <div class="w-[1000px] !py-12 place-self-center">
+          <div class="w-[1000px] h-[102px] !pb-8">
             <span class="text-3xl font-bold text-white">Phillip Members (Cambodia Offices)</span><br />
             <span class="text-xl text-white">(Mutual integration and resource complementary)</span>
           </div>
@@ -87,15 +87,15 @@
               </div>
             </div>
           </div>
-          <div class="w-[1010px] h-[137.69px]">
+          <div class="w-[1010px]">
             <p class="text-lg text-white">
-              <span class="text-lx mb-[22.5px]">As an associate company of Phillip Bank, Phillip Trustee
+              <span class="text-lx !mb-[22.5px]">As an associate company of Phillip Bank, Phillip Trustee
                 (Cambodia), Co Ltd leverages on the bank’s facilities and
                 resources that has more than 10 years of financial management
                 experience in Cambodia.
               </span>
               <br /><br />
-              <span class="text-lx mb-[22.5px]">
+              <span class="text-lx !mb-[22.5px]">
                 We will work closely with you to determine an appropriate
                 structure that can cater to all your investment needs and
                 purposes.

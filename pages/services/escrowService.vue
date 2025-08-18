@@ -1,3 +1,12 @@
+<script setup>
+import { computed } from "vue";
+import { keyService } from "~/data/Service/keyService";
+const allowedIds = [1, 2, 4];
+const allowedService = computed(() => {
+  return keyService.filter(s => allowedIds.includes(s.id));
+});
+</script>
+
 <template>
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')] bg-cover">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -17,7 +26,8 @@
           <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
             <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
             <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
-            <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
+            <a href="/services"
+              class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
             <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
             <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
           </nav>
@@ -166,7 +176,9 @@
             <table class="w-full h-full  text-white text-sm ">
               <thead class=" text-lg">
                 <tr>
-                  <th class="text-left !py-4 !px-6 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">Trust Value</th>
+                  <th
+                    class="text-left !py-4 !px-6 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">
+                    Trust Value</th>
                   <th class="text-center !py-2 !px-1 bg-[#00204d] rounded-tl-lg rounded-tr-lg font-normal">
                     Administration Fee </th>
                   <th
@@ -233,7 +245,8 @@
                     400</td>
                 </tr>
                 <tr>
-                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e] rounded-bl-xl rounded-br-xl">More than 20,000,000</td>
+                  <td class="!py-4 !px-6 bg-[#F15A22] border-r-[5px] border-[#002e6e] rounded-bl-xl rounded-br-xl">More
+                    than 20,000,000</td>
                   <td class="text-center !py-2 !px-1 bg-[#00204d] rounded-br-lg rounded-bl-lg">2,000</td>
                   <td
                     class="text-center !py-4 !px-6 bg-[#00204d] rounded-br-lg rounded-bl-lg border-l-[5px] border-[#002e6e]">
@@ -255,7 +268,9 @@
             <table class="w-[80%] h-full border-collapse positin text-white text-sm !mx-auto rounded-xl ">
               <thead class=" text-lg ">
                 <tr>
-                  <th class="text-left !py-2 !px-4 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">Trust value for Public or Social Trust</th>
+                  <th
+                    class="text-left !py-2 !px-4 font-normal rounded-tr-lg rounded-tl-lg bg-[#F15A22] border-r-[5px] border-[#002e6e]">
+                    Trust value for Public or Social Trust</th>
                   <th class="text-center !py-4 !px-6 bg-[#00204d] rounded-tl-lg rounded-tr-lg font-normal">
                     Administration Fee </th>
                   <th
@@ -294,13 +309,15 @@
 
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-6  bg-[#F15A22]  border-r-[5px] border-[#002e6e]">&gt; 10,000,000 - 20,000,000</td>
+                  <td class="!py-4 !px-6  bg-[#F15A22]  border-r-[5px] border-[#002e6e]">&gt; 10,000,000 - 20,000,000
+                  </td>
                   <td class="!py-2 !px-1 bg-[#00204d]">375</td>
                   <td class="!py-4 !px-6 bg-[#00204d] border-l-[5px] border-[#002e6e]">
                     500</td>
                 </tr>
                 <tr class="text-center">
-                  <td class="!py-4 !px-3 rounded-bl-lg rounded-br-lg border-r-[5px] bg-[#F15A22] border-[#002e6e]">More than 20,000,000</td>
+                  <td class="!py-4 !px-3 rounded-bl-lg rounded-br-lg border-r-[5px] bg-[#F15A22] border-[#002e6e]">More
+                    than 20,000,000</td>
                   <td class="!py-2 !px-1 bg-[#00204d] rounded-br-lg rounded-bl-lg">500</td>
                   <td
                     class="text-center !py-4 !px-6 bg-[#00204d] rounded-br-lg rounded-bl-lg border-l-[5px] border-[#002e6e]">
@@ -320,53 +337,16 @@
           <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>
         </div>
         <div class="grid w-[80%] h-[180px] grid-cols-3 gap-4 place-self-center">
-          <div
+          <div v-for="service in allowedService" :key="service.id"
             class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/services/holdProperty">
+            <a :href="service.link">
               <div class="absolute w-full rounded-xl">
                 <img
                   class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_01.jpg" alt="">
+                  :src="service.image" alt="">
               </div>
               <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white absolute top-[35%] left-[15%] font-bold">Hold Trust <br> Property</span>
-              <span>
-                <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-              </span>
-            </a>
-          </div>
-
-          <div
-            class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a href="/services/holdPersonal">
-              <div class="absolute w-full rounded-xl">
-                <img
-                  class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_02.jpg" alt="">
-              </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white absolute top-[35%] left-[15%] font-bold">Hold Personal <br> Trust</span>
-              <span>
-                <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-              </span>
-            </a>
-          </div>
-
-          <div
-            class="relative w-full  overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:duration-500 group hover:shadow-xl">
-            <a href="/services/salePurchase">
-              <div class="absolute w-full rounded-xl">
-                <img
-                  class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  src="https://www.philliptrustee.com.kh/v2/img/key_service_img_04.jpg" alt="">
-              </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white w-full absolute top-[25%] left-[15%] font-bold">Sales & Purchase <br> Agreement
-                (SPA)
-                <br>
-                Service</span>
+              <span class="text-white absolute top-[35%] left-[15%] font-bold">{{ service.title }}</span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
                   src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">

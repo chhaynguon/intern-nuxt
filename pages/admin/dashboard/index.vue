@@ -1,33 +1,3 @@
-<script setup>
-// import { navigateTo } from '#app'
-
-// let token = null
-
-// // Read token from localStorage (browser only)
-// if (typeof window !== 'undefined') {
-//   token = localStorage.getItem('token')
-// }
-
-// if (!token) {
-//   navigateTo('/login')
-// }
-
-// // Optional: Verify token
-// await $fetch('http://localhost:8000/api/auth/verify', {
-//   method: 'GET',
-//   headers: {
-//     Authorization: `Bearer ${token}`
-//   }
-// }).catch(() => {
-//   if (typeof window !== 'undefined') {
-//     localStorage.removeItem('token')
-//   }
-//   navigateTo('/login')
-// })
-definePageMeta({
-  middleware: ["auth"]
-})
-</script>
 <template>
   <dbHeader />
   <section class="w-full flex justify-between relative top-22.5">
@@ -57,7 +27,7 @@ definePageMeta({
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-              </svg><a href="/admin/tableAdmin" class="!ml-[8px]">User</a>
+              </svg><a href="/admin/tableadmin" class="!ml-[8px]">User</a>
             </button>
           </li>
 
