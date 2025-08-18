@@ -35,7 +35,7 @@ const event = partevents.find(e => e.id === eventId)
                 </div>
             </div>
         </div>
-        <div class="w-full h-screen bg-fixed" :style="{ backgroundImage: `url(${event.background})` }">
+        <div class="w-full h-screen bg-fixed bg-no-repeat bg-cover" :style="{ backgroundImage: `url(${event.background})` }">
         </div>
         <section
             class="w-full relative bg-bottom bg-repeat-x bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')] ">
@@ -45,7 +45,7 @@ const event = partevents.find(e => e.id === eventId)
                         <h2 class="text-center text-white font-bold text-3xl !mb-[40px]">{{ event.title }}</h2>
                         <div class="w-[70%] !mx-auto">
                             <p class=" place-self-center !mb-[20px] font-normal text-lg">
-                                <span class="text-base text-white text-left">{{ event.des }}
+                                <span v-html="event.des" class="text-base text-white text-left">
                                 </span>
                             </p>
                             <div v-for="img in event.image" :key="img">
