@@ -1,16 +1,15 @@
-<script setup>
-import { partevents } from '~/data/Event/partevent';
-import { useRoute, useRouter } from 'vue-router'
-import { listEvents } from '~/data/Event/event';
-
+<script setup lang="ts">
+import { partevents } from '~/data/Event/partevent'
+import { useRoute } from '#imports'
 const route = useRoute()
-const router = useRouter()
 
-// If event not found, redirect or show 404
-if (!events) router.push('/events')
+// slug is like "event3"
+const slug = route.params.slug as string
+const eventId = Number(slug.replace('event', ''))
+const event = partevents.find(e => e.id === eventId)
 </script>
 <template>
-    <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
+    <div v-if="event" class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
 
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,21 +35,21 @@ if (!events) router.push('/events')
                 </div>
             </div>
         </div>
-        <div class="w-full h-screen bg-fixed" :style="{ backgroundImage: url(`{{listEvents.background}}`) }">
+        <div class="w-full h-screen bg-fixed" :style="{ backgroundImage: `url(${event.background})` }">
         </div>
         <section
             class="w-full relative bg-bottom bg-repeat-x bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')] ">
             <div class="w-full place-self-center !pb-[20px] ">
                 <div class="w-full place-self-center !py-[50px] !px-[40px]">
-                    <div class="w-[80%] !mx-auto" v-for="partevent in partevents" :key="partevent.id">
-                        <h2 class="text-center text-white font-bold text-3xl !mb-[40px]">{{ partevent.title }}</h2>
+                    <div class="w-[80%] !mx-auto">
+                        <h2 class="text-center text-white font-bold text-3xl !mb-[40px]">{{ event.title }}</h2>
                         <div class="w-[70%] !mx-auto">
                             <p class=" place-self-center !mb-[20px] font-normal text-lg">
-                                <span class="text-base text-white text-left">{{ partevent.des }}
+                                <span class="text-base text-white text-left">{{ event.des }}
                                 </span>
                             </p>
-                            <div v-for="img in partevent.image" :key="img">
-                                <img :src="img" alt="">
+                            <div v-for="img in event.image" :key="img">
+                                <img class="!mt-[20px]" :src="img" alt="">
                             </div>
                         </div>
                     </div>
@@ -59,4 +58,7 @@ if (!events) router.push('/events')
         </section>
         <AppFooter />
     </div>
+    <div v-else class="text-center text-red-500 !py-10">
+    Event not found
+  </div>
 </template>

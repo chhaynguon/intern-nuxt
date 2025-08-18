@@ -4,7 +4,7 @@ import { listEvents } from '~/data/Event/event'
 // events.sort((a, b) => a.id - b.id)
 
 // Or descending
-let event = listEvents.sort((a, b) => b.id - a.id)
+const event = listEvents.sort((a, b) => b.id - a.id)
 </script>
 <template>
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">

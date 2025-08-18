@@ -18,6 +18,8 @@ const handleLogin = async () => {
                 password: password.value
             }
         })
+        alert('Login Successfully')
+        console.log('Login Successlly', res)
         // Store token locally
         localStorage.setItem('token', `Bearer ${res.access_token}`)
         await navigateTo('/admin/dashboard')
@@ -74,7 +76,7 @@ const handleLogin = async () => {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" @click="handleLogin()"
+                        <button type="submit"
                             class="w-full text-black cursor-pointer bg-white font-medium rounded-lg text-sm !px-5 !py-2.5 !mt-[15px] !mb-[15px] text-center hover:bg-[#002E6E] hover:text-white hover:transition hover:duration-300 transition duration-300">
                             Sign in</button>
                     </form>

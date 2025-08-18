@@ -115,7 +115,7 @@
             <!-- 3rd Total-Account -->
             <div
               class="w-[22%] h-[40%] !p-7 bg-white shadow drop-shadow-md rounded-md hover:scale-102 transition hover:transition hover:duration-300">
-              <a href="/admin/tableAdmin">
+              <a href="/admin/tableadmin">
                 <h1 class="text-xl font-semibold text-black flex">
                   <svg class="w-6 h-6 text-black dark:text-white !mt-[2.5px] !mr-[5px] cursor-pointer"
                     aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"

@@ -1,9 +1,9 @@
 export interface EventItem {
-  id: number;
-  background: string;
-  title: string;
-  des: string;
-  image: string[];
+  id: number
+  background: string
+  title: string
+  des: string
+  image: string[]
 }
 
 export const partevents: EventItem[] = [
@@ -30,12 +30,12 @@ export const partevents: EventItem[] = [
   },
   {
     id: 3,
-    background: "https://www.philliptrustee.com.kh/v2/img/Yi%20Fung%20Real%20Estate_2.jpg",
+    background: "https://www.philliptrustee.com.kh/v2/img/Yi%20Fung%20Real_Estate_2.jpg",
     title: "MoU with Yi Fung Real Estate",
     des: "Phnom Penh, 22nd May 2023 - Yi Fung Real Estate Co., Ltd and Phillip Trustee (Cambodia) Co., Ltd. sign a Memorandum of Understanding (MoU) to expand the overall scope of the market for products, services, and cooperation between Yi Fung Real Estate Co., Ltd and Phillip Trustee (Cambodia) Co., Ltd. In particular, attracting international investors to build real estate credibility in the Cambodian market.",
     image: [
       "https://www.philliptrustee.com.kh/v2/img/Yi%20Fung%20Real%20Estate_1.jpg",
-      "https://www.philliptrustee.com.kh/v2/img/Yi%20Fung%20Real%20Estate_2.jpg",
+      "https://www.philliptrustee.com.kh/v2/img/Yi%20Fung%20Real_Estate_2.jpg",
     ],
   },
   {

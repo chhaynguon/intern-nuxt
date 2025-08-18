@@ -8,7 +8,7 @@
             <div class="cursor-pointer">
                 <nuxt-link to="/admin/dashboard" class="flex items-center gap-2 !mx-[5px] cursor-pointer group">
                     <img class="w-[50px] h-[50px] rounded-full border-[2px] border-[#454545] group-hover:border-[#F15A22]"
-                        src="../../assets/img/IMG_20250603_125940_674.jpg" alt="">
+                        src="../../../assets/img/IMG_20250603_125940_674.jpg" alt="">
                     <div
                         class="font-medium text-[#454545] dark:text-white text-right group-hover:text-[#F15A22] transition gorup-hover:trasition gorup-hover:duration-300">
                         <div>Pen ChhayNguon</div>

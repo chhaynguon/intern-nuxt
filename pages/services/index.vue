@@ -19,7 +19,7 @@ import { keyService } from '~/data/Service/keyService'
             <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
             <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
             <a href="/services"
-              class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
+              class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Service</a>
             <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
             <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
           </nav>
