@@ -120,5 +120,12 @@ export const listEvents: EventItem[] = [
     link: '/events/event16',
     icon: 'https://www.philliptrustee.com.kh/v2/img/arrow_right.svg'
   },
+  {
+    id: 17,
+    title: 'MoU with CVEA',
+    image: 'https://www.philliptrustee.com.kh/v2/img/event17/event17-11.jpg',
+    link: '/events/event17',
+    icon: 'https://www.philliptrustee.com.kh/v2/img/arrow_right.svg'
+  },
 ]
 

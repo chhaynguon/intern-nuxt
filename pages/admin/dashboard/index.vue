@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const logout = async () => {
+    localStorage.removeItem('token');
+    alert("You have been logged out!")
+    navigateTo("/login")
+}
+
+</script>
 <template>
   <dbHeader />
   <section class="w-full flex justify-between relative top-22.5">
@@ -8,42 +16,41 @@
 
           <!-- home menu -->
           <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
-            <button class="w-[135px] h-[44px] flex place-self-center items-center !pl-[18px]">
-              <svg class="w-6 h-6 text-white dark:text-white cursor-pointer" aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <a href="/admin/dashboard" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[18px]">
+              <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                   d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
                   clip-rule="evenodd" />
               </svg>
-              <a href="/admin/dashboard" class="!ml-[5px]">Home</a>
-            </button>
+              <span class="!ml-[5px]">Home</span>
+            </a>
           </li>
 
           <!-- user menu -->
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 transition dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+            <a href="/admin/tableadmin"
+              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class="w-6 h-6 text-gray-800 transition dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-              </svg><a href="/admin/tableadmin" class="!ml-[8px]">User</a>
-            </button>
+              </svg><span class="!ml-[8px]">User</span>
+            </a>
           </li>
 
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-            <button class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+            <button @click="logout()" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
               <svg
                 class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
-              </svg>
-              <a href="/login" class="!ml-[8px]">Logout
-              </a>
+              </svg> <span class="!ml-[8px] cursor-pointer">Logout</span>
             </button>
           </li>
         </ul>

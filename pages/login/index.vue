@@ -19,7 +19,6 @@ const handleLogin = async () => {
             }
         })
         alert('Login Successfully')
-        console.log('Login Successlly', res)
         // Store token locally
         localStorage.setItem('token', `Bearer ${res.access_token}`)
         await navigateTo('/admin/dashboard')
@@ -29,9 +28,6 @@ const handleLogin = async () => {
     }
 
 }
-
-
-
 </script>
 
 <template>
