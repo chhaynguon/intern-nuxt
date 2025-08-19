@@ -1,12 +1,30 @@
 <script setup lang="ts">
 import { partevents } from '~/data/Event/partevent'
-import { useRoute } from '#imports'
-const route = useRoute()
+import { useRoute, navigateTo } from '#imports'
+
+
+const route = useRoute();
 
 // slug is like "event3"
 const slug = route.params.slug as string
 const eventId = Number(slug.replace('event', ''))
 const event = partevents.find(e => e.id === eventId)
+
+
+const goNext = () => {
+    if (eventId < 17) {
+        navigateTo(`/events/${eventId + 1}`)
+    } else {
+        navigateTo('/events')
+    }
+}
+const goBack = () => {
+    if (eventId > 1) {
+        navigateTo(`/events/${eventId - 1}`)
+
+    }
+}
+
 </script>
 <template>
     <div v-if="event" class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
@@ -35,7 +53,8 @@ const event = partevents.find(e => e.id === eventId)
                 </div>
             </div>
         </div>
-        <div class="w-full h-screen bg-fixed bg-no-repeat bg-cover" :style="{ backgroundImage: `url(${event.background})` }">
+        <div class="w-full h-screen bg-fixed bg-no-repeat bg-cover"
+            :style="{ backgroundImage: `url(${event.background})` }">
         </div>
         <section
             class="w-full relative bg-bottom bg-repeat-x bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')] ">
@@ -49,7 +68,21 @@ const event = partevents.find(e => e.id === eventId)
                                 </span>
                             </p>
                             <div v-for="img in event.image" :key="img">
-                                <img class="!mt-[20px]" :src="img" alt="">
+                                <img class="w-full h-full !mt-[20px]" :src="img" alt="">
+                            </div>
+                            <div class="flex justify-between !mt-6">
+                                <button :hidden="(eventId <= 1)" @click="goBack()"
+                                    class=" bg-[#F15A22] hover:bg-orange-600 text-white !px-6 !py-2 rounded-lg flex items-center justify-center gap-2 cursor-pointer">
+                                    <img class="w-[15px] h-[15px] bottom-[20px] left-[45%] scale-x-[-1]"
+                                        src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
+                                </button>
+                                <span class=" text-white content-center text-center bg-[#F15A22] !px-6 !py-2 rounded-lg font-semibold">{{ event.id }}</span>
+                                <button :hidden="(eventId >= 17)" @click="goNext()"
+                                    class=" bg-[#F15A22] hover:bg-orange-600 text-white !px-6 !py-2 rounded-lg flex items-center justify-center gap-2 cursor-pointer">
+                                    <img class="w-[15px] h-[15px] bottom-[20px] left-[45%]"
+                                        src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
+                                </button>
+                                
                             </div>
                         </div>
                     </div>
@@ -59,6 +92,6 @@ const event = partevents.find(e => e.id === eventId)
         <AppFooter />
     </div>
     <div v-else class="text-center text-red-500 !py-10">
-    Event not found
-  </div>
+        Event not found
+    </div>
 </template>

@@ -5,6 +5,7 @@ import { listEvents } from '~/data/Event/event'
 
 // Or descending
 const event = listEvents.sort((a, b) => b.id - a.id)
+
 </script>
 <template>
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
@@ -41,7 +42,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
       <div class="w-[45%] place-self-center grid grid-cols-3">
 
         <div class="!m-[8px] relative" v-for="event in listEvents" :key="event.id">
-          <NuxtLink to="`/events/${event.id}`">
+          <NuxtLink :to="`/events/${event.id}`">
             <div
               class="relative w-full h-[200px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-300 group hover:shadow-xl">
               <div class=" absolute w-full h-full bg-[#00275E]"></div>

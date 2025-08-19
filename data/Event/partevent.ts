@@ -153,7 +153,7 @@ export const partevents: EventItem[] = [
     background: "https://www.philliptrustee.com.kh/v2/img/david-banner-en.jpg",
     title: "",
     des: "",
-    image: [""],
+    image: []
   },
   {
     id: 14,
