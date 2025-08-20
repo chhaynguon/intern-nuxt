@@ -77,6 +77,11 @@ const searchInfo = async () => {
   }
 }
 
+const logout = async () => {
+  localStorage.removeItem('token');
+  alert("You have been logged out!")
+  navigateTo("/login")
+}
 
 </script>
 <template>
@@ -120,16 +125,14 @@ const searchInfo = async () => {
             <!-- Logout menu -->
             <li
               class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-              <button class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+              <button @click="logout()" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
                 <svg
                   class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                   viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
-                </svg>
-                <a href="/login" class="!ml-[8px]">Logout
-                </a>
+                </svg> <span class="!ml-[8px] cursor-pointer">Logout</span>
               </button>
             </li>
           </ul>

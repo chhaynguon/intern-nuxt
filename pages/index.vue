@@ -13,7 +13,7 @@ const toggleShowMore = async () => {
 
   const el = document.getElementById("extraContent");
   if (el) {
-    contentHeight.value = showMore.value ? el.scrollHeight + "px" : "0px";
+    contentHeight.value = showMore.value ? el.scrollHeight + "0px" : "0px";
   }
 };
 </script>
@@ -33,12 +33,11 @@ const toggleShowMore = async () => {
           <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
             <a href="/" class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Home</a>
             <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
-            <a href="/services" class="hover:text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px]">Service</a>
+            <a href="/services" class="hover:text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px]">Services</a>
             <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
             <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
           </nav>
         </div>
-
       </div>
     </div>
 

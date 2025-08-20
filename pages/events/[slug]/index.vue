@@ -76,13 +76,15 @@ const goBack = () => {
                                     <img class="w-[15px] h-[15px] bottom-[20px] left-[45%] scale-x-[-1]"
                                         src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
                                 </button>
-                                <span class=" text-white content-center text-center bg-[#F15A22] !px-6 !py-2 rounded-lg font-semibold">{{ event.id }}</span>
+                                <span
+                                    class=" text-white content-center text-center bg-[#F15A22] !px-6 !py-2 rounded-lg font-semibold">{{
+                                        event.id }}
+                                </span>
                                 <button :hidden="(eventId >= 17)" @click="goNext()"
                                     class=" bg-[#F15A22] hover:bg-orange-600 text-white !px-6 !py-2 rounded-lg flex items-center justify-center gap-2 cursor-pointer">
                                     <img class="w-[15px] h-[15px] bottom-[20px] left-[45%]"
                                         src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
                                 </button>
-                                
                             </div>
                         </div>
                     </div>

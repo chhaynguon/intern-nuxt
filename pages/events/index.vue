@@ -23,7 +23,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
           <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
             <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
             <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
-            <a href="/services" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px] ">Service</a>
+            <a href="/services" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px] ">Services</a>
             <a href="/events" class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Event</a>
             <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
           </nav>
@@ -59,7 +59,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
               <span class="text-white absolute top-[25%] left-[5%] font-semibold text-left text-lg ">{{ event.title }}</span>
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20%] left-[45%]"
-                  :src="event.icon" alt="">
+                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
               </span>
             </div>
           </NuxtLink>
