@@ -64,7 +64,7 @@ const goBack = () => {
                         <h2 class="text-center text-white font-bold text-3xl !mb-[40px]">{{ event.title }}</h2>
                         <div class="w-[70%] !mx-auto">
                             <p class=" place-self-center !mb-[20px] font-normal text-lg">
-                                <span v-html="event.des" class="text-base text-white text-left">
+                                <span v-html="event.description" class="text-base text-white text-left">
                                 </span>
                             </p>
                             <div v-for="img in event.image" :key="img">

@@ -9,9 +9,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
   css: [
-    '~/assets/css/main.css',
-    '@/assets/css/tailwind.css',
-    'primeicons/primeicons.css',
+    "~/assets/css/main.css",
+    "@/assets/css/tailwind.css",
+    "primeicons/primeicons.css",
   ],
   build: { transpile: ["primevue"] },
   components: [
@@ -26,8 +26,9 @@ export default defineNuxtConfig({
     },
   },
   modules: [
-    '@primevue/nuxt-module',
-    '@nuxtjs/tailwindcss', // optional
+    "@primevue/nuxt-module",
+    "@nuxtjs/tailwindcss", // optional
+    "@nuxtjs/apollo",
   ],
   primevue: {
     options: {

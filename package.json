@@ -10,9 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.9",
+    "@apollo/client": "^3.14.0",
     "@nuxt/ui": "^3.3.0",
-    "@nuxtjs/apollo": "^4.0.1-rc.5",
+    "@nuxtjs/apollo": "^5.0.0-alpha.15",
     "@primeuix/themes": "^1.2.3",
     "@primevue/forms": "^4.3.7",
     "express": "^5.1.0",
