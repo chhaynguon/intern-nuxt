@@ -1,46 +1,45 @@
-// // /service/EventService.ts
-// import { useNuxtApp } from '#imports'
+import { useApollo } from '~/composables/useApollo'
 
-// export class EventService {
-//   static async getEventById(id: number) {
-//     const { $apollo, $gql } = useNuxtApp();
+export class EventService {
+  static async getEventById(id: number) {
+    const { apollo, gql } = useApollo()
 
-//     const { data } = await $apollo.query({
-//       query: $gql`
-//         query ($id: Int!) {
-//           getEventById(id: $id) {
-//             id
-//             title
-//             description
-//             background
-//             picture
-//           }
-//         }
-//       `,
-//       variables: { id },
-//     });
+    const { data } = await apollo.query({
+      query: gql`
+        query ($id: Int!) {
+          getEventById(id: $id) {
+            id
+            title
+            description
+            background
+            picture
+          }
+        }
+      `,
+      variables: { id },
+    })
 
-//     return data.getEventById;
-//   }
+    return data.getEventById
+  }
 
-//   static async getEventByTitle(title: string) {
-//     const { $apollo, $gql } = useNuxtApp();
+  static async getEventByTitle(title: string) {
+    const { apollo, gql } = useApollo()
 
-//     const { data } = await $apollo.query({
-//       query: $gql`
-//         query ($title: String!) {
-//           getEventByTitle(title: $title) {
-//             id
-//             title
-//             description
-//             background
-//             picture
-//           }
-//         }
-//       `,
-//       variables: { title },
-//     });
+    const { data } = await apollo.query({
+      query: gql`
+        query ($title: String!) {
+          getEventByTitle(title: $title) {
+            id
+            title
+            description
+            background
+            picture
+          }
+        }
+      `,
+      variables: { title },
+    })
 
-//     return data.getEventByTitle;
-//   }
-// }
+    return data.getEventByTitle
+  }
+}
