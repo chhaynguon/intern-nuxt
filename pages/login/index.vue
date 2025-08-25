@@ -1,4 +1,7 @@
 <script setup>
+
+import Toast from 'primevue/toast';
+
 import { ref } from 'vue'
 import { navigateTo } from '#app'
 const username = ref('')
@@ -18,16 +21,29 @@ const handleLogin = async () => {
                 password: password.value
             }
         })
-        alert('Login Successfully')
         // Store token locally
         localStorage.setItem('token', `Bearer ${res.access_token}`)
+        showSuccess(),
         await navigateTo('/admin/dashboard')
     } catch (error) {
         console.error('Login failed:', error)
-        alert('Login failed')
+        showError()
     }
 
 }
+
+
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
+
+const showSuccess = () => {
+    toast.add({ severity: 'success', summary: 'Login Successfully', detail: 'You have successfully loggin.', life: 3000 });
+};
+const showError = () => {
+    toast.add({ severity: 'error', summary: 'Login Failed', detail: 'Please check the username, password and try again.', life: 3000 });
+};
+
 </script>
 
 <template>
@@ -44,6 +60,7 @@ const handleLogin = async () => {
                         Sign in to your account
                     </h1>
                     <form class="space-y-4 md:space-y-6 !mt-[30px]" @submit.prevent="handleLogin">
+                        <Toast />
                         <div class="relative z-0 w-full !mb-5 group">
                             <input v-model="username" type="text" name="name" id="name"
                                 class="block !py-2.5 !px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-white dark:focus:border-[#002E6E] focus:outline-none focus:ring-0 focus:border-[#002E6E] peer"
@@ -72,7 +89,7 @@ const handleLogin = async () => {
                                 </div>
                             </div>
                         </div>
-                        <button type="submit"
+                        <button type="submit" @click="loginUser()"
                             class="w-full text-black cursor-pointer bg-white font-medium rounded-lg text-sm !px-5 !py-2.5 !mt-[15px] !mb-[15px] text-center hover:bg-[#002E6E] hover:text-white hover:transition hover:duration-300 transition duration-300">
                             Sign in</button>
                     </form>

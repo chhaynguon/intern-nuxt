@@ -3,6 +3,11 @@ import Dialog from 'primevue/dialog';
 import { useUserAdminActions } from '../../../composables/useUserAdminActions';
 import { ref } from "vue";
 import { reactive } from 'vue';
+import { useToast } from 'primevue/usetoast';
+import { useConfirm } from 'primevue/useconfirm'
+import ConfirmDialog from 'primevue/confirmdialog';
+const confirm = useConfirm()
+
 
 const { data, refresh } = await useFetch(`http://localhost:8000/api/user`, {
 })
@@ -43,9 +48,9 @@ async function addUser() {
 
     // const data = await response.json();
     console.log('User created:', data, response);
-    reloadPage();
+    // reloadPage();
     visible.value = false;
-    alert('User created successfully!');
+    createSuccess()
   }
   catch (error) {
     console.error('Network or server error:', error.message);
@@ -69,30 +74,62 @@ const searchInfo = async () => {
     });
 
     data.value = Array.isArray(result) ? result : [result];
-    // const data = await response.json();
-    //   console.log('Search result', data);
   } catch (error) {
     console.error('Search error:', error);
     alert('User does not exit!');
   }
 }
 
-const logout = async () => {
-  localStorage.removeItem('token');
-  alert("You have been logged out!")
-  navigateTo("/login")
+const toast = useToast();
+const createSuccess = async () => {
+  toast.add({ severity: 'success', summary: 'User created successfully!', detail: 'You have successfully created user.', life: 3000 });
+};
+
+const confirmLogout = () => {
+  confirm.require({
+    message: 'Are you sure you want to logout?',
+    header: 'Confirm Logout',
+    icon: 'pi pi-sign-out',
+    acceptProps: {
+      label: 'Yes',
+    },
+    rejectProps: {
+      label: 'No',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptClass: 'p-button-danger',
+    accept: () => {
+      // do logout action here (clear token, redirect, etc.)
+      localStorage.removeItem('token');
+      navigateTo("/login")
+      toast.add({
+        severity: 'success',
+        summary: 'Logged Out',
+        detail: 'You have been successfully logged out.',
+        life: 3000
+      })
+    },
+    reject: () => {
+      toast.add({
+        severity: 'info',
+        summary: 'Cancelled',
+        detail: 'Logout cancelled.',
+        life: 2000
+      })
+    }
+
+  })
 }
 
 </script>
 <template>
   <div>
     <dbHeader />
-    <section class="flex justify-between relative top-22.5">
-      <!-- <dbMenu /> -->
-      <div class="flex min-h-screen shadow-xl bg-white fixed top-22.5">
+    <section class="flex justify-between relative top-14.5">
+      <div class="flex min-h-screen shadow-xl bg-white fixed top-14.5">
         <aside class="w-[100%] text-black flex flex-col">
-          <ul class="w-[135px] text-center ">
-
+          <ul class="w-[135px] text-center">
             <!-- home menu -->
             <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
               <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group">
@@ -107,7 +144,6 @@ const logout = async () => {
                 <a href="/admin/dashboard" class="!ml-[8px]">Home</a>
               </button>
             </li>
-
             <!-- user menu -->
             <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
               <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] ">
@@ -125,7 +161,8 @@ const logout = async () => {
             <!-- Logout menu -->
             <li
               class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-              <button @click="logout()" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+              <button @click="confirmLogout"
+                class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
                 <svg
                   class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -133,16 +170,20 @@ const logout = async () => {
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
                 </svg> <span class="!ml-[8px] cursor-pointer">Logout</span>
+                <confirmDialog />
+                <Toast />
               </button>
             </li>
           </ul>
         </aside>
       </div>
-      <div class="w-full h-screen">
-        <div class="w-[60%] place-self-center">
-          <h1 class="text-center font-bold text-2xl !m-[20px] text-[#454545]">Admin & User Tables</h1>
-          <div class="w-[30%] flex justify-end !mb-[15px] place-self-end ">
-            <div class="flex shadow-xl bg-[white]/100 rounded-lg ">
+      <div class="w-full h-screen !pl-[135px]">
+        <div class="w-full place-self-center !px-8 !mt-[25px]">
+          <div class="w-full flex justify-between !mb-[10px]">
+            <div class="w-full">
+              <h1 class="text-start font-bold text-xl text-[#454545] align-middle">Admin & User Tables</h1>
+            </div>
+            <div class="flex shadow-md bg-[white]/100 rounded-lg ">
               <input v-model="data.id" placeholder="Enter ID" class="w-[150px] !pl-[20px] ">
               <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
                 <svg
@@ -224,39 +265,35 @@ const logout = async () => {
 
                   <div class="w-[50%] !mt-[20px] place-self-end flex justify-end">
                     <button @click="addUser()" type="submit"
-                      class=" text-blue-400 cursor-pointer font-medium !p-2 !mr-[5px] rounded-lg text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
+                      class=" bg-blue-200 text-white cursor-pointer font-medium !p-2 !mr-[5px] rounded-lg text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
                       Save</button>
                     <button @click="visible = false"
-                      class="text-red-400 cursor-pointer font-medium !p-2 rounded-lg text-sm text-center hover:text-white hover:bg-red-400 hover:transition hover:duration-300 transition duration-300">Cancel</button>
+                      class="bg-red-200 text-white cursor-pointer font-medium !p-2 rounded-lg text-sm text-center hover:text-white hover:bg-red-400 hover:transition hover:duration-300 transition duration-300">Cancel</button>
                   </div>
                 </form>
-
-
               </Dialog>
             </div>
           </div>
-          <table class="min-w-full place-self-center border-collapse shadow-xl border-2 border-[#abafb3]">
+          <table class="min-w-full place-self-center border-collapse shadow-md border-2 border-[#abafb3]">
             <thead class="bg-white">
               <tr class="bg-[#abafb3] text-white">
-                <th class="!px-3 !py-2">#</th>
-                <th class="!px-3 !py-2">Name</th>
-                <th class="!px-3 !py-2">Age</th>
-                <th class="!px-3 !py-2">Gender</th>
-                <th class="!px-3 !py-2">Email address</th>
-                <th class="!px-3 !py-2">Action</th>
+                <th class="text-left !px-2 !py-1">#</th>
+                <th class="text-left !px-2 !py-2">Name</th>
+                <th class="text-left !px-3 !py-2">Age</th>
+                <th class="text-left !px-3 !py-2">Gender</th>
+                <th class="text-left !px-3 !py-2">Email address</th>
+                <th class="text-right !px-10 !py-2">Action</th>
               </tr>
             </thead>
             <tbody class="bg-white">
               <tr v-for="user in data" :key="user?.id">
-                <td class="text-center !px-3 !py-2">{{ user.id }}</td>
-                <td class="text-center !px-3 !py-2">{{ user.username }}</td>
-                <td class="text-center !px-3 !py-2">{{ user.age }}</td>
-                <td class="text-center !px-3 !py-2">{{ user.gender }}</td>
-                <td class="text-center !px-3 !py-2">
-                  <div class="!p-[5px]">{{ user.email ? '******@gmail.com' : '' }}</div>
-                </td>
+                <td class="text-left !px-2 !py-1">{{ user.id }}</td>
+                <td class="text-left !px-2 !py-2">{{ user.username }}</td>
+                <td class="text-left !px-3 !py-2">{{ user.age }}</td>
+                <td class="text-left !px-3 !py-2">{{ user.gender }}</td>
+                <td class="text-left !px-3 !py-2">{{ user.email }}</td>
                 <td class="">
-                  <div class="flex justify-center bg-white">
+                  <div class="flex justify-end bg-white">
                     <dialogEdit :user="user" />
                     <button type="button" @click="deleteUser(user.id)"
                       class=" text-sm !px-[5px] !mx-[10px] cursor-pointer ">

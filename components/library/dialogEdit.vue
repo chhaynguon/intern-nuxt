@@ -54,14 +54,15 @@ const updateUser = async () => {
 const editDialog = () => {
   // Populate form with user data
   //  console.log(newData.age = user.value.age)
-  Object.keys(user.value).map((item) => newData[item] = user.value[item])
   // newData.id = user.value.id || '';
   // newData.username = user.value.user.valuename || '';
   // newData.age = user.value.age || '';
   // newData.gender = user.value.gender || '';
   // newData.email = user.value.email || '';
   // newData.password = ''; // Password not pre-filled for security
+  Object.keys(user.value).map((item) => newData[item] = user.value[item])
   // console.log(newData)
+  newData.password = user.password ? user.password.substring(0, 8) : '********'
   visible.value = true; // Show dialog
 }
 
@@ -73,6 +74,7 @@ function saveUser() {
 const reloadPage = () => {
   window.location.reload();
 }
+
 
 </script>
 
@@ -132,13 +134,11 @@ const reloadPage = () => {
     </div>
 
     <div class="w-[50%] !mt-[20px] place-self-end flex justify-end">
-      <button @click="saveUser()"
-        class=" text-blue-400 cursor-pointer font-medium !px-2.5 !mr-[5px] rounded-lg text-base hover:text-black hover:transition hover:duration-300 transition duration-300">
-        Save
-      </button>
+      <button @click="saveUser()" type="submit"
+        class=" bg-blue-700 text-white cursor-pointer font-medium !p-2 !mr-[5px] rounded-lg text-sm text-center hover:text-white hover:bg-blue-600 hover:transition hover:duration-300 transition duration-300">
+        Save</button>
       <button @click="visible = false"
-        class="text-red-400 cursor-pointer font-medium !p-2.5 rounded-lg text-base text-center hover:text-black hover:transition hover:duration-300 transition duration-300">
-        Cancel</button>
+        class="bg-red-700 text-white cursor-pointer font-medium !p-2 rounded-lg text-sm text-center hover:text-white hover:bg-red-600 hover:transition hover:duration-300 transition duration-300">Cancel</button>
     </div>
 
   </Dialog>

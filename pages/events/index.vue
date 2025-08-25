@@ -49,7 +49,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
               <div class="absolute w-full overflow-hidden">
                 <img
                   class="w-full h-full place-self-center rounded-xl group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  :src="event.background" alt="">
+                  :src="event.thumbnail" alt="">
               </div>
               <div class="absolute w-full h-full bg-black/40 rounded-xl">
                 <div

@@ -50,8 +50,10 @@
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white !mb-5">Profile</h2>
                 <address class="relative bg-white shadow-md !p-4 rounded-lg border border-gray-200 not-italic">
                     <div class="space-y-2 text-gray-500 dark:text-gray-400 flex">
-                        <img class="w-[80px] h-[80px] rounded-full" src="/assets/img/IMG_20250603_125940_674.jpg"
-                            alt="">
+                        <div class="w-[40px] h-[40px] md:w-[80px] md:h-[80px]">
+                            <img class="w-full h-full rounded-full border-red-200 border-2 object-cover"
+                                src="/assets/img/IMG_20250603_125940_674.jpg" alt="">
+                        </div>
                         <div class="!ml-[40px] self-center">
                             <h1 class="text-base font-bold text-[black]/70 !mb-[10px]">Pen ChhayNguon</h1>
                             <p class="text-sm">IT Applications Department | Boeng Keng Kang Branch, Phnom Penh</p>

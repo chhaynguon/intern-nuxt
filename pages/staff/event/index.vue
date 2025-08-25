@@ -4,7 +4,7 @@ import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';   // optional
 import Row from 'primevue/row';                   // optional
 import { ref, onMounted } from 'vue';
-import { EventService } from '@/service/EventService';
+// import { EventService } from '@/service/EventService';
 
 // onMounted(() => {
 //     EventService.getEventsMini().then((data) => (event.value = data));
