@@ -1,19 +1,20 @@
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { ref } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm'
 import ConfirmDialog from 'primevue/confirmdialog';
+import { ref, onMounted } from 'vue';
+import { EventService } from '../../../service/EventService';
 
-// import { EventService } from '@/service/EventService';
+const eventService = new EventService();
 
-// onMounted(() => {
-//     EventService.getEventsMini().then((data) => (event.value = data));
-// });
+onMounted(async () => {
+  events.value = await eventService.getEventsMini()
+});
 
-const event = ref();
+const events = ref([]);
 const getSeverity = (event) => {
   switch (event.infoStatus) {
     case 'UPDATED':
@@ -86,9 +87,9 @@ const confirmLogout = () => {
 </script>
 <template>
   <dbHeader />
-  <section class="w-full flex justify-between relative top-16">
+  <section class="relative flex justify-between w-full top-16">
 
-    <div class="flex h-screen shadow-xl bg-white fixed top-16">
+    <div class="fixed flex h-screen bg-white shadow-xl top-16">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center ">
 
@@ -96,7 +97,7 @@ const confirmLogout = () => {
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/dashboard" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[18px]">
               <svg
-                class="w-6 h-6 hover:text-black dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 cursor-pointer hover:text-black dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                 viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -123,7 +124,7 @@ const confirmLogout = () => {
 
           <!-- staff menu -->
           <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
-            <a href="/admin/event" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
                 class="w-6 h-6 text-white dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -136,7 +137,7 @@ const confirmLogout = () => {
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/service"
               class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
@@ -149,9 +150,10 @@ const confirmLogout = () => {
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-            <button @click="confirmLogout" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+            <button @click="confirmLogout"
+              class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
               <svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -166,14 +168,14 @@ const confirmLogout = () => {
     </div>
 
     <!-- middle contain -->
-    <div class="w-full h-screen !pl-[135px] bg-[#f9fafb]">
+    <div class="w-full !pl-[135px] bg-[#f9fafb]">
       <div class="w-full place-self-end">
-        <div class="w-full !mx-auto flex justify-between !px-8">
+        <div class="w-[90%] !mx-auto flex justify-between">
           <div class="w-full !mx-auto">
-            <div class="w-full flex justify-between !pt-[25px]">
-              <h1 class="font-bold text-xl">Welcome to Event</h1>
+            <div class="flex justify-between w-full">
+              <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Event</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                <div class="flex shadow-md bg-[white]/100 rounded-lg ">
+                <div class="flex shadow-xl bg-[white]/100 rounded-lg ">
                   <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
                   <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
                     <svg
@@ -207,30 +209,38 @@ const confirmLogout = () => {
               </div>
             </div>
             <div class="card">
-              <DataTable :value="data" tableStyle="min-width: 50rem">
+              <DataTable :value="events" tableStyle="min-width: 50rem">
                 <template #header>
                   <div class="flex flex-wrap items-center justify-between gap-2">
                     <span class="text-xl font-bold">Events</span>
                     <Button icon="pi pi-refresh" rounded raised />
                   </div>
                 </template>
-                <Column field="title" header="Title"></Column>
-                <Column header="Image">
+                <Column field="id" header="ID">
                   <template #body="slotProps">
-                    <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-                      :alt="slotProps.data.image" class="w-24 rounded" />
+                    {{ slotProps.data.id }}
                   </template>
                 </Column>
-                <Column field="thumbnail" header="thumbnail">
+
+                <Column field="title" header="Title">
                   <template #body="slotProps">
-                    {{ slotProps.thumbnail }}
+                    <a class="text-blue-500 hover:underline" :href="`/admin/events/detail-${slotProps.data.id}`">
+                      {{ slotProps.data.title }}
+                    </a>
                   </template>
                 </Column>
-                <Column header="Status">
+                <Column header="Thumbnail">
                   <template #body="slotProps">
-                    <Tag :value="slotProps.data.infoStatus" :severity="getSeverity(slotProps.data)" />
+                    <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
+                      class="object-cover w-20 h-20 rounded-lg" />
                   </template>
                 </Column>
+                <!-- <Column header="Status">
+                                    <template #body="slotProps">
+                                        <Tag :value="slotProps.data.status"
+                                            :severity="getSeverity(slotProps.data.event)" />
+                                    </template>
+                                </Column> -->
                 <template #footer> In total there are {{ events ? events.length : 0 }} events.
                 </template>
               </DataTable>

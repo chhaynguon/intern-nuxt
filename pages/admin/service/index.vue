@@ -86,9 +86,9 @@ const confirmLogout = () => {
 </script>
 <template>
   <dbHeader />
-  <section class="w-full flex justify-between relative top-16">
+  <section class="relative flex justify-between w-full top-16">
 
-    <div class="flex h-screen shadow-xl bg-white fixed top-16">
+    <div class="fixed flex h-screen bg-white shadow-xl top-16">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center ">
 
@@ -96,7 +96,7 @@ const confirmLogout = () => {
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/dashboard" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[18px]">
               <svg
-                class="w-6 h-6 hover:text-black dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 cursor-pointer hover:text-black dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                 viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
@@ -121,7 +121,7 @@ const confirmLogout = () => {
           </li>
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/event" class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
+            <a href="/admin/events" class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -147,7 +147,7 @@ const confirmLogout = () => {
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-            <button @click="confirmLogout" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+            <button @click="confirmLogout()" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -169,7 +169,7 @@ const confirmLogout = () => {
         <div class="w-full !mx-auto flex justify-between !px-8">
           <div class="w-full !mx-auto">
             <div class="w-full flex justify-between !pt-[25px]">
-              <h1 class="font-bold text-xl">Welcome to Service</h1>
+              <h1 class="text-xl font-bold">Welcome to Service</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <div class="flex shadow-md bg-[white]/100 rounded-lg ">
                   <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">

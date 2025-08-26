@@ -63,9 +63,9 @@ const services = keyService.length
 </script>
 <template>
     <dbHeader />
-    <section class="w-full flex justify-between relative top-16">
+    <section class="relative flex justify-between w-full top-16">
         <!-- <dbMenu /> -->
-        <div class="flex min-h-screen shadow-xl bg-white fixed top-16">
+        <div class="fixed flex min-h-screen bg-white shadow-xl top-16">
             <aside class="w-[100%] text-black flex flex-col">
                 <ul class="w-[135px] text-center ">
 
@@ -88,7 +88,7 @@ const services = keyService.length
                     <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
                         <a href="/staff/event"
                             class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -102,7 +102,7 @@ const services = keyService.length
                     <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
                         <a href="/staff/service"
                             class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
@@ -115,9 +115,9 @@ const services = keyService.length
                     <!-- Logout menu -->
                     <li
                         class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-                        <button @click="logout()"
+                        <button @click="confirmLogout()"
                             class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
-                            <svg class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                            <svg class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                 viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

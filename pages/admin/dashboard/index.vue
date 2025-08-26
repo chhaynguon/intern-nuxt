@@ -64,7 +64,7 @@ const services = keyService.length
 <template>
   <dbHeader />
 
-  <section class="flex flex-col lg:flex-row relative lg:top-16">
+  <section class="relative flex flex-col lg:flex-row lg:top-16">
 
     <div class="lg:fixed lg:top-1.4 shadow-xl bg-white w-full h-screen lg:w-[135px]">
       <aside class="flex flex-row justify-around text-black lg:flex-col lg:justify-start">
@@ -97,8 +97,8 @@ const services = keyService.length
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/event" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -111,7 +111,7 @@ const services = keyService.length
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/service"
               class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"

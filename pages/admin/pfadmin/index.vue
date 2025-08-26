@@ -34,8 +34,8 @@
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/event" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -48,7 +48,7 @@
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/service"
               class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
-                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
@@ -83,9 +83,9 @@
                 class="w-[50%] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg !p-5 place-self-center">
                 <h2 class="text-lg font-bold text-gray-900 dark:text-white !mb-5">Profile</h2>
                 <address class="relative bg-white shadow-md !p-4 rounded-lg border border-gray-200 not-italic">
-                    <div class="space-y-2 text-gray-500 dark:text-gray-400 flex">
+                    <div class="flex space-y-2 text-gray-500 dark:text-gray-400">
                         <div class="w-[40px] h-[40px] md:w-[80px] md:h-[80px]">
-                            <img class="w-full h-full rounded-full border-red-200 border-2 object-cover"
+                            <img class="object-cover w-full h-full border-2 border-red-200 rounded-full"
                                 src="/assets/img/IMG_20250603_125940_674.jpg" alt="">
                         </div>
                         <div class="!ml-[40px] self-center">
@@ -98,7 +98,7 @@
                     class="relative bg-white shadow-md !mt-[25px] !p-4 rounded-lg border border-gray-200 not-italic flex justify-between">
                     <div class="w-[50%]">
                         <h1 class="!mb-5 font-semibold">Personal Information</h1>
-                        <div class="grid grid-cols-2 justify-between">
+                        <div class="grid justify-between grid-cols-2">
 
                             <div class="!py-2">
                                 <div class="text-xs text-gray-400">User Name</div>

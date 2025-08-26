@@ -52,27 +52,34 @@ const menuOpen = ref(false)
 
 
     <section
-      class="w-full bg-fixed h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/about_hero.jpg')] bg-cover">
+      class="max-w-screen-xl bg-fixed h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/about_hero.jpg')] bg-cover bg-center">
     </section>
-    <section class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
+    <section class="w-full md:w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
       <section class="w-full !py-12 md:!py-20">
-        <div class="w-full flex flex-col md:flex-row items-center md:items-start">
+        <div
+          class="w-full md:w-full !px-4 sm:!px-6 lg:!px-8 !mx-auto flex flex-col items-center md:flex-row md:items-start">
+
           <!-- Left Side (Images) -->
-          <div class="flex justify-center w-full md:w-1/2 !mb-8 md:!mb-0">
-            <div class="w-[80%] relative max-w-md">
-              <img class="w-40 h-52 sm:w-56 sm:h-72 md:w-72 md:h-96 absolute top-4 left-4 rounded-lg shadow-lg"
+          <div class="w-full md:w-full !mb-8 md:!mb-0 flex justify-center md:justify-start">
+            <div class="relative w-[90%] max-w-xl h-[240px] sm:h-[320px] md:h-[420px] lg:h-[460px]">
+
+              <!-- Top-left card -->
+              <img class="absolute -top-10 -left-10 w-[64%] sm:w-[60%] md:w-[58%] h-[78%] sm:h-[82%] md:h-[86%] object-cover
+                 translate-x-2 translate-y-2 sm:translate-x-3 sm:translate-y-3 md:translate-x-4 md:translate-y-4"
                 src="https://www.philliptrustee.com.kh/v2/img/about_img_01.jpg" alt="About Phillip Trustee" />
-              <img class="w-40 h-52 sm:w-56 sm:h-72 md:w-72 md:h-96 absolute bottom-4 right-4 rounded-lg shadow-lg"
-                src="https://www.philliptrustee.com.kh/v2/img/about_img_02.jpg" alt="About Phillip Trustee" />
+
+              <!-- Bottom-right card -->
+              <img class="absolute -bottom-10 -right-10 w-[64%] sm:w-[60%] md:w-[58%] h-[78%] sm:h-[82%] md:h-[86%] object-cover
+                 -translate-x-2 -translate-y-2 sm:-translate-x-3 sm:-translate-y-3 md:-translate-x-4 md:-translate-y-4"
+                src="https://www.philliptrustee.com.kh/v2/img/about_img_02.jpg" alt="About Phillip Trustee team" />
             </div>
           </div>
 
           <!-- Right Side (Content) -->
           <div class="w-full md:w-1/2 !px-6 md:!px-12">
-            <h2 class="text-2xl md:text-3xl font-bold text-white !mb-6">
-              About Us
-            </h2>
-            <p class="text-base md:text-lg text-justify text-white space-y-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-white !mb-6">About Us</h2>
+
+            <p class="text-base text-justify text-white md:text-lg">
               <span class="block !my-2">
                 Phillip Trustee (Cambodia), Co Ltd. was incorporated in June 2022,
                 after the Law of Trust was passed in 2019, allowing foreigners to

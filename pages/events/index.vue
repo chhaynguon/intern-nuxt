@@ -50,32 +50,52 @@ const event = listEvents.sort((a, b) => b.id - a.id)
       </div>
     </header>
 
-    <section class="w-full h-screen bg-fixed bg-[url('https://www.philliptrustee.com.kh/v2/img/event_1_hero.jpg')] bg-cover bg-center">
+    <section
+      class="w-full h-screen bg-fixed bg-[url('https://www.philliptrustee.com.kh/v2/img/event_1_hero.jpg')] bg-cover bg-center">
     </section>
+
     <section
       class="w-full !py-[45px] relative bg-repeat-x bg-left-bottom top-0 left-0 bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')]">
-      <div class=" w-[80%] !py-[60px] !px-[70px] place-self-center">
-        <h1 class="text-white text-3xl text-center font-bold !mb-[30px]">Events</h1>
+
+      <!-- Title -->
+      <div class="w-[90%] md:w-[80%] !py-[40px] md:!py-[60px] !px-[20px] md:!px-[70px] !mx-auto">
+        <h1 class="text-white text-2xl md:text-3xl text-center font-bold !mb-[20px] md:!mb-[30px]">
+          Events
+        </h1>
       </div>
-      <div class="w-[45%] place-self-center grid grid-cols-3">
+
+      <!-- Event Grid -->
+      <div class="lg:w-[55%] md:w-[60%] !mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px]">
 
         <div class="!m-[8px] relative" v-for="event in listEvents" :key="event.id">
           <NuxtLink :to="`/events/${event.id}`">
             <div
-              class="relative w-full h-[200px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-300 group hover:shadow-xl">
-              <div class=" absolute w-full h-full bg-[#00275E]"></div>
-              <div class="absolute w-full overflow-hidden">
+              class="relative w-full h-[200px] sm:h-[180px] md:h-[200px] lg:h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-300 group hover:shadow-xl">
+
+              <!-- Dark blue overlay -->
+              <div class="absolute w-full h-full bg-[#002b66]"></div>
+
+              <!-- Image -->
+              <div class="absolute w-full h-full overflow-hidden">
                 <img
-                  class="w-full h-full place-self-center rounded-xl group-hover:scale-110 group-hover:transition group-hover:duration-5000"
+                  class="object-cover w-full h-full rounded-xl group-hover:scale-110 group-hover:transition group-hover:duration-2000"
                   :src="event.thumbnail" alt="">
               </div>
+
+              <!-- Black overlay -->
               <div class="absolute w-full h-full bg-black/40 rounded-xl">
                 <div
-                  class="absolute rounded-xl w-full h-full group-hover:bg-[#F15A22]/40  hover:transition hover:duration-300">
+                  class="absolute rounded-xl w-full h-full group-hover:bg-[#F15A22]/40 hover:transition hover:duration-500">
                 </div>
               </div>
-              <span class="text-white absolute top-[25%] left-[5%] font-semibold text-left text-lg ">{{ event.title
-                }}</span>
+
+              <!-- Title -->
+              <span
+                class="text-white absolute top-[25%] left-[5%] font-semibold text-left text-base sm:text-lg md:text-xl">
+                {{ event.title }}
+              </span>
+
+              <!-- Arrow -->
               <span>
                 <img class="absolute w-[20px] h-[20px] bottom-[20%] left-[45%]"
                   src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
@@ -83,6 +103,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
             </div>
           </NuxtLink>
         </div>
+
       </div>
     </section>
     <AppFooter />

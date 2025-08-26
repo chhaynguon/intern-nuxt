@@ -46,7 +46,7 @@
                 <!-- Settings Icon -->
                 <div class="cursor-pointer !mx-[2px] sm:!mx-[3px] place-self-center group">
                     <i class="pi pi-spin pi-cog w-[22px] h-[22px] sm:w-[25px] sm:h-[25px] !mt-[3px] sm:!mt-[5px] rounded-full place-self-center hover:text-red-400 hover:bg-white"
-                        style="font-size: 22px"></i>
+                        style="font-size: 25px"></i>
                 </div>
             </div>
         </div>
