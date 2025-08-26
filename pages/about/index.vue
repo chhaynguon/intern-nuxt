@@ -1,3 +1,8 @@
+<script setup>
+import { ref } from 'vue'
+
+const menuOpen = ref(false)
+</script>
 <template>
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
 
@@ -44,45 +49,54 @@
         </div>
       </div>
     </header>
+
+
     <section
       class="w-full bg-fixed h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/about_hero.jpg')] bg-cover">
     </section>
     <section class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
-      <section class="w-full h-[758.75px] !py-12">
-        <div class="w-full h-[593.75px] flex">
-          <div class="flex justify-center w-1/2">
-            <div class="w-[80%] relative">
-              <img class="ww-[350px] h-[400px] absolute top-[30px] left-[30px]"
-                src="https://www.philliptrustee.com.kh/v2/img/about_img_01.jpg" alt="" />
-              <img class="w-[350px] h-[400px] absolute bottom-[30px] right-[30px]"
-                src="https://www.philliptrustee.com.kh/v2/img/about_img_02.jpg" alt="" />
+      <section class="w-full !py-12 md:!py-20">
+        <div class="w-full flex flex-col md:flex-row items-center md:items-start">
+          <!-- Left Side (Images) -->
+          <div class="flex justify-center w-full md:w-1/2 !mb-8 md:!mb-0">
+            <div class="w-[80%] relative max-w-md">
+              <img class="w-40 h-52 sm:w-56 sm:h-72 md:w-72 md:h-96 absolute top-4 left-4 rounded-lg shadow-lg"
+                src="https://www.philliptrustee.com.kh/v2/img/about_img_01.jpg" alt="About Phillip Trustee" />
+              <img class="w-40 h-52 sm:w-56 sm:h-72 md:w-72 md:h-96 absolute bottom-4 right-4 rounded-lg shadow-lg"
+                src="https://www.philliptrustee.com.kh/v2/img/about_img_02.jpg" alt="About Phillip Trustee" />
             </div>
           </div>
-          <div class="w-1/2">
-            <h2 class="w-1/2 !mb-6 text-3xl font-bold text-white">About Us</h2>
-            <p class="w-[60%] space-y-4 text-base text-justify text-white">
+
+          <!-- Right Side (Content) -->
+          <div class="w-full md:w-1/2 !px-6 md:!px-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-white !mb-6">
+              About Us
+            </h2>
+            <p class="text-base md:text-lg text-justify text-white space-y-4">
               <span class="block !my-2">
-                Phillip Trustee (Cambodia), Co Ltd. was incorporated in June
-                2022, after the Law of Trust was passed in 2019, allowing
-                foreigners to register their fixed assets with trustee companies
-                in Cambodia. Our specialised license consists of commercial,
-                social and personal trust in which has been approved by the
-                Trust Regulator. </span><br>
+                Phillip Trustee (Cambodia), Co Ltd. was incorporated in June 2022,
+                after the Law of Trust was passed in 2019, allowing foreigners to
+                register their fixed assets with trustee companies in Cambodia. Our
+                specialised license consists of commercial, social and personal trust
+                in which has been approved by the Trust Regulator.
+              </span>
               <span class="block !my-2">
                 We are the associated company of Phillip Bank, Plc, one of the
-                medium-sized commercial banks in Cambodia, part of Phillip
-                Capital group in Singapore, and a sister company of Phillip
-                General Insurance and Phillip Life Assurance Company. </span>
-              <span class="block !my-2"><br>
-                At Phillip Trustee (Cambodia), Co Ltd. we believe in a financial
-                and non-financial ecosystem that can provide suitable services
-                to investors and customers throughout Cambodia such as
-                commercial, public, social and personal trust services.
+                medium-sized commercial banks in Cambodia, part of Phillip Capital
+                group in Singapore, and a sister company of Phillip General Insurance
+                and Phillip Life Assurance Company.
+              </span>
+              <span class="block !my-2">
+                At Phillip Trustee (Cambodia), Co Ltd. we believe in a financial and
+                non-financial ecosystem that can provide suitable services to
+                investors and customers throughout Cambodia such as commercial,
+                public, social and personal trust services.
               </span>
             </p>
           </div>
         </div>
       </section>
+
       <section class="w-full">
         <div class="w-[1000px] !py-12 place-self-center">
           <div class="w-[1000px] h-[102px] !pb-8">
@@ -250,9 +264,3 @@
     <AppFooter />
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const menuOpen = ref(false)
-</script>

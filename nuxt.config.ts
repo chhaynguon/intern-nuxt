@@ -25,11 +25,8 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE_URL,
     },
   },
-  modules: [
-    "@primevue/nuxt-module",
-    "@nuxtjs/tailwindcss", // optional
-    "@nuxtjs/apollo",
-  ],
+  modules: ["@primevue/nuxt-module", // optional
+  "@nuxtjs/tailwindcss", "@nuxtjs/apollo"],
   primevue: {
     options: {
       theme: {

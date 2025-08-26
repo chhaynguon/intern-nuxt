@@ -5,6 +5,7 @@ const allowedIds = [1, 2, 4];
 const allowedService = computed(() => {
   return keyService.filter(s => allowedIds.includes(s.id));
 });
+
 </script>
 
 <template>
@@ -12,28 +13,47 @@ const allowedService = computed(() => {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- HEADER -->
-    <div class="w-full h-[100px] fixed left-0 top-0 z-10 bg-gradient-to-b from-[#00275e] via-[rgba(0, 39, 94, 0)]">
-      <div class="max-w-[1280px] !mx-auto h-full flex justify-between items-center !px-4 sm:px-6 lg:px-8">
-        <!-- Logo -->
-        <div class="w-[150px] sm:w-[180px]">
-          <a href="/">
-            <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="Logo" class="w-full" />
-          </a>
+    <header class="fixed top-0 left-0 z-50 w-full">
+      <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
+        <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-2">
+          <!-- Logo -->
+          <div class="shrink-0">
+            <a href="/" class="inline-flex items-center">
+              <img class="h-10 md:h-12 !p-1" src="https://www.philliptrustee.com.kh/v2/img/trustee.png"
+                alt="Phillip Trustee Cambodia" />
+            </a>
+          </div>
+
+          <!-- Desktop Nav -->
+          <nav class="hidden md:flex items-center gap-2 lg:gap-3 text-white text-[15px] lg:text-base font-normal">
+            <a href="/" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4 ">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Profile</a>
+            <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-2 !px-4 bg-[#F15A22]/20">Services</a>
+            <a href="/events" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">FAQs</a>
+          </nav>
+
+          <!-- Mobile Menu Button -->
+          <button class="md:hidden text-white text-2xl !p-2" @click="menuOpen = !menuOpen"
+            aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
+            ☰
+          </button>
         </div>
 
-        <!-- Navigation -->
-        <div class="w-[75%]">
-          <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
-            <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
-            <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
-            <a href="/services"
-              class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
-            <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
-            <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
-          </nav>
+        <!-- Mobile Nav -->
+        <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
+          <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
+            <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Home</a>
+            <a href="/about"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
+            <a href="/services" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Services</a>
+            <a href="/events"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
 
     <!-- HERO SECTION -->
     <section
@@ -331,7 +351,7 @@ const allowedService = computed(() => {
         </div>
       </div>
     </section>
-    <section class="w-full !py-[70px] bg-[url('https://www.philliptrustee.com.kh/v2/img/rep_bottom_bg.png')] bg-bottom">
+    <section class="w-full !mb-[70px]">
       <div class="w-[1000px] place-self-center">
         <div class="w-full place-self-center">
           <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>

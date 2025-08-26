@@ -1,31 +1,53 @@
 <script setup>
 import { keyService } from '~/data/Service/keyService'
+import { ref } from 'vue'
+
+const menuOpen = ref(false)
 </script>
 <template>
-  <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
+  <div class="min-w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
     <!-- <AppHeader /> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <div
-      class="w-full h-[100px] items-end fixed left-0 top-0 z-10 bg-gradient-to-b from-[#00275e] via-[rgba(0, 39, 94, 0)]">
-      <div class="w-[65%] h-full place-self-center flex justify-between items-center">
-        <div class="w-[15%]">
-          <a href="/" class="w-[220px] z-1000">
-            <img src="https://www.philliptrustee.com.kh/v2/img/trustee.png" alt="" />
-          </a>
-        </div>
-        <!-- Navigation -->
-        <div class="w-[75%]">
-          <nav class="w-[60%] items-end place-self-end flex justify-between text-white text-lg font-normal !px-[10px]">
-            <a href="/" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Home</a>
-            <a href="/about" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Profile</a>
-            <a href="/services"
-              class="text-[#F15A22] font-medium rounded-lg !py-1 !px-[30px] bg-[#F15A22]/20">Services</a>
-            <a href="/events" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">Event</a>
-            <a href="/faqs" class="hover:text-[#F15A22] font-medium !py-1 !px-[30px]">FAQs</a>
+    <header class="fixed top-0 left-0 z-50 w-full">
+      <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
+        <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-2">
+          <!-- Logo -->
+          <div class="shrink-0">
+            <a href="/" class="inline-flex items-center">
+              <img class="h-10 md:h-12 !p-1" src="https://www.philliptrustee.com.kh/v2/img/trustee.png"
+                alt="Phillip Trustee Cambodia" />
+            </a>
+          </div>
+
+          <!-- Desktop Nav -->
+          <nav class="hidden md:flex items-center gap-2 lg:gap-3 text-white text-[15px] lg:text-base font-normal">
+            <a href="/" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4 ">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Profile</a>
+            <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-2 !px-4 bg-[#F15A22]/20">Services</a>
+            <a href="/events" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">FAQs</a>
           </nav>
+
+          <!-- Mobile Menu Button -->
+          <button class="md:hidden text-white text-2xl !p-2" @click="menuOpen = !menuOpen"
+            aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
+            ☰
+          </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
+          <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
+            <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Home</a>
+            <a href="/about"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
+            <a href="/services" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Services</a>
+            <a href="/events"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
 
 
     <section
@@ -120,31 +142,31 @@ import { keyService } from '~/data/Service/keyService'
           </div>
         </div>
       </div>
-      <div class="w-full !mb-[70px]">
-        <div class="w-[1000px] place-self-center">
-          <div class="w-full place-self-center">
-            <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>
-          </div>
-          <div class="grid w-full h-[180px] grid-cols-4 gap-4 place-self-center">
+      <!-- Key Services -->
+      <section class="w-full !pb-14 sm:!pb-16">
+        <div class="max-w-screen-xl !mx-auto !px-4 sm:!px-6 lg:!px-8">
+          <h2 class="text-center text-white text-2xl md:text-3xl font-bold !mb-8">Key Services & Products</h2>
+
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div v-for="service in keyService" :key="service.id"
-              class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-              <a :href="service.link">
-                <div class="absolute w-full rounded-xl">
-                  <img
-                    class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                    :src="service.image" alt="">
+              class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl group hover:shadow-xl">
+              <a :href="service.link" class="block w-full h-full">
+                <img
+                  class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 rounded-xl group-hover:scale-110"
+                  :src="service.image" :alt="service.title" />
+                <div class="absolute inset-0 rounded-xl bg-[#00275E]/40 group-hover:bg-[#F15A22]/40 transition-colors">
                 </div>
-                <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-                <span class="text-white absolute top-[35%] left-[15%] font-bold">{{ service.title }}</span>
-                <span>
-                  <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                    src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-                </span>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center !px-3">
+                  <span class="font-bold text-white">{{ service.title }}</span>
+                  <img class="w-[20px] h-[20px] !mt-3" src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg"
+                    alt="" />
+                </div>
               </a>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </section>
     <AppFooter />
   </div>

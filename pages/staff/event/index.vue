@@ -1,18 +1,22 @@
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';   // optional
-import Row from 'primevue/row';                   // optional
 import { ref, onMounted } from 'vue';
-// import { EventService } from '@/service/EventService';
+import { EventService } from '../../../service/EventService';
+
+const eventService = new EventService();
+
+onMounted(async () => {
+    events.value = await eventService.getEventsMini()
+});
 
 // onMounted(() => {
-//     EventService.getEventsMini().then((data) => (event.value = data));
+//     event.value = data.value.id;
 // });
 
-const event = ref();
-const getSeverity = (event) => {
-    switch (event.infoStatus) {
+const events = ref([]);
+const getSeverity = (events) => {
+    switch (events.infoStatus) {
         case 'UPDATED':
             return 'success';
         case 'OUTDATED':
@@ -31,31 +35,27 @@ const logout = async () => {
     navigateTo("/login")
 }
 
-const { $apollo, $gql } = useNuxtApp()
-const { data } = await $apollo.query({
-    query: $gql`
-    query FindAll {
-    findAll {
-        id
-        title
-        thumbnail
-        des_detail
-    }
-}
-  `,
-})
-
-
-
-
+// const { $apollo, $gql } = useNuxtApp()
+// const { data } = await $apollo.query({
+//     query: $gql`
+//     query FindAll {
+//     findAll {
+//         id
+//         title
+//         thumbnail
+//         des_detail
+//     }
+// }
+//   `,
+// })
 </script>
 <template>
     <dbHeader />
-    <section class="w-full flex justify-between relative top-22.5">
+    <section class="w-full flex justify-between relative top-16">
 
-        <div class="flex h-screen shadow-xl bg-white fixed top-22.5">
+        <div class="flex h-screen shadow-xl bg-white fixed top-16">
             <aside class="w-[100%] text-black flex flex-col">
-                <ul class="w-[200px] text-center ">
+                <ul class="w-[135px] text-center ">
 
                     <!-- home menu -->
                     <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
@@ -121,72 +121,67 @@ const { data } = await $apollo.query({
         <!-- middle contain -->
         <div class="w-full h-screen !pl-[200px] bg-[#f9fafb]">
             <div class="w-full place-self-end">
-                <div>
-                    <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Event</h1>
-                </div>
                 <div class="w-[90%] !mx-auto flex justify-between">
-                    <div class="w-[80%] !mx-auto">
-                        <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                            <div class="flex shadow-xl bg-[white]/100 rounded-lg ">
-                                <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
-                                <button class="transition hover:transition hover:duration-300 hover:scale-110 "
-                                    @click="reloadPage()">
-                                    <svg class="w-6.5 h-6.5 text-red-400 !m-1 cursor-pointer hover:scale-120 transition hover:transition hover:duration-300 rounded-full"
-                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
-                                    </svg>
-                                </button>
-                                <button class="transition hover:transition hover:duration-300 hover:scale-110"
-                                    @click="eventSearch()">
-                                    <svg class="w-6.5 h-6.5 !m-1 text-blue-400 cursor-pointer hover:scale-105 transition hover:transition hover:duration-300 rounded-full"
-                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                            d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </button>
+                    <div class="w-full !mx-auto">
+                        <div class="w-full flex justify-between">
+                            <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Event</h1>
+                            <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
+                                <div class="flex shadow-xl bg-[white]/100 rounded-lg ">
+                                    <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
+                                    <button class="transition hover:transition hover:duration-300 hover:scale-110 "
+                                        @click="reloadPage()">
+                                        <svg class="w-6.5 h-6.5 text-red-400 !m-1 cursor-pointer hover:scale-120 transition hover:transition hover:duration-300 rounded-full"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                                        </svg>
+                                    </button>
+                                    <button class="transition hover:transition hover:duration-300 hover:scale-110"
+                                        @click="eventSearch()">
+                                        <svg class="w-6.5 h-6.5 !m-1 text-blue-400 cursor-pointer hover:scale-105 transition hover:transition hover:duration-300 rounded-full"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                                                d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                                        </svg>
+                                    </button>
 
-                                <button @click="visible = true"
-                                    class="transition hover:transition hover:duration-300 hover:scale-110">
-                                    <svg class="w-7 h-7 !m-1 text-black cursor-pointer hover:scale-110 "
-                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M16.5 15v1.5m0 0V18m0-1.5H15m1.5 0H18M3 9V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3M3 9v6a1 1 0 0 0 1 1h5M3 9h16m0 0v1M6 12h3m12 4.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
-                                    </svg>
+                                    <button @click="visible = true"
+                                        class="transition hover:transition hover:duration-300 hover:scale-110">
+                                        <svg class="w-7 h-7 !m-1 text-black cursor-pointer hover:scale-110 "
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M16.5 15v1.5m0 0V18m0-1.5H15m1.5 0H18M3 9V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v3M3 9v6a1 1 0 0 0 1 1h5M3 9h16m0 0v1M6 12h3m12 4.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
+                                        </svg>
 
-                                </button>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="card">
-                            <DataTable :value="data" tableStyle="min-width: 50rem">
+                            <DataTable :value="events" tableStyle="min-width: 50rem">
                                 <template #header>
                                     <div class="flex flex-wrap items-center justify-between gap-2">
-                                        <span class="text-xl font-bold">events</span>
+                                        <span class="text-xl font-bold">Events</span>
                                         <Button icon="pi pi-refresh" rounded raised />
                                     </div>
                                 </template>
-                                <Column field="title" header="Title"></Column>
-                                <Column header="Image">
+                                <Column field="title" header="Title">{{ slotProps.title }}</Column>
+                                <Column header="Thumbnail">
                                     <template #body="slotProps">
-                                        <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-                                            :alt="slotProps.data.image" class="w-24 rounded" />
+                                        <img v-if="slotProps.events.thumbnail" :src="slotProps.events.thumbnail"
+                                            alt="Thumbnail" class="w-20 h-20 object-cover rounded-lg" />
                                     </template>
                                 </Column>
-                                <Column field="thumbnail" header="thumbnail">
+                                <!-- <Column header="Status">
                                     <template #body="slotProps">
-                                        {{ slotProps.thumbnail }}
+                                        <Tag :value="slotProps.event.infoStatus"
+                                            :severity="getSeverity(slotProps.event)" />
                                     </template>
-                                </Column>
-                                <Column header="Status">
-                                    <template #body="slotProps">
-                                        <Tag :value="slotProps.data.infoStatus"
-                                            :severity="getSeverity(slotProps.data)" />
-                                    </template>
-                                </Column>
+                                </Column> -->
                                 <template #footer> In total there are {{ events ? events.length : 0 }} events.
                                 </template>
                             </DataTable>

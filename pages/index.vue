@@ -1,6 +1,8 @@
-<script setup>
+<script setup >
 import { keyService } from '~/data/Service/keyService'
 import { ref, nextTick } from 'vue'
+
+const menuOpen = ref(false)
 
 const showMore = ref(false);
 const contentHeight = ref("0px");
@@ -44,7 +46,7 @@ const toggleShowMore = async () => {
           </nav>
 
           <!-- Mobile Menu Button -->
-          <button class="md:hidden text-white text-2xl !p-2" @click="menuOpen = !menuOpen"
+          <button class="md:hidden text-white text-2xl !p-2 transition duration-300" @click="menuOpen = !menuOpen"
             aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
             ☰
           </button>
@@ -53,11 +55,11 @@ const toggleShowMore = async () => {
         <!-- Mobile Nav -->
         <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
           <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
-            <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2">Home</a>
-            <a href="/about" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2">Profile</a>
-            <a href="/services" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2">Services</a>
-            <a href="/events" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2">Event</a>
-            <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2">FAQs</a>
+            <a href="/" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Home</a>
+            <a href="/about" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
+            <a href="/services" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Services</a>
+            <a href="/events" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
           </div>
         </div>
       </div>
@@ -73,7 +75,7 @@ const toggleShowMore = async () => {
       <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20"></div>
 
       <div class="relative flex items-center max-w-screen-xl !mx-auto">
-        <div class="w-full flex items-center justify-center sm:justify-start !px-4 sm:!px-6 lg:!px-8 !py-16 sm:!py-24">
+        <div class="w-full flex items-center justify-center sm:justify-start !px-4 sm:!px-6 lg:!px-18 !py-16 sm:!py-24">
           <div class="max-w-[520px] text-center sm:text-left">
             <span class="block text-base text-white sm:text-lg" style="font-family: sans-serif;">Leave your worries
               behind,</span>

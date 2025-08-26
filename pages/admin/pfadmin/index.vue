@@ -3,44 +3,78 @@
 </script>
 <template>
 
-    <header class=" w-full bg-white shadow-md fixed z-2">
-        <div class="w-[80%] !p-[20px] flex justify-between place-self-center">
-            <div class="cursor-pointer">
-                <nuxt-link to="/admin/dashboard" class="flex items-center gap-2 !mx-[5px] cursor-pointer group">
-                    <img class="w-[50px] h-[50px] rounded-full border-[2px] border-[#454545] group-hover:border-[#F15A22]"
-                        src="../../../assets/img/IMG_20250603_125940_674.jpg" alt="">
-                    <div
-                        class="font-medium text-[#454545] dark:text-white text-right group-hover:text-[#F15A22] transition gorup-hover:trasition gorup-hover:duration-300">
-                        <div>Pen ChhayNguon</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">Joined in June 2025</div>
-                    </div>
-                </nuxt-link>
-            </div>
-            <div class="flex place-self-center place-items-center">
-                <div class="place-self-center text-center !mx-[6px] !mt-[2px]">
-                    <button type="button"
-                        class="inline-flex items-center !px-4 !py-2 text-sm font-medium text-center text-white bg-[#454545] rounded-lg hover:bg-blue-400 cursor-pointer group transition hover:transition hover:duration-300">
-                        Messages
-                        <span
-                            class="inline-flex items-center justify-center w-5 h-5 !ms-2 text-md font-semibold text-blue-400 group-hover:text-red-500 bg-white rounded-full transition group-hover:transition group-hover:duration-300">
-                            2
-                        </span>
-                    </button>
-                </div>
-                <div class="relative flex">
-                    <svg class="w-[30px] h-[30px] !mx-[6px] text-gray-800 dark:text-white cursor-pointer hover:scale-115 hover:border-[3px] hover:text-blue-400 hover:rounded-full hover:border-blue-400 transition hover:transition hover:duration-300"
-                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 21">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 3.464V1.1m0 2.365a5.338 5.338 0 0 1 5.133 5.368v1.8c0 2.386 1.867 2.982 1.867 4.175C15 15.4 15 16 14.462 16H1.538C1 16 1 15.4 1 14.807c0-1.193 1.867-1.789 1.867-4.175v-1.8A5.338 5.338 0 0 1 8 3.464ZM4.54 16a3.48 3.48 0 0 0 6.92 0H4.54Z" />
-                    </svg>
-                </div>
-                <div class="cursor-pointer !mx-[6px] place-self-center group position">
-                    <i class="pi pi-spin pi-cog w-[30px] h-[30px] !mt-[5px] rounded-full place-self-center hover:text-red-400 hover:bg-white"
-                        style="font-size: 30px">
-                    </i>
-                </div>
-            </div>
-        </div>
+    <header class="lg:fixed lg:top-1.4 shadow-xl bg-white w-full h-screen lg:w-[135px]">
+      <aside class="flex flex-row justify-around text-black lg:flex-col lg:justify-start">
+        <ul class="flex w-full text-center lg:flex-col">
+
+          <li class="transition hover:duration-300 bg-[#454545] text-white">
+            <a href="/admin/dashboard"
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
+              <svg class="w-6 h-6 !mr-2 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd"
+                  d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
+                  clip-rule="evenodd" />
+              </svg>
+              <span>Home</span>
+            </a>
+          </li>
+
+
+          <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
+            <a href="/admin/tableadmin"
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
+              <svg
+                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
+                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path
+                  d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
+              </svg>
+              <span>User</span>
+            </a>
+          </li>
+
+          <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
+            <a href="/admin/event" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
+              </svg>
+              <span class="!pl-[8px]">Event</span>
+            </a>
+          </li>
+
+          <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
+            <a href="/admin/service"
+              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class="w-6 h-6 text-gray-800 dark:text-white group-hover:text-white hover:transition hover:duration-300 cursor-pointer"
+                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                  d="M7.58209 8.96025 9.8136 11.1917l-1.61782 1.6178c-1.08305-.1811-2.23623.1454-3.07364.9828-1.1208 1.1208-1.32697 2.8069-.62368 4.1363.14842.2806.42122.474.73509.5213.06726.0101.1347.0133.20136.0098-.00351.0666-.00036.1341.00977.2013.04724.3139.24069.5867.52125.7351 1.32944.7033 3.01552.4971 4.13627-.6237.8375-.8374 1.1639-1.9906.9829-3.0736l4.8107-4.8108c1.0831.1811 2.2363-.1454 3.0737-.9828 1.1208-1.1208 1.3269-2.80688.6237-4.13632-.1485-.28056-.4213-.474-.7351-.52125-.0673-.01012-.1347-.01327-.2014-.00977.0035-.06666.0004-.13409-.0098-.20136-.0472-.31386-.2406-.58666-.5212-.73508-1.3294-.70329-3.0155-.49713-4.1363.62367-.8374.83741-1.1639 1.9906-.9828 3.07365l-1.7788 1.77875-2.23152-2.23148-1.41419 1.41424Zm1.31056-3.1394c-.04235-.32684-.24303-.61183-.53647-.76186l-1.98183-1.0133c-.38619-.19746-.85564-.12345-1.16234.18326l-.86321.8632c-.3067.3067-.38072.77616-.18326 1.16235l1.0133 1.98182c.15004.29345.43503.49412.76187.53647l1.1127.14418c.3076.03985.61628-.06528.8356-.28461l.86321-.8632c.21932-.21932.32446-.52801.2846-.83561l-.14417-1.1127ZM19.4448 16.4052l-3.1186-3.1187c-.7811-.781-2.0474-.781-2.8285 0l-.1719.172c-.7811.781-.7811 2.0474 0 2.8284l3.1186 3.1187c.7811.781 2.0474.781 2.8285 0l.1719-.172c.7811-.781.7811-2.0474 0-2.8284Z" />
+              </svg>
+              <span class="!pl-[8px]">Service</span>
+            </a>
+          </li>
+
+          <li class="transition hover:bg-red-400 hover:text-white group">
+            <button @click="confirmLogout()"
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
+              <svg
+                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
+                fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
+              </svg>
+              <span>Logout</span>
+              <confirmDialog />
+              <Toast />
+
+            </button>
+          </li>
+        </ul>
+      </aside>
     </header>
 
     <section class="flex justify-between relative top-22.5">
