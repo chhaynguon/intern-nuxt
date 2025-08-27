@@ -23,7 +23,6 @@ const toggleShowMore = async () => {
   <div class="w-full min-h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')] bg-no-repeat">
     <!-- Prefer adding external CSS in app.config or nuxt.config, kept here if needed -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <!-- Header -->
     <header class="fixed top-0 left-0 z-50 w-full">
       <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
@@ -46,7 +45,7 @@ const toggleShowMore = async () => {
           </nav>
 
           <!-- Mobile Menu Button -->
-          <button class="md:hidden text-white text-2xl !p-2 transition duration-300" @click="menuOpen = !menuOpen"
+          <button class="sm:hidden text-white text-2xl !p-2 transition duration-300" @click="menuOpen = !menuOpen"
             aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
             ☰
           </button>
@@ -111,6 +110,7 @@ const toggleShowMore = async () => {
           banks in Cambodia, part of Phillip Capital group in Singapore, and a sister company of
           Phillip General Insurance and Phillip Life Assurance Company.
         </p>
+        <br>
         <p>
           At Phillip Trustee (Cambodia), Co Ltd. we believe in a financial and non-financial
           ecosystem that can provide suitable services to investors and customers throughout

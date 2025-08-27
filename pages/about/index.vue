@@ -36,7 +36,7 @@ const menuOpen = ref(false)
 
         <!-- Mobile Nav -->
         <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
-          <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
+          <div class="max-w-full !mx-auto flex flex-col !px-4 !py-2">
             <a href="/" class="font-medium rounded-lg hover:bg-[#F15A22]/20 hover:text-[#F15A22] !py-3 !px-2">Home</a>
             <a href="/about" class="font-medium rounded-lg bg-[#F15A22]/20 text-[#F15A22] !py-3 !px-2">Profile</a>
             <a href="/services"
@@ -52,16 +52,16 @@ const menuOpen = ref(false)
 
 
     <section
-      class="max-w-screen-xl bg-fixed h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/about_hero.jpg')] bg-cover bg-center">
+      class="w-full bg-fixed h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/about_hero.jpg')] bg-cover bg-no-repeat">
     </section>
-    <section class="w-full md:w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
+    <section class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
       <section class="w-full !py-12 md:!py-20">
         <div
-          class="w-full md:w-full !px-4 sm:!px-6 lg:!px-8 !mx-auto flex flex-col items-center md:flex-row md:items-start">
+          class="w-full md:w-full !px-4 sm:!px-6 lg:!px-8 flex flex-col items-center md:flex-row md:items-start">
 
           <!-- Left Side (Images) -->
-          <div class="w-full md:w-full !mb-8 md:!mb-0 flex justify-center md:justify-start">
-            <div class="relative w-[90%] max-w-xl h-[240px] sm:h-[320px] md:h-[420px] lg:h-[460px]">
+          <div class="w-[50%] md:w-full !mb-8 md:!mb-0 flex justify-center md:justify-center">
+            <div class="relative w-[80%] max-w-xl h-[240px] sm:h-[320px] md:h-[420px] lg:h-[460px]">
 
               <!-- Top-left card -->
               <img class="absolute -top-10 -left-10 w-[64%] sm:w-[60%] md:w-[58%] h-[78%] sm:h-[82%] md:h-[86%] object-cover
@@ -76,7 +76,7 @@ const menuOpen = ref(false)
           </div>
 
           <!-- Right Side (Content) -->
-          <div class="w-full md:w-1/2 !px-6 md:!px-12">
+          <div class="w-[50%] md:w-1/2 sm:block !px-6 md:!px-12">
             <h2 class="text-2xl md:text-3xl font-bold text-white !mb-6">About Us</h2>
 
             <p class="text-base text-justify text-white md:text-lg">
@@ -86,13 +86,13 @@ const menuOpen = ref(false)
                 register their fixed assets with trustee companies in Cambodia. Our
                 specialised license consists of commercial, social and personal trust
                 in which has been approved by the Trust Regulator.
-              </span>
+              </span><br>
               <span class="block !my-2">
                 We are the associated company of Phillip Bank, Plc, one of the
                 medium-sized commercial banks in Cambodia, part of Phillip Capital
                 group in Singapore, and a sister company of Phillip General Insurance
                 and Phillip Life Assurance Company.
-              </span>
+              </span><br>
               <span class="block !my-2">
                 At Phillip Trustee (Cambodia), Co Ltd. we believe in a financial and
                 non-financial ecosystem that can provide suitable services to
@@ -177,13 +177,13 @@ const menuOpen = ref(false)
       </section>
       <section class="value w-full !py-20 !px-12">
         <div class="w-[1100px] h-[366.36px] place-self-center flex justify-between">
-          <div class="left">
+          <div class="left w-[50%]">
             <h2 class="flex text-3xl font-bold text-white item-center">
               <img class="w-[45px] h-[48px] !mr-6" src="https://www.philliptrustee.com.kh/v2/img/icon_value.svg"
                 alt="" />
               Value
             </h2>
-            <p class="w-[550px] h-[275.38px] text-white text-xl">
+            <p class="w-full h-[275.38px] text-white text-xl">
               <span>Transparency: We are transparent in all dealings with our
                 customers.</span><br /><br />
               <span>Conduct of Business: We serve our customers with mutual respect
@@ -194,9 +194,9 @@ const menuOpen = ref(false)
                 from our overseas business units.</span>
             </p>
           </div>
-          <div class="right">
+          <div class="right w-[50%]">
             <div class="para_bg w-[505px] h-[366.36px]">
-              <img class="w-[325px] h-[366.36px] place-self-end"
+              <img class="w-[325px] h-[366.36px] place-self-center"
                 src="https://www.philliptrustee.com.kh/v2/img/icon_value2.jpg" alt="" />
             </div>
           </div>
@@ -211,7 +211,7 @@ const menuOpen = ref(false)
             Management Profile
           </h2>
           <div class="flex flex-wrap justify-center !pt-[50px]">
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid sm:grid-cols-1 gap-4 md:grid-cols-3">
               <div class="w-[330px] h-[298.75px] !my-[1.5%] !mb-10">
                 <div class="flex justify-center">
                   <img class="w-[214.5px] h-[214.5px] rounded-full"
@@ -243,7 +243,8 @@ const menuOpen = ref(false)
                 </div>
               </div>
             </div>
-            <div class="w-[330px] h-[298.75px] !my-[1.5%] !mb-10">
+            <div class="grid sm:grid-cols-1 gap-4 md:grid-cols-2 !mx-auto">
+              <div class="w-[330px] h-[298.75px] !my-[1.5%] !mb-10">
               <div class="flex justify-center">
                 <img class="w-[214.5px] h-[214.5px] rounded-full"
                   src="https://www.philliptrustee.com.kh/v2/img/management/kong_rothana.jpg" alt="" />
@@ -263,6 +264,7 @@ const menuOpen = ref(false)
                 <h4 class="text-xl font-bold">Ho Souven</h4>
                 <small class="text-white place-self-center">Operation Supervisor</small>
               </div>
+            </div>
             </div>
           </div>
         </div>

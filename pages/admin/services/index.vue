@@ -7,15 +7,16 @@ import { useToast } from 'primevue/usetoast';
 import { useConfirm } from 'primevue/useconfirm'
 import ConfirmDialog from 'primevue/confirmdialog';
 
-// import { EventService } from '@/service/EventService';
+import { KeyService } from '../../../service/KeyService';
 
-// onMounted(() => {
-//     EventService.getEventsMini().then((data) => (event.value = data));
-// });
+const keyService = new KeyService();
+onMounted(async () => {
+  services.value = await keyService.getServicesMini()
+});
 
-const event = ref();
-const getSeverity = (event) => {
-  switch (event.infoStatus) {
+const services = ref([]);
+const getSeverity = (services) => {
+  switch (services.status) {
     case 'UPDATED':
       return 'success';
     case 'OUTDATED':
@@ -108,7 +109,7 @@ const confirmLogout = () => {
           </li>
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/tableadmin"
+            <a href="/admin/users"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
@@ -116,14 +117,16 @@ const confirmLogout = () => {
                 <path
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
               </svg>
-              <span>Staff</span>
+              <span>Users</span>
             </a>
           </li>
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/events" class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
-                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <a href="/admin/events"
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
+                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
+                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
               </svg>
@@ -132,11 +135,10 @@ const confirmLogout = () => {
           </li>
 
           <li class="transition hover:duration-300 bg-[#454545] text-white group">
-            <a href="/admin/service"
+            <a href="/admin/services"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
-                class="w-6 h-6 !mr-2 text-white transition group-hover:duration-300 hover:transition"
-                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                viewBox="0 0 24 24">
+                class="w-6 h-6 !mr-2 text-white transition group-hover:duration-300 hover:transition" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
                   d="M7.58209 8.96025 9.8136 11.1917l-1.61782 1.6178c-1.08305-.1811-2.23623.1454-3.07364.9828-1.1208 1.1208-1.32697 2.8069-.62368 4.1363.14842.2806.42122.474.73509.5213.06726.0101.1347.0133.20136.0098-.00351.0666-.00036.1341.00977.2013.04724.3139.24069.5867.52125.7351 1.32944.7033 3.01552.4971 4.13627-.6237.8375-.8374 1.1639-1.9906.9829-3.0736l4.8107-4.8108c1.0831.1811 2.2363-.1454 3.0737-.9828 1.1208-1.1208 1.3269-2.80688.6237-4.13632-.1485-.28056-.4213-.474-.7351-.52125-.0673-.01012-.1347-.01327-.2014-.00977.0035-.06666.0004-.13409-.0098-.20136-.0472-.31386-.2406-.58666-.5212-.73508-1.3294-.70329-3.0155-.49713-4.1363.62367-.8374.83741-1.1639 1.9906-.9828 3.07365l-1.7788 1.77875-2.23152-2.23148-1.41419 1.41424Zm1.31056-3.1394c-.04235-.32684-.24303-.61183-.53647-.76186l-1.98183-1.0133c-.38619-.19746-.85564-.12345-1.16234.18326l-.86321.8632c-.3067.3067-.38072.77616-.18326 1.16235l1.0133 1.98182c.15004.29345.43503.49412.76187.53647l1.1127.14418c.3076.03985.61628-.06528.8356-.28461l.86321-.8632c.21932-.21932.32446-.52801.2846-.83561l-.14417-1.1127ZM19.4448 16.4052l-3.1186-3.1187c-.7811-.781-2.0474-.781-2.8285 0l-.1719.172c-.7811.781-.7811 2.0474 0 2.8284l3.1186 3.1187c.7811.781 2.0474.781 2.8285 0l.1719-.172c.7811-.781.7811-2.0474 0-2.8284Z" />
               </svg>
@@ -147,7 +149,8 @@ const confirmLogout = () => {
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
-            <button @click="confirmLogout()" class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+            <button @click="confirmLogout()"
+              class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -164,12 +167,12 @@ const confirmLogout = () => {
     </div>
 
     <!-- middle contain -->
-    <div class="w-full h-screen !pl-[135px] bg-[#f9fafb]">
+    <div class="w-full !pl-[135px] bg-[#f9fafb]">
       <div class="w-full place-self-end">
         <div class="w-full !mx-auto flex justify-between !px-8">
           <div class="w-full !mx-auto">
-            <div class="w-full flex justify-between !pt-[25px]">
-              <h1 class="text-xl font-bold">Welcome to Service</h1>
+            <div class="w-full flex justify-between">
+              <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Services</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <div class="flex shadow-md bg-[white]/100 rounded-lg ">
                   <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
@@ -204,32 +207,58 @@ const confirmLogout = () => {
                 </div>
               </div>
             </div>
-            <div class="card">
-              <DataTable :value="data" tableStyle="min-width: 50rem">
-                <template #header>
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-                    <span class="text-xl font-bold">Services</span>
-                    <Button icon="pi pi-refresh" rounded raised />
-                  </div>
-                </template>
-                <Column field="title" header="Title"></Column>
-                <Column header="Image">
+            <div class="card shadow-md">
+              <DataTable :value="services" tableStyle="min-width: 50rem">
+                <Column field="id" header="ID">
                   <template #body="slotProps">
-                    <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-                      :alt="slotProps.data.image" class="w-24 rounded" />
+                    {{ slotProps.data.id }}
                   </template>
                 </Column>
-                <Column field="thumbnail" header="thumbnail">
+                <Column header="thumbnail">
                   <template #body="slotProps">
-                    {{ slotProps.thumbnail }}
+                    <img :src="`${slotProps.data.thumbnail}`" :alt="slotProps.data.thumbnail"
+                      class="object-cover w-25 h-25 rounded-lg " />
                   </template>
                 </Column>
-                <Column header="Status">
+                <Column field="title" header="Title">
+                  <template #body="slotProps">
+                    <a class="text-blue-500 hover:underline" :href="`/admin/services/detail/${slotProps.data.link}`">
+                      {{ slotProps.data.title }}
+                    </a>
+                  </template>
+                </Column>
+                <Column field="action" header="action">
+                  <template #body>
+                    <div class="flex">
+                      <button type="button" class=" text-sm cursor-pointer ">
+                        <svg
+                          class=" text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
+                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                          viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m11.5 11.5 2.071 1.994M4 10h5m11 0h-1.5M12 7V4M7 7V4m10 3V4m-7 13H8v-2l5.227-5.292a1.46 1.46 0 0 1 2.065 2.065L10 17Zm-5 3h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
+                        </svg>
+
+
+                      </button>
+                      <button type="button" class=" text-sm cursor-pointer ">
+                        <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
+                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                          viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 15v3c0 .5523.44772 1 1 1h10.5M3 15v-4m0 4h11M3 11V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v5M3 11h18m0 0v1M8 11v8m4-8v8m4-8v2m1.8956 5.9528 1.5047-1.5047m0 0 1.5048-1.5048m-1.5048 1.5048 1.4605 1.4604m-1.4605-1.4604-1.4604-1.4605" />
+                        </svg>
+
+                      </button>
+                    </div>
+                  </template>
+                </Column>
+                <!-- <Column header="Status">
                   <template #body="slotProps">
                     <Tag :value="slotProps.data.infoStatus" :severity="getSeverity(slotProps.data)" />
                   </template>
-                </Column>
-                <template #footer> In total there are {{ events ? events.length : 0 }} events.
+                </Column> -->
+                <template #footer> In total there are {{ services ? services.length : 0 }} services.
                 </template>
               </DataTable>
             </div>

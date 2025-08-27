@@ -8,28 +8,28 @@ export interface serviceItem {
 export const keyService: serviceItem[] = [
     {
         id: 1,
-        link: '/services/holdProperty',
+        link: '/services/hold-Property',
         image: 'https://www.philliptrustee.com.kh/v2/img/key_service_img_01.jpg',
         title: 'Hold Trust Property'
         
     },
     {
         id: 2,
-        link: '/services/holdPersonal',
+        link: '/services/hold-Personal',
         image: 'https://www.philliptrustee.com.kh/v2/img/key_service_img_02.jpg',
         title: 'Hold Personal Trust'
         
     },
     {
         id: 3,
-        link: '/services/escrowService',
+        link: '/services/escrow-Service',
         image: 'https://www.philliptrustee.com.kh/v2/img/key_service_img_03.jpg',
         title: 'Escrow Service'
         
     },
     {
         id: 4,
-        link: '/services/salePurchase',
+        link: '/services/sale-Purchase',
         image: 'https://www.philliptrustee.com.kh/v2/img/key_service_img_04.jpg',
         title: 'Sales & Purchase Agreement (SPA) Service'
         

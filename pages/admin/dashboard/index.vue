@@ -84,7 +84,7 @@ const services = keyService.length
 
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/tableadmin"
+            <a href="/admin/users"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
@@ -92,7 +92,7 @@ const services = keyService.length
                 <path
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
               </svg>
-              <span>Staff</span>
+              <span>users</span>
             </a>
           </li>
 
@@ -109,7 +109,7 @@ const services = keyService.length
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/service"
+            <a href="/admin/services"
               class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -123,7 +123,7 @@ const services = keyService.length
 
           <li class="transition hover:bg-red-400 hover:text-white group">
             <button @click="confirmLogout()"
-              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px] cursor-pointer">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -147,8 +147,8 @@ const services = keyService.length
         <div class="grid grid-cols-1 gap-6 !px-4 md:!px-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
           <div class="!p-6 transition bg-white rounded-md shadow hover:scale-105">
-            <a href="/admin/recent">
-              <h1 class="flex text-lg font-semibold text-black">
+            <a href="#">
+              <h1 class="flex text-xl font-semibold text-black">
                 <svg class="w-6 h-6 !mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path
                     d="M12 8v4l3 3M3.22302 14C4.13247 18.008 7.71683 21 12 21c4.9706 0 9-4.0294 9-9 0-4.97056-4.0294-9-9-9-3.72916 0-6.92858 2.26806-8.29409 5.5M7 9H3V5" />
@@ -163,8 +163,8 @@ const services = keyService.length
           </div>
 
           <div class="!p-6 transition bg-white rounded-md shadow hover:scale-105">
-            <a href="/admin/event">
-              <h1 class="flex text-lg font-semibold text-black">
+            <a href="/admin/events">
+              <h1 class="flex text-xl font-semibold text-black">
                 <svg class="w-6 h-6 !mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path
                     d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
@@ -179,8 +179,8 @@ const services = keyService.length
           </div>
 
           <div class="!p-6 transition bg-white rounded-md shadow hover:scale-105">
-            <a href="/admin/service">
-              <h1 class="flex text-lg font-semibold text-black">
+            <a href="/admin/services">
+              <h1 class="flex text-xl font-semibold text-black">
                 <svg class="w-6 h-6 !mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path
                     d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -195,13 +195,13 @@ const services = keyService.length
           </div>
 
           <div class="!p-6 transition bg-white rounded-md shadow hover:scale-105">
-            <a href="/admin/tableadmin">
-              <h1 class="flex text-lg font-semibold text-black">
+            <a href="/admin/users">
+              <h1 class="flex text-xl font-semibold text-black">
                 <svg class="w-6 h-6 !mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path
                     d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                 </svg>
-                Total Staff :
+                Total Users :
               </h1>
               <div class="flex items-center !mt-6">
                 <p class="!p-2 text-xl font-medium bg-gray-200 rounded-md">{{ counts }}</p>

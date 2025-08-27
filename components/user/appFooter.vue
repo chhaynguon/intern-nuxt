@@ -1,8 +1,8 @@
 <template>
   <footer class="max-width-[100%] bg-[#F15A22]">
-    <div class="max-w-5xl !mx-auto !px-4 !py-6 flex justify-between">
-      <div class="left w-[404px]">
-        <div class="social_media flex h-[46px] !mb-[37.5px] !ml-3">
+    <div class="max-w-5xl !mx-auto !px-4 !py-6 md:flex justify-between md:items-center">
+      <div class="left w-[404px] sm:place-self-end">
+        <div class="social_media flex justify-end h-[46px] !mb-18 lg:!ml-3 lg:place-self-start sm:place-self-end md:place-self-start">
           <a href="https://www.facebook.com/philliptrustee">
             <img src="https://www.philliptrustee.com.kh/v2/img/fb.svg" alt="" />
           </a>
@@ -13,10 +13,10 @@
             <img src="https://www.philliptrustee.com.kh/v2/img/li.svg" alt="" />
           </a>
         </div>
-        <strong class="text-lg text-[#053069] !ml-3">Partners</strong>
-        <div class="partner !m-3">
+        <div class="w-full lg:text-start text-end md:text-start"><strong class=" text-lg text-[#053069]">Partners</strong></div>
+        <div class="partner ">
           <div class="swiper-slide flex justify-between animate-pulse">
-            <a href="https://www.philliptrustee.com.kh" >
+            <a href="https://www.philliptrustee.com.kh">
               <img src="https://www.philliptrustee.com.kh/v2/img/1_Rose_Mavel.jpg" alt="" />
             </a>
             <a href="https://www.philliptrustee.com.kh">
@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <div class="right w-[606px]">
+      <div class="right sm:w-[606px]">
         <div class="each_footer_item">
           <a href="" class="flex items-center justify-end">
             <span class="_desktop text-right">

@@ -208,31 +208,30 @@ const allowedService = computed(() => {
         </div>
       </div>
     </section>
-    <section class="w-full !mb-[70px]">
-      <div class="w-[1000px] place-self-center">
-        <div class="w-full place-self-center">
-          <h2 class="text-center text-white text-3xl font-bold !mb-[40px]">Key Services & Products</h2>
-        </div>
-        <div class="grid w-[80%] h-[180px] grid-cols-3 gap-4 place-self-center">
-          <div v-for="service in allowedService" :key="service.id"
-            class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-500 group hover:shadow-xl">
-            <a :href="service.link">
-              <div class="absolute w-full rounded-xl">
+    <section class="w-[60%] xl:w-[50%] !pb-14 sm:!pb-16 !mx-auto">
+        <div class="max-w-screen-xl !mx-auto !px-4 sm:!px-6 lg:!px-8">
+          <h2 class="text-center text-white text-2xl md:text-3xl font-bold !mb-8">Key Services & Products</h2>
+
+          <div class="grid grid-cols-3 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-for="service in allowedService" :key="service.id"
+              class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl group hover:shadow-xl">
+              <a :href="service.link" class="block w-full h-full">
                 <img
-                  class="w-full h-full rounded-xl place-self-center group-hover:scale-110 group-hover:transition group-hover:duration-5000"
-                  :src="service.image" alt="">
-              </div>
-              <div class="absolute w-full h-full bg-[#00275E]/40 group-hover:bg-[#F15A22]/40"></div>
-              <span class="text-white absolute top-[35%] left-[15%] font-bold">{{ service.title }}</span>
-              <span>
-                <img class="absolute w-[20px] h-[20px] bottom-[20px] left-[45%]"
-                  src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg" alt="">
-              </span>
-            </a>
+                  class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 rounded-xl group-hover:scale-110"
+                  :src="service.image" :alt="service.title" />
+                <div class="absolute inset-0 rounded-xl bg-[#00275E]/40 group-hover:bg-[#F15A22]/40 transition-colors">
+                </div>
+
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center !px-3">
+                  <span class="font-bold text-white">{{ service.title }}</span>
+                  <img class="w-[20px] h-[20px] !mt-3" src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg"
+                    alt="" />
+                </div>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     <appFooter />
   </div>
 </template>

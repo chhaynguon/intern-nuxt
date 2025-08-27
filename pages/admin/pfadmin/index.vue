@@ -7,10 +7,10 @@
       <aside class="flex flex-row justify-around text-black lg:flex-col lg:justify-start">
         <ul class="flex w-full text-center lg:flex-col">
 
-          <li class="transition hover:duration-300 bg-[#454545] text-white">
+          <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/dashboard"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
-              <svg class="w-6 h-6 !mr-2 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6 !mr-2 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                   d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
                   clip-rule="evenodd" />
@@ -21,7 +21,7 @@
 
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/tableadmin"
+            <a href="/admin/users"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
@@ -33,8 +33,8 @@
             </a>
           </li>
 
-          <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+          <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
+            <a href="/admin/events" class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
@@ -46,8 +46,8 @@
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/service"
-              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+            <a href="/admin/services"
+              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">

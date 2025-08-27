@@ -261,11 +261,11 @@ const allowedService = computed(() => {
       </div>
 
     </section>
-    <section class="w-full !pb-14 sm:!pb-16">
+    <section class="w-[60%] xl:w-[50%] !pb-14 sm:!pb-16 !mx-auto">
         <div class="max-w-screen-xl !mx-auto !px-4 sm:!px-6 lg:!px-8">
           <h2 class="text-center text-white text-2xl md:text-3xl font-bold !mb-8">Key Services & Products</h2>
 
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="grid grid-cols-3 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div v-for="service in allowedService" :key="service.id"
               class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl group hover:shadow-xl">
               <a :href="service.link" class="block w-full h-full">

@@ -15,8 +15,8 @@ onMounted(async () => {
 });
 
 const events = ref([]);
-const getSeverity = (event) => {
-  switch (event.infoStatus) {
+const getSeverity = (events) => {
+  switch (events.status) {
     case 'UPDATED':
       return 'success';
     case 'OUTDATED':
@@ -109,7 +109,7 @@ const confirmLogout = () => {
           </li>
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/tableadmin"
+            <a href="/admin/users"
               class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
               <svg
                 class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
@@ -117,14 +117,15 @@ const confirmLogout = () => {
                 <path
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
               </svg>
-              <span>Staff</span>
+              <span>Users</span>
             </a>
           </li>
 
 
-          <!-- staff menu -->
+          <!-- users menu -->
           <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
-            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+            <a href="/admin/events"
+              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
                 class="w-6 h-6 text-white dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -135,7 +136,7 @@ const confirmLogout = () => {
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/service"
+            <a href="/admin/services"
               class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -170,12 +171,12 @@ const confirmLogout = () => {
     <!-- middle contain -->
     <div class="w-full !pl-[135px] bg-[#f9fafb]">
       <div class="w-full place-self-end">
-        <div class="w-[90%] !mx-auto flex justify-between">
+        <div class="w-full !mx-auto flex justify-between !px-8">
           <div class="w-full !mx-auto">
             <div class="flex justify-between w-full">
-              <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Event</h1>
+              <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Events</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                <div class="flex shadow-xl bg-[white]/100 rounded-lg ">
+                <div class="flex shadow-md bg-[white]/100 rounded-lg ">
                   <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
                   <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
                     <svg
@@ -208,17 +209,18 @@ const confirmLogout = () => {
                 </div>
               </div>
             </div>
-            <div class="card">
+            <div class="card shadow-md">
               <DataTable :value="events" tableStyle="min-width: 50rem">
-                <template #header>
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-                    <span class="text-xl font-bold">Events</span>
-                    <Button icon="pi pi-refresh" rounded raised />
-                  </div>
-                </template>
                 <Column field="id" header="ID">
                   <template #body="slotProps">
                     {{ slotProps.data.id }}
+                  </template>
+                </Column>
+
+                <Column header="Thumbnail">
+                  <template #body="slotProps">
+                    <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
+                      class="object-cover w-25 h-25 rounded-lg" />
                   </template>
                 </Column>
 
@@ -229,18 +231,32 @@ const confirmLogout = () => {
                     </a>
                   </template>
                 </Column>
-                <Column header="Thumbnail">
-                  <template #body="slotProps">
-                    <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
-                      class="object-cover w-20 h-20 rounded-lg" />
+                <Column field="action" header="action">
+                  <template #body>
+                    <div class="flex">
+                      <button type="button" class=" text-sm cursor-pointer ">
+                        <svg
+                          class=" text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
+                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                          viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m11.5 11.5 2.071 1.994M4 10h5m11 0h-1.5M12 7V4M7 7V4m10 3V4m-7 13H8v-2l5.227-5.292a1.46 1.46 0 0 1 2.065 2.065L10 17Zm-5 3h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
+                        </svg>
+
+
+                      </button>
+                      <button type="button" class=" text-sm cursor-pointer ">
+                        <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
+                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                          viewBox="0 0 24 24">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 15v3c0 .5523.44772 1 1 1h10.5M3 15v-4m0 4h11M3 11V6c0-.55228.44772-1 1-1h16c.5523 0 1 .44772 1 1v5M3 11h18m0 0v1M8 11v8m4-8v8m4-8v2m1.8956 5.9528 1.5047-1.5047m0 0 1.5048-1.5048m-1.5048 1.5048 1.4605 1.4604m-1.4605-1.4604-1.4604-1.4605" />
+                        </svg>
+
+                      </button>
+                    </div>
                   </template>
                 </Column>
-                <!-- <Column header="Status">
-                                    <template #body="slotProps">
-                                        <Tag :value="slotProps.data.status"
-                                            :severity="getSeverity(slotProps.data.event)" />
-                                    </template>
-                                </Column> -->
                 <template #footer> In total there are {{ events ? events.length : 0 }} events.
                 </template>
               </DataTable>
