@@ -15,7 +15,7 @@ const allowedService = computed(() => {
     <!-- HEADER -->
     <header class="fixed top-0 left-0 z-50 w-full">
       <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
-        <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-2">
+        <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-5">
           <!-- Logo -->
           <div class="shrink-0">
             <a href="/" class="inline-flex items-center">

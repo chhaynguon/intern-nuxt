@@ -10,44 +10,46 @@ const allowedService = computed(() => {
   <div class="w-full bg-[url('https://www.philliptrustee.com.kh/v2/img/bg_1.jpg')]">
     <!-- <AppHeader /> -->
     <header class="fixed top-0 left-0 z-50 w-full">
-          <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
-            <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-2">
-              <!-- Logo -->
-              <div class="shrink-0">
-                <a href="/" class="inline-flex items-center">
-                  <img class="h-10 md:h-12 !p-1" src="https://www.philliptrustee.com.kh/v2/img/trustee.png"
-                    alt="Phillip Trustee Cambodia" />
-                </a>
-              </div>
-    
-              <!-- Desktop Nav -->
-              <nav class="hidden md:flex items-center gap-2 lg:gap-3 text-white text-[15px] lg:text-base font-normal">
-                <a href="/" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4 ">Home</a>
-                <a href="/about" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Profile</a>
-                <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-2 !px-4 bg-[#F15A22]/20">Services</a>
-                <a href="/events" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Event</a>
-                <a href="/faqs" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">FAQs</a>
-              </nav>
-    
-              <!-- Mobile Menu Button -->
-              <button class="md:hidden text-white text-2xl !p-2" @click="menuOpen = !menuOpen"
-                aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
-                ☰
-              </button>
-            </div>
-    
-            <!-- Mobile Nav -->
-            <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
-              <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
-                <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Home</a>
-                <a href="/about" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
-                <a href="/services" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Services</a>
-                <a href="/events" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Event</a>
-                <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
-              </div>
-            </div>
+      <div class="w-full bg-gradient-to-b from-[#00275e] via-[#00275e]/60 to-transparent">
+        <div class="max-w-screen-xl !mx-auto flex items-center justify-between !px-4 sm:!px-6 lg:!px-8 !py-5">
+          <!-- Logo -->
+          <div class="shrink-0">
+            <a href="/" class="inline-flex items-center">
+              <img class="h-10 md:h-12 !p-1" src="https://www.philliptrustee.com.kh/v2/img/trustee.png"
+                alt="Phillip Trustee Cambodia" />
+            </a>
           </div>
-        </header>
+
+          <!-- Desktop Nav -->
+          <nav class="hidden md:flex items-center gap-2 lg:gap-3 text-white text-[15px] lg:text-base font-normal">
+            <a href="/" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4 ">Home</a>
+            <a href="/about" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Profile</a>
+            <a href="/services" class="text-[#F15A22] font-medium rounded-lg !py-2 !px-4 bg-[#F15A22]/20">Services</a>
+            <a href="/events" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">Event</a>
+            <a href="/faqs" class="hover:text-[#F15A22] font-medium rounded-lg !py-2 !px-4">FAQs</a>
+          </nav>
+
+          <!-- Mobile Menu Button -->
+          <button class="md:hidden text-white text-2xl !p-2" @click="menuOpen = !menuOpen"
+            aria-label="Toggle navigation" :aria-expanded="menuOpen ? 'true' : 'false'">
+            ☰
+          </button>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div v-show="menuOpen" class="md:hidden bg-[#00275E] text-white">
+          <div class="max-w-screen-xl !mx-auto flex flex-col !px-4 !py-2">
+            <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Home</a>
+            <a href="/about"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
+            <a href="/services" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Services</a>
+            <a href="/events"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Event</a>
+            <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
+          </div>
+        </div>
+      </div>
+    </header>
 
 
     <section class="w-full h-screen bg-[url('https://www.philliptrustee.com.kh/v2/img/hero_bg.png')] bg-cover">
@@ -223,26 +225,18 @@ const allowedService = computed(() => {
             <div class="absolute -top-4 left-4 bg-[#F15A22] text-white !px-4 !py-1 rounded font-bold text-sm">
               Enter Trust Agreement<br>and Proceed with Trust<br><span class="font-normal">(3–5 Working Days)</span>
             </div>
-            <p class="!mt-6">
-              <strong class="font-normal">A trust agreement is entered by the customer and Phillip Trustee to
+            <p class="!mt-6"> A trust agreement is entered by the customer and Phillip Trustee to
                 establish a trust
-                fund.</strong><br>
+                fund.<br> <br>
               The customer is required to make a transfer to the trust fund under Phillip Trustee’s company bank
-              account, Phillip Bank.
-            </p>
-            <p class="!mt-4">
-              <strong class="font-normal">In proceeding with the trust, the terms of payment for the service are
+              account, Phillip Bank. <br><br> In proceeding with the trust, the terms of payment for the service are
                 agreed
-                upon.</strong><br>
-              The customer has to create a trust sub-account under the Trustee main account.
-            </p>
-            <p class="!mt-4">
-              <strong class="font-normal">The Trustee is to coordinate the trustor’s documents and submit them to
+                upon.<br> <br>
+              The customer has to create a trust sub-account under the Trustee main account. <br> <br> The Trustee is to coordinate the trustor’s documents and submit them to
                 the bank to apply for
-                an account.</strong><br>
+                an account.<br> <br>
               The trustee is to sign on the sub-account opening form on behalf of the trustor.
-            </p>
-            <p class="!mt-4 font-normal">
+              <br><br>
               100% of the Trustor’s fund will be deducted.
             </p>
           </div>
@@ -262,29 +256,29 @@ const allowedService = computed(() => {
 
     </section>
     <section class="w-[60%] xl:w-[50%] !pb-14 sm:!pb-16 !mx-auto">
-        <div class="max-w-screen-xl !mx-auto !px-4 sm:!px-6 lg:!px-8">
-          <h2 class="text-center text-white text-2xl md:text-3xl font-bold !mb-8">Key Services & Products</h2>
+      <div class="max-w-screen-xl !mx-auto !px-4 sm:!px-6 lg:!px-8">
+        <h2 class="text-center text-white text-2xl md:text-3xl font-bold !mb-8">Key Services & Products</h2>
 
-          <div class="grid grid-cols-3 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <div v-for="service in allowedService" :key="service.id"
-              class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl group hover:shadow-xl">
-              <a :href="service.link" class="block w-full h-full">
-                <img
-                  class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 rounded-xl group-hover:scale-110"
-                  :src="service.image" :alt="service.title" />
-                <div class="absolute inset-0 rounded-xl bg-[#00275E]/40 group-hover:bg-[#F15A22]/40 transition-colors">
-                </div>
+        <div class="grid grid-cols-3 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div v-for="service in allowedService" :key="service.id"
+            class="relative w-full h-[180px] overflow-hidden cursor-pointer rounded-xl group hover:shadow-xl">
+            <a :href="service.link" class="block w-full h-full">
+              <img
+                class="absolute inset-0 object-cover w-full h-full transition-transform duration-500 rounded-xl group-hover:scale-110"
+                :src="service.image" :alt="service.title" />
+              <div class="absolute inset-0 rounded-xl bg-[#00275E]/40 group-hover:bg-[#F15A22]/40 transition-colors">
+              </div>
 
-                <div class="absolute inset-0 flex flex-col items-center justify-center text-center !px-3">
-                  <span class="font-bold text-white">{{ service.title }}</span>
-                  <img class="w-[20px] h-[20px] !mt-3" src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg"
-                    alt="" />
-                </div>
-              </a>
-            </div>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center !px-3">
+                <span class="font-bold text-white">{{ service.title }}</span>
+                <img class="w-[20px] h-[20px] !mt-3" src="https://www.philliptrustee.com.kh/v2/img/arrow_right.svg"
+                  alt="" />
+              </div>
+            </a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
     <appFooter />
   </div>
 </template>

@@ -6,6 +6,7 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import { onMounted, ref } from 'vue';
 import { listEvents } from '~/data/Event/event';
 import { keyService } from '~/data/Service/keyService'
+import Chart from 'primevue/chart';
 const toast = useToast();
 const confirm = useConfirm()
 
@@ -60,6 +61,117 @@ onMounted(async () => {
 
 const events = listEvents.length
 const services = keyService.length
+
+// onMounted(() => {
+//   chartCircleData.value = setChartData();
+//   chartCircleOptions.value = setChartOptions();
+// });
+
+// const chartCircleData = ref();
+// const chartCircleOptions = ref();
+
+// const chartCircleData = () => {
+//   const documentStyle = getComputedStyle(document.body);
+
+//   return {
+//     labels: ['Events', 'User', 'Services'],
+//     datasets: [
+//       {
+//         data: [17, 4, 4],
+//         backgroundColor: [documentStyle.getPropertyValue('--p-cyan-500'), documentStyle.getPropertyValue('--p-orange-500'), documentStyle.getPropertyValue('--p-gray-500')],
+//         hoverBackgroundColor: [documentStyle.getPropertyValue('--p-cyan-400'), documentStyle.getPropertyValue('--p-orange-400'), documentStyle.getPropertyValue('--p-gray-400')]
+//       }
+//     ]
+//   };
+// };
+
+// const chartCircleOptions = () => {
+//   const documentStyle = getComputedStyle(document.documentElement);
+//   const textColor = documentStyle.getPropertyValue('--p-text-color');
+
+//   return {
+//     plugins: {
+//       legend: {
+//         labels: {
+//           usePointStyle: true,
+//           color: textColor
+//         }
+//       }
+//     }
+//   };
+// };
+
+onMounted(() => {
+  chartData.value = setChartData();
+  chartOptions.value = setChartOptions();
+});
+
+const chartData = ref();
+const chartOptions = ref();
+
+const setChartData = () => {
+  const documentStyle = getComputedStyle(document.documentElement);
+
+  return {
+    labels: ['June', 'July', 'August'],
+    datasets: [
+      {
+        label: 'Events',
+        backgroundColor: documentStyle.getPropertyValue('--p-cyan-500'),
+        borderColor: documentStyle.getPropertyValue('--p-cyan-500'),
+        data: [65, 59, 80]
+      },
+      {
+        label: 'Services',
+        backgroundColor: documentStyle.getPropertyValue('--p-gray-500'),
+        borderColor: documentStyle.getPropertyValue('--p-gray-500'),
+        data: [28, 48, 40]
+      }
+    ]
+  };
+};
+const setChartOptions = () => {
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColor = documentStyle.getPropertyValue('--p-text-color');
+  const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+  const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+
+  return {
+    indexAxis: 'y',
+    maintainAspectRatio: false,
+    aspectRatio: 0.8,
+    plugins: {
+      legend: {
+        labels: {
+          color: textColor
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: textColorSecondary,
+          font: {
+            weight: 500
+          }
+        },
+        grid: {
+          display: false,
+          drawBorder: false
+        }
+      },
+      y: {
+        ticks: {
+          color: textColorSecondary
+        },
+        grid: {
+          color: surfaceBorder,
+          drawBorder: false
+        }
+      }
+    }
+  };
+}
 </script>
 <template>
   <dbHeader />
@@ -71,33 +183,32 @@ const services = keyService.length
         <ul class="flex w-full text-center lg:flex-col">
 
           <li class="transition hover:duration-300 bg-[#454545] text-white">
-            <a href="/admin/dashboard"
-              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
-              <svg class="w-6 h-6 !mr-2 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <a href="/admin/dashboard" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group">
+              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path fill-rule="evenodd"
                   d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
                   clip-rule="evenodd" />
               </svg>
-              <span>Home</span>
+              <span class="!pl-[8px]">Dashboard</span>
             </a>
           </li>
 
 
           <li class="transition hover:duration-300 hover:bg-[#454545] hover:text-white group">
-            <a href="/admin/users"
-              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px]">
+            <a href="/admin/users" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group">
               <svg
-                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
+                class="w-6 h-6 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path
                   d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
               </svg>
-              <span>users</span>
+              <span class="!pl-[8px]">Users</span>
             </a>
           </li>
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-            <a href="/admin/events" class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+            <a href="/admin/events"
+              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
@@ -110,7 +221,7 @@ const services = keyService.length
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/services"
-              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
@@ -122,15 +233,15 @@ const services = keyService.length
           </li>
 
           <li class="transition hover:bg-red-400 hover:text-white group">
-            <button @click="confirmLogout()"
-              class="flex items-center justify-center lg:justify-start !px-4 !py-3 lg:w-[135px] lg:h-[44px] cursor-pointer">
+            <button @click="confirmLogout"
+              class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group cursor-pointer">
               <svg
-                class="w-6 h-6 !mr-2 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
+                class="w-6 h-6 text-gray-800 group-hover:text-white transition group-hover:duration-300 hover:transition"
                 fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
               </svg>
-              <span>Logout</span>
+              <span class="!pl-[8px]">Logout</span>
               <confirmDialog />
               <Toast />
 
@@ -142,9 +253,8 @@ const services = keyService.length
 
     <div class="w-full min-h-screen bg-[#f9fafb] lg:!pl-[135px]">
       <div class="w-full">
-        <h1 class="!px-4 !mt-6 text-xl font-bold text-start md:!px-8 md:!my-6">Welcome to Admin-Side</h1>
 
-        <div class="grid grid-cols-1 gap-6 !px-4 md:!px-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 !p-5">
 
           <div class="!p-6 transition bg-white rounded-md shadow hover:scale-105">
             <a href="#">
@@ -169,7 +279,7 @@ const services = keyService.length
                   <path
                     d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
                 </svg>
-                Total Event :
+                Total Events :
               </h1>
               <div class="flex items-center !mt-6">
                 <p class="!p-2 text-xl font-medium bg-blue-200 rounded-md">{{ events }}</p>
@@ -185,7 +295,7 @@ const services = keyService.length
                   <path
                     d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
-                Total Service :
+                Total Services :
               </h1>
               <div class="flex items-center !mt-6">
                 <p class="!p-2 text-xl font-medium bg-red-200 rounded-md">{{ services }}</p>
@@ -209,6 +319,11 @@ const services = keyService.length
               </div>
             </a>
           </div>
+        </div>
+        <div class="!p-5 flex w-full">
+          <!-- <div class="card">
+            <Chart type="bar" :data="chartData" :options="chartOptions" class="h-[30rem]" />
+          </div> -->
         </div>
       </div>
     </div>

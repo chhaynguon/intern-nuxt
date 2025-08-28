@@ -132,7 +132,7 @@ const confirmLogout = () => {
           <ul class="w-[135px] text-center">
 
             <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
-              <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group">
+              <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group">
                 <svg
                   class="w-6 h-6 text-black cursor-pointer group-hover:text-white hover:transition hover:duration-300"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -141,12 +141,12 @@ const confirmLogout = () => {
                     d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z"
                     clip-rule="evenodd" />
                 </svg>
-                <a href="/admin/dashboard" class="!pl-[8px]">Home</a>
+                <a href="/admin/dashboard" class="!pl-[8px]">Dashboard</a>
               </button>
             </li>
 
             <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
-              <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] ">
+              <button class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] ">
                 <svg
                   class="w-6 h-6 transition cursor-pointer group-hover:text-white hover:transition hover:duration-300"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -160,7 +160,7 @@ const confirmLogout = () => {
 
             <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
               <a href="/admin/events"
-                class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
                   class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                   viewBox="0 0 24 24">
@@ -173,7 +173,7 @@ const confirmLogout = () => {
 
             <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
               <a href="/admin/services"
-                class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[18px] group"><svg
+                class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
                   class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                   viewBox="0 0 24 24">
@@ -188,7 +188,7 @@ const confirmLogout = () => {
             <li
               class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
               <button @click="confirmLogout"
-                class="w-[135px] h-[44px] flex place-self-center !pl-[18px] items-center group">
+                class="w-[135px] h-[44px] flex place-self-center !pl-[10px] items-center group">
                 <svg
                   class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                   aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -203,12 +203,19 @@ const confirmLogout = () => {
           </ul>
         </aside>
       </div>
-      <div class="w-full h-screen !pl-[135px]">
-        <div class="w-full place-self-center !px-8 !pt-[25px]">
+      <div class="w-full h-screen !pl-[135px] bg-[#f9fafb]">
+        <div class="w-full place-self-center !px-8 !mt-5">
           <div class="w-full flex justify-between !pb-[10px]">
             <div class="w-full">
-              <h1 class="text-start font-bold text-xl text-[#454545]">Admin & User Tables</h1>
+              <h1 class="text-start font-bold text-xl text-[#454545]">Users</h1>
             </div>
+            <button @click="visible = true" class="transition hover:transition hover:duration-300 hover:scale-110">
+              <svg class="w-7 h-7 !m-1 text-black cursor-pointer hover:scale-110 " aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+            </button>
             <div class="flex shadow-md bg-[white]/100 rounded-lg ">
               <input v-model="data.id" placeholder="Enter ID" class="w-[150px] !pl-[20px] ">
               <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
@@ -229,17 +236,9 @@ const confirmLogout = () => {
                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                 </svg>
               </button>
-
-              <button @click="visible = true" class="transition hover:transition hover:duration-300 hover:scale-110">
-                <svg class="w-7 h-7 !m-1 text-black cursor-pointer hover:scale-110 " aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-              </button>
             </div>
             <div class="bg-white">
-              <Dialog v-model:visible="visible" modal header="Add Profile"
+              <Dialog v-model:visible="visible" modal header="Add User"
                 style="width: 25rem; border-radius: 8px; border-color: var(--color-blue-400);"
                 class="!p-[10px] rounded-lg !border-blue-400 !border !bg-[white]/100 !text-black">
                 <form class="max-w-md !mx-auto !mt-[10px]">
@@ -251,16 +250,6 @@ const confirmLogout = () => {
                       class="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                       Username</label>
                   </div>
-
-                  <div class="relative z-0 w-full !mb-5 group">
-                    <input v-model="newinfo.age" type="number" id="age" name="age" min="0"
-                      class="block !py-2.5 !px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-400 focus:outline-none focus:ring-0 focus:border-blue-400 peer"
-                      placeholder="" />
-                    <label for=""
-                      class="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                      Age</label>
-                  </div>
-
 
                   <div class="relative z-0 w-full !mb-5 group">
                     <select v-model="newinfo.gender"
@@ -305,24 +294,21 @@ const confirmLogout = () => {
               <tr class="bg-[#abafb3] text-white">
                 <th class="text-left !px-2 !py-1">#</th>
                 <th class="text-left !px-2 !py-2">Name</th>
-                <th class="text-left !px-3 !py-2">Age</th>
                 <th class="text-left !px-3 !py-2">Gender</th>
                 <th class="text-left !px-3 !py-2">Email address</th>
-                <th class="text-right !px-10 !py-2">Action</th>
+                <th class="text-right !px-5 !py-2">Action</th>
               </tr>
             </thead>
             <tbody class="bg-white">
               <tr v-for="user in data" :key="user?.id">
                 <td class="text-left !px-2 !py-1">{{ user.id }}</td>
                 <td class="text-left !px-2 !py-2">{{ user.username }}</td>
-                <td class="text-left !px-3 !py-2">{{ user.age }}</td>
                 <td class="text-left !px-3 !py-2">{{ user.gender }}</td>
                 <td class="text-left !px-3 !py-2">{{ user.email }}</td>
                 <td class="">
                   <div class="flex justify-end bg-white">
                     <dialogEdit :user="user" />
-                    <button type="button" @click="deleteUser(user.id)"
-                      class=" text-sm !px-[5px] !mx-[10px] cursor-pointer ">
+                    <button type="button" @click="deleteUser(user.id)" class=" text-sm !px-[5px] cursor-pointer ">
                       <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                         viewBox="0 0 24 24">
@@ -330,6 +316,7 @@ const confirmLogout = () => {
                           d="M16 12h4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                       </svg>
                     </button>
+
                   </div>
                 </td>
               </tr>

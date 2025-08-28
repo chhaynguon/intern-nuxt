@@ -79,7 +79,7 @@ const reloadPage = () => {
 </script>
 
 <template>
-  <Button @click="editDialog()" class="!px-[5px] !mx-[10px] cursor-pointer !bg-white !border-none"><svg
+  <Button @click="editDialog()" class="!px-[5px] cursor-pointer !bg-white !border-none"><svg
       class="w-7 h-7 text-black hover:scale-120 transition hover:transition hover:duration-300" aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
       <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"
