@@ -244,7 +244,7 @@ const confirmLogout = () => {
                 <form class="max-w-md !mx-auto !mt-[10px]">
                   <div class="relative z-0 w-full !mb-5 group">
                     <input v-model="newinfo.username" type="text" name="name" id="name"
-                      class="block !py-2.5 !px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-400 focus:outline-none focus:ring-0 focus:border-blue-400 peer"
+                      class="block !py-2.5 !px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-blue-400 peer"
                       placeholder="" required />
                     <label for=""
                       class="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
@@ -292,7 +292,6 @@ const confirmLogout = () => {
           <table class="min-w-full place-self-center border-collapse shadow-md border-2 border-[#abafb3]">
             <thead class="bg-white">
               <tr class="bg-[#abafb3] text-white">
-                <th class="text-left !px-2 !py-1">#</th>
                 <th class="text-left !px-2 !py-2">Name</th>
                 <th class="text-left !px-3 !py-2">Gender</th>
                 <th class="text-left !px-3 !py-2">Email address</th>
@@ -301,7 +300,6 @@ const confirmLogout = () => {
             </thead>
             <tbody class="bg-white">
               <tr v-for="user in data" :key="user?.id">
-                <td class="text-left !px-2 !py-1">{{ user.id }}</td>
                 <td class="text-left !px-2 !py-2">{{ user.username }}</td>
                 <td class="text-left !px-3 !py-2">{{ user.gender }}</td>
                 <td class="text-left !px-3 !py-2">{{ user.email }}</td>

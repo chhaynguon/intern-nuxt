@@ -1,174 +1,191 @@
 <script setup>
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
-import { useConfirm } from 'primevue/useconfirm'
-import ConfirmDialog from 'primevue/confirmdialog';
-import { ref, onMounted } from 'vue';
-import { Form } from '@primevue/forms';
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
+import ConfirmDialog from "primevue/confirmdialog";
+import { ref, onMounted } from "vue";
+import { Form } from "@primevue/forms";
+import { Dialog } from "primevue";
 
-const { $apollo, $gql } = useNuxtApp() // reactive variable for DataTable
-const loading = ref(true)   // optional, show loading state
+const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
+const loading = ref(true); // optional, show loading state
 
 const fetchEvents = async () => {
-  loading.value = true
+  loading.value = true;
   try {
     const { data } = await $apollo.query({
       query: $gql`
         query FindAll {
           findAll {
             id
-            sub_title
             thumbnail
+            title
+            sub_title
+            title_detail
+            des_detail
+            cover
+            images
+            created_by
+            approved_by
+            rejected_by
+            updated_by
+            deleted_by
             status
           }
         }
       `,
       fetchPolicy: "network-only", // optional, avoid cache
-    })
-    events.value = data.findAll
+    });
+    events.value = data.findAll;
   } catch (error) {
-    console.error("Failed to fetch events:", error)
+    console.error("Failed to fetch events:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
+const visible = ref(false);
 const createEvents = async () => {
-  loading.value = true
+  loading.value = true;
+
   try {
     const { data } = await $apollo.query({
       mutation: $gql`
         mutation CreateEvent($input: CreateEventInput!) {
           createEvent(CreateEventInput: $input) {
-            id
-            sub_title
             thumbnail
+            title
+            sub_title
+            title_detail
+            des_detail
+            cover
+            images
+            created_by
+            approved_by
+            rejected_by
+            updated_by
+            deleted_by
             status
           }
         }
       `,
       fetchPolicy: "network-only", // optional, avoid cache
-    })
-    events.value = data.findAll
+    });
+    events.value = data.findAll;
   } catch (error) {
-    console.error("Failed to fetch events:", error)
+    console.error("Failed to fetch events:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
-
+};
 // Fetch events when component mounts
 onMounted(async () => {
   // await syncStaticData()
-  await fetchEvents()
-})
+  await fetchEvents();
+});
 
 const events = ref([]);
-const getSeverity = (events) => {
-  switch (events.status) {
-    case 'UPDATED':
-      return 'success';
-    case 'OUTDATED':
-      return 'danger';
-
-    default:
-      return null;
-  }
-};
 
 const toast = useToast();
-const confirm = useConfirm()
+const confirm = useConfirm();
 
 const confirmLogout = () => {
   confirm.require({
-    message: 'Are you sure you want to logout?',
-    header: 'Confirm Logout',
-    icon: 'pi pi-sign-out',
+    message: "Are you sure you want to logout?",
+    header: "Confirm Logout",
+    icon: "pi pi-sign-out",
     acceptProps: {
-      label: 'Yes',
+      label: "Yes",
     },
     rejectProps: {
-      label: 'No',
-      severity: 'secondary',
-      outlined: true
+      label: "No",
+      severity: "secondary",
+      outlined: true,
     },
-    acceptClass: 'p-button-danger',
+    acceptClass: "p-button-danger",
     accept: () => {
       // do logout action here (clear token, redirect, etc.)
-      localStorage.removeItem('token');
-      navigateTo("/login")
+      localStorage.removeItem("token");
+      navigateTo("/login");
       toast.add({
-        severity: 'success',
-        summary: 'Logged Out',
-        detail: 'You have been successfully logged out.',
-        life: 3000
-      })
+        severity: "success",
+        summary: "Logged Out",
+        detail: "You have been successfully logged out.",
+        life: 3000,
+      });
     },
     reject: () => {
       toast.add({
-        severity: 'info',
-        summary: 'Cancelled',
-        detail: 'Logout cancelled.',
-        life: 2000
-      })
-    }
-
-  })
-}
+        severity: "info",
+        summary: "Cancelled",
+        detail: "Logout cancelled.",
+        life: 2000,
+      });
+    },
+  });
+};
 
 const first = ref(0);
 
-import { reactive } from 'vue';
-import { valibotResolver } from '@primevue/forms/resolvers/valibot';
-import { yupResolver } from '@primevue/forms/resolvers/yup';
-import { zodResolver } from '@primevue/forms/resolvers/zod';
-import * as v from 'valibot';
-import * as yup from 'yup';
-import { z } from 'zod';
+import { reactive } from "vue";
+import { valibotResolver } from "@primevue/forms/resolvers/valibot";
+import { yupResolver } from "@primevue/forms/resolvers/yup";
+import { zodResolver } from "@primevue/forms/resolvers/zod";
+import * as v from "valibot";
+import * as yup from "yup";
+import { z } from "zod";
 
 const initialValues = reactive({
-  details: ''
+  details: "",
 });
 
 const resolver = zodResolver(
   z.object({
-    details: z.string().min(1, { message: 'Details is required via Form Resolver.' })
+    details: z
+      .string()
+      .min(1, { message: "Details is required via Form Resolver." }),
   })
 );
 
-const zodUserNameResolver = zodResolver(z.string().min(1, { message: 'Username is required via Zod.' }));
-const yupFirstNameResolver = yupResolver(yup.string().required('First name is required via Yup.'));
-const valibotLastNameResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Last name is required via Valibot.')));
-
-const customPasswordResolver = ({ value }) => {
-  const errors = [];
-
-  if (!value) {
-    errors.push({ message: 'Password is required via Custom.' });
-  }
-
-  return {
-    errors
-  };
-};
+const yupThumbnailesolver = yupResolver(
+  yup.string().required("Thumbnail is required")
+);
+const zodTitleDetailResolver = zodResolver(
+  z.string().min(1, { message: "Title is required" })
+);
+const valibotCreatorResolver = valibotResolver(
+  v.pipe(v.string(), v.minLength(1, "Creator is required"))
+);
 
 const onFormSubmit = ({ valid }) => {
   if (valid) {
-    toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
+    toast.add({
+      severity: "success",
+      summary: "Form is submitted.",
+      life: 3000,
+    });
   }
 };
 
+const onThumbnailSelect = (event, field) => {
+  const file = event.files?.[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      field.value = e.target.result; // store base64 preview
+    };
+    reader.readAsDataURL(file);
+  }
+};
 </script>
 <template>
   <dbHeader />
   <section class="relative flex justify-between w-full top-16">
-
     <div class="fixed flex h-screen bg-white shadow-xl top-16">
       <aside class="w-[100%] text-black flex flex-col">
-        <ul class="w-[135px] text-center ">
-
+        <ul class="w-[135px] text-center">
           <!-- home menu -->
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/dashboard" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px]">
@@ -196,12 +213,10 @@ const onFormSubmit = ({ valid }) => {
             </a>
           </li>
 
-
           <!-- users menu -->
           <li class="transition hover:transition hover:duration-300 bg-[#454545] text-white">
-            <a href="/admin/events"
-              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
-                class="w-6 h-6 text-white dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            <a href="/admin/events" class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
+                class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
@@ -212,7 +227,7 @@ const onFormSubmit = ({ valid }) => {
 
           <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
             <a href="/admin/services"
-              class=" w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
+              class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
                 class="w-6 h-6 text-gray-800 cursor-pointer dark:text-white group-hover:text-white hover:transition hover:duration-300"
                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                 viewBox="0 0 24 24">
@@ -234,7 +249,8 @@ const onFormSubmit = ({ valid }) => {
                 viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
-              </svg> <span class="!pl-[8px] cursor-pointer">Logout</span>
+              </svg>
+              <span class="!pl-[8px] cursor-pointer">Logout</span>
               <confirmDialog />
               <Toast />
             </button>
@@ -253,16 +269,15 @@ const onFormSubmit = ({ valid }) => {
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <button @click="visible = true"
                   class="transition hover:transition hover:duration-300 scale-100 !pt-1 !pr-1">
-                  <svg class="w-7 h-7 text-black cursor-pointer hover:scale-110 " aria-hidden="true"
+                  <svg class="w-7 h-7 text-black cursor-pointer hover:scale-110" aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
-
                 </button>
-                <div class="flex shadow-md bg-[white]/100 rounded-lg ">
-                  <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px] ">
-                  <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
+                <div class="flex shadow-md bg-[white]/100 rounded-lg">
+                  <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px]" />
+                  <button class="transition hover:transition hover:duration-300 hover:scale-110" @click="reloadPage()">
                     <svg
                       class="w-6.5 h-6.5 text-red-400 !m-1 cursor-pointer hover:scale-120 transition hover:transition hover:duration-300 rounded-full"
                       aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -283,57 +298,55 @@ const onFormSubmit = ({ valid }) => {
                 </div>
               </div>
             </div>
-            <div class="card flex justify-center">
-              <Form :initialValues :resolver @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-80">
-                <FormField v-slot="$field" name="Title_Detail" initialValue="" :resolver="zodUserNameResolver"
+            <Dialog v-model:visible="visible" modal header="Add Event" :style="{ width: '30rem' }">
+              <Form @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-80">
+                <FormField v-slot="$data" name="Title" initialValue="" :resolver="zodTitleResolver"
                   class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Title_Detail" />
+                  <InputText type="text" placeholder="Title" />
+                  <Message v-if="$data.title" severity="error" size="small" variant="simple">{{
+                    $field.error?.message }}</Message>
+                </FormField>
+                <FormField v-slot="$field" name="Created_by" initialValue="" :resolver="zodTitleResolver"
+                  class="flex flex-col gap-1">
+                  <InputText type="text" placeholder="Created_by" />
+                  <Message v-if="$data.created_by" severity="error" size="small" variant="simple">{{
+                    $field.error?.message }}</Message>
+                </FormField>
+                <FormField v-slot="$field" name="Create" initialValue="" :resolver="valibotCreateResolver"
+                  class="flex flex-col gap-1">
+                  <InputText type="text" placeholder="Create" />
                   <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
                     $field.error?.message }}</Message>
                 </FormField>
-                <FormField v-slot="$field" name="Sub_Title" initialValue="" :resolver="yupFirstNameResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Sub_Title" />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
+                <FormField v-slot="$data.thumbnail" name="thumbnail" initialValue="">
+                  <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-gray-700">Thumbnail</label>
+                    <div
+                      class="flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition"
+                      :class="{
+                        'border-gray-300': !$data.invalid,
+                        'border-red-500 bg-red-50': $data.invalid,
+                      }">
+                      <input type="file" accept="image/*" class="hidden"
+                        @change="(e) => onThumbnailSelect(e, $data)" />
+                      <span class="text-gray-500 text-sm">Click or drop an image here</span>
+                    </div>
+                    <img v-if="$field.value" :src="$field.value" class="w-24 h-24 mt-2 rounded object-cover shadow" />
+                    <span v-if="$field.invalid" class="text-xs text-red-500">
+                      {{ $field.error?.message }}
+                    </span>
+                  </div>
                 </FormField>
-                <FormField v-slot="$field" name="Des_Detail" initialValue="" :resolver="valibotLastNameResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Des_Detail" />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$field" name="Cover" initialValue="" :resolver="valibotLastNameResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Cover" />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$field" name="Active" initialValue="" :resolver="valibotLastNameResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Active" />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$field" name="password" initialValue="" :resolver="customPasswordResolver"
-                  class="flex flex-col gap-1">
-                  <Password type="text" placeholder="Password" :feedback="false" toggleMask fluid />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <Button type="submit" severity="secondary" label="Submit" />
+
+                <Button @click="createEvents" type="submit" severity="secondary" label="Submit" />
               </Form>
-            </div>
+            </Dialog>
+
             <div class="card shadow-md">
-              <DataTable :value="events" tableStyle="min-width: 50rem" paginator="true" :rows="5" :totalRecords="120"
+              <DataTable :value="events" tableStyle="min-width: 50rem" paginator="true" :rows="5"
+                :totalRecords="events?.length"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                <Column field="id" header="#">
-                  <template #body="slotProps">
-                    {{ slotProps.data.id }}
-                  </template>
-                </Column>
-
                 <Column header="Thumbnail">
                   <template #body="slotProps">
                     <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
@@ -341,22 +354,28 @@ const onFormSubmit = ({ valid }) => {
                   </template>
                 </Column>
 
-                <Column field="title" header="Sub_Title">
+                <Column field="title" header="Title">
                   <template #body="slotProps">
-                    <a class="text-blue-500 hover:underline" :href="`/admin/events/detail-${slotProps.data.id}`">
-                      {{ slotProps.data.sub_title }}
+                    <a class="text-blue-500 hover:!underline" :href="`/admin/events/detail-${slotProps.data.id}`">
+                      {{ slotProps.data.title }}
                     </a>
+                  </template>
+                </Column>
+                <Column field="created by" header="Created_by">
+                  <template #body="slotProps">
+                    {{ slotProps.data.creator }}
                   </template>
                 </Column>
                 <Column field="status" header="Status">
                   <template #body="slotProps">
-                    {{ slotProps.data.status }}
+                    <Tag :value="slotProps.data.status" />
                   </template>
                 </Column>
+
                 <Column field="Action" header="Action">
                   <template #body>
                     <div class="flex">
-                      <button type="button" @click="editEvents" class=" text-sm cursor-pointer !px-[5px]">
+                      <button type="button" @click="editEvents" class="text-sm cursor-pointer !px-[5px]">
                         <svg class="text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">
@@ -364,7 +383,8 @@ const onFormSubmit = ({ valid }) => {
                             d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                         </svg>
                       </button>
-                      <button type="button" @click="deleteUser(user.id)" class=" text-sm !px-[5px] cursor-pointer ">
+                      <button type="button" @click="deleteUser(slotProps.data.id)"
+                        class="text-sm !px-[5px] cursor-pointer">
                         <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">
@@ -375,8 +395,8 @@ const onFormSubmit = ({ valid }) => {
                     </div>
                   </template>
                 </Column>
-                <template #footer> In total there are {{ events ? events.length : 0 }} events.
-
+                <template #footer>
+                  In total there are {{ events ? events.length : 0 }} events.
                 </template>
               </DataTable>
             </div>

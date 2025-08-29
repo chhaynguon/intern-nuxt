@@ -4,9 +4,10 @@
   "compilerOptions": {
     "types": [ "@nuxt/kit", "@types/node", "nuxt"],
     "paths": {
-      "#imports": ["./.nuxt/imports.d.ts"]
+      "#imports": ["./.nuxt/imports.d.ts"],
     },
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0"
   },
   "vueCompilerOptions": {
     "globalTypesPath": ".nuxt/global.d.ts"

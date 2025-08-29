@@ -209,11 +209,6 @@ const first = ref(0);
               <DataTable :value="services" tableStyle="min-width: 50rem" paginator="true" :rows="5" :totalRecords="120"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
-                <Column field="id" header="#">
-                  <template #body="slotProps">
-                    {{ slotProps.data.id }}
-                  </template>
-                </Column>
                 <Column header="Thumbnail">
                   <template #body="slotProps">
                     <img :src="`${slotProps.data.thumbnail}`" :alt="slotProps.data.thumbnail"
