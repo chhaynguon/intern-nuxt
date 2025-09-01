@@ -7,7 +7,8 @@ import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import { ref, onMounted } from "vue";
 import { Form } from "@primevue/forms";
-import { Dialog } from "primevue";
+import { FormField } from '@primevue/forms';
+
 
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const loading = ref(true); // optional, show loading state
@@ -20,19 +21,25 @@ const fetchEvents = async () => {
         query FindAll {
           findAll {
             id
-            thumbnail
-            title
-            sub_title
-            title_detail
-            des_detail
-            cover
-            images
-            created_by
-            approved_by
-            rejected_by
-            updated_by
-            deleted_by
-            status
+        thumbnail
+        title
+        sub_title
+        title_detail
+        description_detail
+        cover
+        images
+        created_by
+        created_at
+        updated_by
+        updated_at
+        approved_by
+        approved_at
+        rejected_by
+        rejected_at
+        deleted_by
+        deleted_at
+        status
+        approval_status
           }
         }
       `,
@@ -55,19 +62,26 @@ const createEvents = async () => {
       mutation: $gql`
         mutation CreateEvent($input: CreateEventInput!) {
           createEvent(CreateEventInput: $input) {
-            thumbnail
-            title
-            sub_title
-            title_detail
-            des_detail
-            cover
-            images
-            created_by
-            approved_by
-            rejected_by
-            updated_by
-            deleted_by
-            status
+            id
+        thumbnail
+        title
+        sub_title
+        title_detail
+        description_detail
+        cover
+        images
+        created_by
+        created_at
+        updated_by
+        updated_at
+        approved_by
+        approved_at
+        rejected_by
+        rejected_at
+        deleted_by
+        deleted_at
+        status
+        approval_status
           }
         }
       `,
@@ -127,58 +141,38 @@ const confirmLogout = () => {
   });
 };
 
-const first = ref(0);
-
-import { reactive } from "vue";
-import { valibotResolver } from "@primevue/forms/resolvers/valibot";
-import { yupResolver } from "@primevue/forms/resolvers/yup";
-import { zodResolver } from "@primevue/forms/resolvers/zod";
-import * as v from "valibot";
-import * as yup from "yup";
-import { z } from "zod";
+import { reactive } from 'vue';
+import { valibotResolver } from '@primevue/forms/resolvers/valibot';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import * as v from 'valibot';
+import * as yup from 'yup';
+import { z } from 'zod';
+import { Textarea } from "primevue";
 
 const initialValues = reactive({
-  details: "",
+  details: ''
 });
 
 const resolver = zodResolver(
   z.object({
-    details: z
-      .string()
-      .min(1, { message: "Details is required via Form Resolver." }),
+    details: z.string().min(1, { message: 'Details is required via Form Resolver.' })
   })
 );
 
-const yupThumbnailesolver = yupResolver(
-  yup.string().required("Thumbnail is required")
-);
-const zodTitleDetailResolver = zodResolver(
-  z.string().min(1, { message: "Title is required" })
-);
-const valibotCreatorResolver = valibotResolver(
-  v.pipe(v.string(), v.minLength(1, "Creator is required"))
-);
+
+const valibotTitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Title field is required.')));
+const valibotSub_TitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Secondary title is required.')));
+const valibotTitle_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Title Detail field is required.')));
+const valibotDescription_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Description field is required.')));
+const valibotCoverResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Cover field is required.')));
+const valibotImagesResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Images field is required.')));
 
 const onFormSubmit = ({ valid }) => {
   if (valid) {
-    toast.add({
-      severity: "success",
-      summary: "Form is submitted.",
-      life: 3000,
-    });
+    toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
   }
 };
 
-const onThumbnailSelect = (event, field) => {
-  const file = event.files?.[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      field.value = e.target.result; // store base64 preview
-    };
-    reader.readAsDataURL(file);
-  }
-};
 </script>
 <template>
   <dbHeader />
@@ -268,29 +262,18 @@ const onThumbnailSelect = (event, field) => {
               <h1 class="text-center font-bold text-2xl">Events</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <button @click="visible = true"
-                  class="transition hover:transition hover:duration-300 scale-100 !pt-1 !pr-1">
-                  <svg class="w-7 h-7 text-black cursor-pointer hover:scale-110" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-500 !mr-2 cursor-pointer group shadow-md">
+                  <svg class="w-6.5 h-6.5 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
+                  </svg>Create
                 </button>
-                <div class="flex shadow-md bg-[white]/100 rounded-lg">
-                  <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[20px]" />
-                  <button class="transition hover:transition hover:duration-300 hover:scale-110" @click="reloadPage()">
-                    <svg
-                      class="w-6.5 h-6.5 text-red-400 !m-1 cursor-pointer hover:scale-120 transition hover:transition hover:duration-300 rounded-full"
-                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                      viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18 17.94 6M18 18 6.06 6" />
-                    </svg>
-                  </button>
-                  <button class="transition hover:transition hover:duration-300 hover:scale-110" @click="eventSearch()">
-                    <svg
-                      class="w-6.5 h-6.5 !m-1 text-blue-400 cursor-pointer hover:scale-105 transition hover:transition hover:duration-300 rounded-full"
-                      aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                      viewBox="0 0 24 24">
+                <div class="flex shadow-md bg-[white]/100">
+                  <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[8px]" />
+                  <button class=" border-t-1 border-b-1 border-r-1" @click="eventSearch()">
+                    <svg class="w-6 h-6 !m-1 text-blue-400 rounded-full cursor-pointer" aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                     </svg>
@@ -298,48 +281,98 @@ const onThumbnailSelect = (event, field) => {
                 </div>
               </div>
             </div>
-            <Dialog v-model:visible="visible" modal header="Add Event" :style="{ width: '30rem' }">
-              <Form @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-80">
-                <FormField v-slot="$data" name="Title" initialValue="" :resolver="zodTitleResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Title" />
-                  <Message v-if="$data.title" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$field" name="Created_by" initialValue="" :resolver="zodTitleResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Created_by" />
-                  <Message v-if="$data.created_by" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$field" name="Create" initialValue="" :resolver="valibotCreateResolver"
-                  class="flex flex-col gap-1">
-                  <InputText type="text" placeholder="Create" />
-                  <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                    $field.error?.message }}</Message>
-                </FormField>
-                <FormField v-slot="$data.thumbnail" name="thumbnail" initialValue="">
-                  <div class="flex flex-col gap-2">
-                    <label class="text-sm font-medium text-gray-700">Thumbnail</label>
-                    <div
-                      class="flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition"
-                      :class="{
-                        'border-gray-300': !$data.invalid,
-                        'border-red-500 bg-red-50': $data.invalid,
-                      }">
-                      <input type="file" accept="image/*" class="hidden"
-                        @change="(e) => onThumbnailSelect(e, $data)" />
-                      <span class="text-gray-500 text-sm">Click or drop an image here</span>
+            <Dialog v-model:visible="visible" class="w-[60%] " header="Add Event">
+              <span class="w-full border-t-1 border-gray-300"></span>
+              <div class="w-full">
+                <Form :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
+                  class="grid grid-cols-1 gap-4 sm:w-full">
+                  <FormField v-slot="$field" name="title" initialValue="" :resolver="valibotTitleResolver"
+                    class="grid-cols-1 gap-1 ">
+                    <div class="flex justify-between items-center">
+                      <label for="title"> <span class="w-[25%] text-end !pr-2">Title</span></label>
+                      <InputText id="title" type="text" class="w-[80%]" />
                     </div>
-                    <img v-if="$field.value" :src="$field.value" class="w-24 h-24 mt-2 rounded object-cover shadow" />
-                    <span v-if="$field.invalid" class="text-xs text-red-500">
-                      {{ $field.error?.message }}
-                    </span>
-                  </div>
-                </FormField>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
+                      class="w-[80%] place-self-end">{{
+                        $field.error?.message }}</Message>
+                  </FormField>
 
-                <Button @click="createEvents" type="submit" severity="secondary" label="Submit" />
-              </Form>
+
+                  <FormField v-slot="$field" name="sub_title" initialValue="" :resolver="valibotSub_TitleResolver"
+                    class="grid-cols-1 gap-1 ">
+                    <div class="flex justify-between items-center"><span class="w-[25%] text-end !pr-2">Secondary
+                        Title</span>
+                      <InputText type="text" class="w-[75%]" />
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
+                      class="w-[80%] place-self-end">{{
+                        $field.error?.message }}</Message>
+                  </FormField>
+
+
+                  <FormField v-slot="$field" name="title_detail" initialValue="" :resolver="valibotTitle_DetailResolver"
+                    class="grid-cols-1 gap-1">
+                    <div class="flex justify-between items-center w-full">
+                      <span class="w-[25%] text-end !pr-2">Title Detail</span>
+                      <InputText type="text" class="w-[75%]" />
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
+                      class="w-[78%] place-self-end">{{
+                        $field.error?.message }}</Message>
+                  </FormField>
+
+
+                  <FormField v-slot="$field" name="description_detail" initialValue=""
+                    :resolver="valibotDescription_DetailResolver" class="grid-cols-1 gap-1">
+                    <div class="flex justify-between items-center">
+                      <span class="w-[25%] text-end !pr-2">Description</span>
+                      <Textarea type="text" class="w-[75%]" />
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
+                      class="w-[80%] place-self-end !pl-2">{{
+                        $field.error?.message }}</Message>
+                  </FormField>
+
+                  <FormField v-slot="$field" name="thumbnail" initialValue="" :resolver="valibotImagesResolver"
+                    class="grid-cols-1 gap-1">
+                    <div class="flex justify-between items-center">
+                      <span class="w-[25%] text-end text-sm text-gray-900 !pr-2" for="file_input">Thumbnail</span>
+                      <input
+                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                        id="file_input" type="file">
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
+                      $field.error?.message }}</Message>
+                  </FormField>
+
+                  <FormField v-slot="$field" name="cover" initialValue="" :resolver="valibotCoverResolver"
+                    class="grid-cols-1 gap-1">
+                    <div class="flex justify-between items-center">
+                      <span class="w-[25%] text-sm text-end text-gray-900 !pr-2" for="file_input">Cover</span>
+                      <input
+                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                        id="file_input" type="file">
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
+                      $field.error?.message }}</Message>
+                  </FormField>
+
+
+                  <FormField v-slot="$field" name="images" initialValue="" :resolver="valibotImagesResolver"
+                    class="grid-cols-1 gap-1">
+                    <div class="flex justify-between items-center">
+                      <span class="w-[25%] text-end text-sm text-gray-900 !pr-2" for="file_input">Images</span>
+                      <input
+                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                        id="file_input" type="file">
+                    </div>
+                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
+                      $field.error?.message }}</Message>
+                  </FormField>
+
+                  <Button type="submit" severity="secondary" label="Create" class="!mt-2" />
+                </Form>
+              </div>
             </Dialog>
 
             <div class="card shadow-md">
@@ -363,7 +396,7 @@ const onThumbnailSelect = (event, field) => {
                 </Column>
                 <Column field="created by" header="Created_by">
                   <template #body="slotProps">
-                    {{ slotProps.data.creator }}
+                    {{ slotProps.data.created_by }}
                   </template>
                 </Column>
                 <Column field="status" header="Status">
