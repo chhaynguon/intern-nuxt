@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import lara from "@primeuix/themes/lara";
 import css from "~/assets/css/main.css";
+import { fileURLToPath } from 'url'
+
 
 export default defineNuxtConfig({
   devServer: {
@@ -25,8 +27,11 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE_URL,
     },
   },
-  modules: ["@primevue/nuxt-module", // optional
-  "@nuxtjs/tailwindcss", "@nuxtjs/apollo"],
+  modules: [
+    "@primevue/nuxt-module", // optional
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/apollo",
+  ],
   primevue: {
     options: {
       theme: {
@@ -37,4 +42,21 @@ export default defineNuxtConfig({
       include: ["Button", "Dialog", "Paginator", "Toast"],
     },
   },
+  builder: "vite",
+  vite: {
+    server: {
+      watch: {
+        ignored: ["**/node_modules/**"],
+      },
+      warmup: {
+        clientFiles: [
+          "./components/LargeComponent.vue",
+          "./utils/complex-helper.js",
+        ],
+      },
+    },
+  },
+  alias: {
+    '@request': '/request/Service/service.master',
+  }
 });

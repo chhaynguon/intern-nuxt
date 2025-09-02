@@ -6,10 +6,10 @@
                 <div class="p-fileupload-buttonbar">
                     <div class="w-[120px] h-[40px]">
                         <label for="file_uplaod">
-                            <span class="p-button p-component p-fileupload-choose mt-1 " tabindex="0">
-                                <span class="p-button-label">
+                            <span class="!p-button p-component !p-fileupload-choose !mt-1 " tabindex="0">
+                                <span class="p-button-label cursor-pointer">
                                     <i class="pi pi-paperclip"></i>
-                                    Attach file
+                                    Images
                                 </span>
                             </span>
                         </label>
@@ -24,14 +24,14 @@
 
         <div class="grid grid-cols-1 gap-4">
             <div class="col-span-1">
-                <div v-for="(file, index) in allAttachments" :key="index"
+                <div v-for="(_file, index) in allAttachments" :key="index"
                     class="w-full border-b-1 flex align-center justify-between items-center rounded-[4px]">
-                    <div class="flex items-center pt-2 pb-2">
+                    <div class="flex items-center !pt-2 !pb-2">
                         <Image class="w-[70px]"
                             :src="images[index].id ? '/storage/' + props.path + images[index]?.url : images[index]?.url"
                             v-if="['image/png', 'image/jpeg', 'image/svg'].includes(images[index]?.type)" preview />
                         <DocumentTextIcon class="w-[70px] h-[70px]" v-else />
-                        <div class="p-2">
+                        <div class="!p-2">
                             <p class="text-lg">
                                 {{ images[index]?.name }}
                             </p>
@@ -44,7 +44,7 @@
                         <div style="width: 9rem;">
                             {{ calImageSize(images[index]?.size) }}
                         </div>
-                        <div style="width: 4rem;" class="flex flex-row justify-end mr-2">
+                        <div style="width: 4rem;" class="flex flex-row justify-end !mr-2">
                             <Button v-if="images[index].id" icon="pi pi-download" severity="info" size="small" rounded
                                 aria-label="Download" @click="downloadWithAxios(images[index]?.url)"
                                 style="margin-right: 5px;" />
@@ -61,7 +61,7 @@
 </template>
 <script setup>
 import { DocumentTextIcon } from "@heroicons/vue/24/outline";
-import ServiceMaster from '@request/Service/service.master.js';
+import ServiceMaster from '~/request/Service/service.master.js';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
 import { useToast } from "primevue/usetoast";
@@ -103,9 +103,9 @@ const loadingButton = reactive({
     url: ''
 });
 
-const removeImage = (index, url, id = null, file) => {
+const removeImage = (index, _url, id = null, _file) => {
     if (id) {
-        emits('deleteFile', index, file)
+        emits('deleteFile', index, _file)
     } else {
         emits('deleteFile', index);
     }
@@ -151,7 +151,7 @@ const createImage = (files) => {
     }
 
     for (const element of files) {
-        error.value = false
+        error.status = false
         const name = element.name
         const size = element.size
         const type = element.type
@@ -236,4 +236,3 @@ const allAttachments = computed(() => {
     border: 1px solid #f44336 !important;
 }
 </style>
- 

@@ -5,7 +5,7 @@
     <div class="w-full h-screen !pl-[135px] bg-[#f9fafb]">
       <div class="w-full place-self-end">
         <div>
-          <h1 class="text-center font-bold text-2xl !m-[20px]">Welcome to Recent</h1>
+          <h1 class="text-center font-bold text-2xl !m-[20px]">Recent</h1>
         </div>
       </div>
     </div>
