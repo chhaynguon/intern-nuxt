@@ -163,8 +163,6 @@ const valibotTitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, '
 const valibotSub_TitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Secondary title is required.')));
 const valibotTitle_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Title Detail field is required.')));
 const valibotDescription_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Description field is required.')));
-const valibotCoverResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Cover field is required.')));
-const valibotImagesResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Images field is required.')));
 
 const onFormSubmit = ({ valid }) => {
   if (valid) {
@@ -266,12 +264,12 @@ const topPos = ref(150);
                     width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>Create
+                  </svg>New
                 </button>
                 <div class="flex shadow-md">
                   <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md" />
                   <button class=" border-t-1 border-b-1 border-r-1 rounded-tr-md rounded-br-md" @click="eventSearch()">
-                    <svg class="w-6 h-6 !m-1 text-blue-400 rounded-full cursor-pointer" aria-hidden="true"
+                    <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
@@ -284,18 +282,18 @@ const topPos = ref(150);
               :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + '50px' }">
               <template #header>
                 <div class="flex items-center justify-between w-full">
-                  <span class="font-bold">Add Event</span>
+                  <span class="font-bold">New Event</span>
                   <div>
                     <button type="submit"
                       class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
-                      Create</button>
+                      Add</button>
                     <button @click="visible = false"
                       class=" cursor-pointer !p-2 !px-2.5 rounded-tr-md rounded-br-md text-sm text-center bg-gray-100 hover:bg-gray-200  hover:transition hover:duration-300 transition duration-300">
                       Close</button>
                   </div>
                 </div>
               </template>
-              <span class="w-full h-[20px] border-b-1 "></span>
+              <span class="w-full h-[20px] border-b-1"></span>
               <div class="w-full bg-[#fafafa] rounded-md">
                 <Form :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
                   class="grid grid-cols-2 gap-4 sm:w-full !p-3">
@@ -338,7 +336,7 @@ const topPos = ref(150);
                   </FormField>
 
                   <FormField v-slot="$field" name="description_detail" initialValue=""
-                    :resolver="valibotDescription_DetailResolver" class="col-span-2 gap-1">
+                    :resolver="valibotDescription_DetailResolver" class="col-span-2">
                     <div class="flex justify-between">
                       <label for="description_detail" class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
                       <Textarea id="description_detail" type="text"
@@ -349,42 +347,6 @@ const topPos = ref(150);
                       class="w-[88%] place-self-end">{{
                         $field.error?.message }}</Message>
                   </FormField>
-
-                  <!-- <FormField v-slot="$field" name="thumbnail" initialValue="" :resolver="valibotImagesResolver"
-                    class="grid-cols-1 gap-1">
-                    <div class="flex justify-between items-center">
-                      <span class="w-[25%] text-end text-gray-900 !pr-2 text-xs" for="file_input">Thumbnail</span>
-                      <input
-                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none"
-                        id="file_input" type="file">
-                    </div>
-                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                      $field.error?.message }}</Message>
-                  </FormField>
-
-                  <FormField v-slot="$field" name="cover" initialValue="" :resolver="valibotCoverResolver"
-                    class="grid-cols-1 gap-1">
-                    <div class="flex justify-between items-center">
-                      <span class="w-[25%] text-end text-gray-900 !pr-2 text-xs" for="file_input">Cover</span>
-                      <input
-                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none"
-                        id="file_input" type="file">
-                    </div>
-                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                      $field.error?.message }}</Message>
-                  </FormField>
-
-                  <FormField v-slot="$field" name="images" initialValue="" :resolver="valibotImagesResolver"
-                    class="grid-cols-1 gap-1">
-                    <div class="flex justify-between items-center">
-                      <span class="w-[25%] text-end text-gray-900 !pr-2 text-xs" for="file_input">Images</span>
-                      <input
-                        class="w-[75%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white focus:outline-none !align-middle"
-                        id="file_input" type="file">
-                    </div>
-                    <Message v-if="$field?.invalid" severity="error" size="small" variant="simple">{{
-                      $field.error?.message }}</Message>
-                  </FormField> -->
                   <fileUpload />
                 </Form>
               </div>

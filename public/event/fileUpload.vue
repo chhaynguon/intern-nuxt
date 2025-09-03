@@ -1,65 +1,63 @@
 <template>
-    <div class="flex flex-col w-full">
-        <input multiple type="file" id="file_uplaod" @change="onFileChange" class="hidden" v-if="!disabled">
-        <div class="grid gap-4">
-            <div class="col-start-1 col-end-3">
-                <div class="p-fileupload-buttonbar">
-                    <div class="w-[120px] h-[40px]">
-                        <label for="file_uplaod">
-                            <span class="!p-button p-component !p-fileupload-choose !mt-1 " tabindex="0">
-                                <span class="p-button-label cursor-pointer">
-                                    <i class="pi pi-paperclip"></i>
-                                    Images
-                                </span>
-                            </span>
-                        </label>
-                    </div>
-                    <span v-if="error.status" class="text-red-500 w-full">{{ error.title }}</span>
+    <input multiple type="file" id="file_uplaod" @change="onFileChange" class="hidden" v-if="!disabled">
+    <div class="grid gap-4">
+        <div class="col-start-1 col-end-3">
+            <div class="p-button-label flex justify-center !pr-6">
+                <div class="flex text-xs font-normal items-center !pr-2">Attachments</div>
+                <div class="w-[100px] h-[40px]">
+                    <label for="file_uplaod" class="flex justify-between">
+                        <div
+                            class="flex items-center cursor-pointer !p-2 bg-blue-400 hover:bg-blue-500 text-white place-content-center text-sm font-normal rounded-sm">
+                            <i class="pi pi-paperclip !px-1"></i>
+                            <span class="!px-1">Images</span>
+                        </div>
+                    </label>
                 </div>
-            </div>
-            <div class="col-end-6 col-span-2">
-                <slot name="right-side"></slot>
+                <span v-if="error.status" class="text-red-500 w-full">{{ error.title }}</span>
             </div>
         </div>
-
-        <div class="grid grid-cols-1 gap-4">
+        <div class="col-end-6 col-span-2">
+            <slot name="right-side"></slot>
+        </div>
+    </div>
+    <div class="grid col-span-2">
+        <div class=" grid-cols-1 gap-4">
             <div class="col-span-1">
-                <div v-for="(_file, index) in allAttachments" :key="index"
-                    class="w-full border-b-1 flex align-center justify-between items-center rounded-[4px]">
+                <div v-for="(file, index) in allAttachments" :key="index"
+                    class="w-[87%] place-self-end border-b-1 flex align-center justify-between items-center rounded-[4px]">
                     <div class="flex items-center !pt-2 !pb-2">
-                        <Image class="w-[70px]"
-                            :src="images[index].id ? '/storage/' + props.path + images[index]?.url : images[index]?.url"
-                            v-if="['image/png', 'image/jpeg', 'image/svg'].includes(images[index]?.type)" preview />
-                        <DocumentTextIcon class="w-[70px] h-[70px]" v-else />
+                        <Image class="w-[70px] h-[70px] object-scale-down"
+                            :src="file.id ? '/storage/' + props.path + file?.url : file?.url"
+                            v-if="['image/png', 'image/jpeg', 'image/svg'].includes(file?.type)" preview />
+                        <DocumentTextIcon class="w-[40px] h-[40px]" v-else />
                         <div class="!p-2">
                             <p class="text-lg">
-                                {{ images[index]?.name }}
+                                {{ file?.name }}
                             </p>
                             <div class="w-full text-xs italic text-red-400">
-                                {{ errors['file.' + index]?.[0] }}
+                                {{ errors?.['file.' + index]?.[0] || '' }}
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-row" style="margin-right: 15px;">
                         <div style="width: 9rem;">
-                            {{ calImageSize(images[index]?.size) }}
+                            {{ calImageSize(file?.size) }}
                         </div>
                         <div style="width: 4rem;" class="flex flex-row justify-end !mr-2">
-                            <Button v-if="images[index].id" icon="pi pi-download" severity="info" size="small" rounded
-                                aria-label="Download" @click="downloadWithAxios(images[index]?.url)"
+                            <Button v-if="file.id" icon="pi pi-download" severity="info" size="small" rounded
+                                aria-label="Download" @click="downloadWithAxios(file?.url)"
                                 style="margin-right: 5px;" />
                             <Button icon="pi pi-times" severity="danger" size="small" rounded aria-label="Remove"
-                                @click="removeImage(index, images[index]?.url, images[index]?.id ?? null, images[index])"
-                                :disabled="disabled" />
+                                @click="removeImage(index, file?.url, file?.id ?? null, file)" :disabled="disabled" />
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script setup>
+
 import { DocumentTextIcon } from "@heroicons/vue/24/outline";
 import ServiceMaster from '~/request/Service/service.master.js';
 import Button from 'primevue/button';
@@ -103,12 +101,9 @@ const loadingButton = reactive({
     url: ''
 });
 
-const removeImage = (index, _url, id = null, _file) => {
-    if (id) {
-        emits('deleteFile', index, _file)
-    } else {
-        emits('deleteFile', index);
-    }
+const removeImage = (index) => {
+  images.value.splice(index, 1) // removes from local list
+  emits('deleteFile', index)    // let parent know too
 }
 
 const onFileChange = (e) => {
@@ -171,6 +166,44 @@ const createImage = (files) => {
     emits('changeFile', images.value);
 }
 
+// Non-serializable storage for uploads only
+// const rawFiles = ref([])
+
+// const createImage = (files) => {
+//     if (checkFileSize(files)) {
+//         error.status = true
+//         error.title = `File too big, please select a file less than ${props.size}MB`
+//         handleRules('error', 'Error', error.title)
+//         return
+//     }
+
+//     if (images.value.length >= props.limit) {
+//         error.status = true
+//         error.title = `File upload allows only ${props.limit} files`
+//         handleRules('error', 'Error', error.title)
+//         return
+//     }
+
+//     for (const file of files) {
+//         error.status = false
+//         const reader = new FileReader()
+//         reader.onload = (event) => {
+//             images.value.push({
+//                 url: event.target.result, // preview
+//                 name: file.name,
+//                 size: file.size,
+//                 type: file.type,
+//                 created_at: new Date(),
+//             })
+//             rawFiles.value.push(file) // keep original File object separately
+//         }
+//         reader.readAsDataURL(file)
+//     }
+
+//     emits("changeFile", images.value)
+//     console.log(images.value)
+// }
+
 const handleRules = (type, title, detial) => {
     toast.add({ severity: type, summary: title, detail: detial, life: 6000 });
 }
@@ -217,6 +250,7 @@ const allAttachments = computed(() => {
         return new Date(b.created_at) - new Date(a.created_at);
     })
 })
+
 
 </script>
 <style>
