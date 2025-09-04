@@ -1,15 +1,14 @@
 <template>
-    <input multiple type="file" id="file_uplaod" @change="onFileChange" class="hidden" v-if="!disabled">
+    <input type="file" name="thumbnail" id="file_uplaod" @change="onThumbnailChange" class="hidden" v-if="!disabled">
     <div class="grid gap-4">
         <div class="col-start-1 col-end-3">
-            <div class="p-button-label flex justify-center !pr-6">
-                <div class="flex text-xs font-normal items-center !pr-2">Attachments</div>
+            <div class="p-button-label flex justify-end !pr-13">
                 <div class="w-[100px] h-[40px]">
                     <label for="file_uplaod" class="flex justify-between">
                         <div
                             class="flex items-center cursor-pointer !p-2 bg-blue-400 hover:bg-blue-500 text-white place-content-center text-sm font-normal rounded-sm">
                             <i class="pi pi-paperclip !px-1"></i>
-                            <span class="!px-1">Images</span>
+                            <span class="!px-1">Thumbnail</span>
                         </div>
                     </label>
                 </div>
@@ -23,16 +22,17 @@
     <div class="grid col-span-2">
         <div class=" grid-cols-1 gap-4">
             <div class="col-span-1">
-                <div v-for="(file, index) in allAttachments" :key="index"
+                <div v-for="(thumbnail, index) in allAttachments" :key="index"
                     class="w-[87%] place-self-end border-b-1 flex align-center justify-between items-center rounded-[4px]">
+                    <p>Images</p>
                     <div class="flex items-center !pt-2 !pb-2">
                         <Image class="w-[70px] h-[70px] object-scale-down"
-                            :src="file.id ? '/storage/' + props.path + file?.url : file?.url"
-                            v-if="['image/png', 'image/jpeg', 'image/svg'].includes(file?.type)" preview />
+                            :src="thumbnail.id ? '/storage/' + props.path + thumbnail?.url : thumbnail?.url"
+                            v-if="['image/png', 'image/jpeg', 'image/svg'].includes(thumbnail?.type)" preview />
                         <DocumentTextIcon class="w-[40px] h-[40px]" v-else />
                         <div class="!p-2">
                             <p class="text-lg">
-                                {{ file?.name }}
+                                {{ thumbnail?.name }}
                             </p>
                             <div class="w-full text-xs italic text-red-400">
                                 {{ errors?.['file.' + index]?.[0] || '' }}
@@ -41,14 +41,15 @@
                     </div>
                     <div class="flex flex-row" style="margin-right: 15px;">
                         <div style="width: 9rem;">
-                            {{ calImageSize(file?.size) }}
+                            {{ calthumbnailsize(thumbnail?.size) }}
                         </div>
                         <div style="width: 4rem;" class="flex flex-row justify-end !mr-2">
-                            <Button v-if="file.id" icon="pi pi-download" severity="info" size="small" rounded
-                                aria-label="Download" @click="downloadWithAxios(file?.url)"
+                            <Button v-if="thumbnail.id" icon="pi pi-download" severity="info" size="small" rounded
+                                aria-label="Download" @click="downloadWithAxios(thumbnail?.url)"
                                 style="margin-right: 5px;" />
                             <Button icon="pi pi-times" severity="danger" size="small" rounded aria-label="Remove"
-                                @click="removeImage(index, file?.url, file?.id ?? null, file)" :disabled="disabled" />
+                                @click="removethumbnail(index, thumbnail?.url, thumbnail?.id ?? null, thumbnail)"
+                                :disabled="disabled" />
                         </div>
                     </div>
                 </div>
@@ -61,17 +62,17 @@
 import { DocumentTextIcon } from "@heroicons/vue/24/outline";
 import ServiceMaster from '~/request/Service/service.master.js';
 import Button from 'primevue/button';
-import Image from 'primevue/image';
+// import Image from 'primevue/image';
 import { useToast } from "primevue/usetoast";
 import { computed, reactive, ref } from 'vue';
 
-const images = ref([])
+const thumbnail = ref([])
 const toast = useToast();
 const error = reactive({
     'status': false,
     'title': ''
 })
-const emits = defineEmits(['changeFile', 'deleteFile'])
+const emits = defineEmits(['changeThumbnail', 'deleteThumbnail'])
 const props = defineProps({
     limit: Number,
     size: Number,
@@ -101,60 +102,60 @@ const loadingButton = reactive({
     url: ''
 });
 
-const removeImage = (index) => {
-  images.value.splice(index, 1) // removes from local list
-  emits('deleteFile', index)    // let parent know too
+const removethumbnail = (index) => {
+    thumbnail.value.splice(index, 1) // removes from local list
+    emits('deleteThumbnail', index)    // let parent know too
 }
 
-const onFileChange = (e) => {
-    var files = e.target.files || e.dataTransfer.files;
-    if (!files.length) {
+const onThumbnailChange = (e) => {
+    var thumbnails = e.target.thumbnails || e.dataTransfer.thumbnails;
+    if (!thumbnails.length) {
         return
     }
 
-    if (files.length + props.preFile > props.limit) {
+    if (thumbnails.length + props.preFile > props.limit) {
         error.status = true
-        error.title = 'File upload allow only ' + props.limit + ' files'
-        handleRules('error', 'Error', 'File upload allow only ' + props.limit + ' files');
+        error.title = 'thumbnail upload allow only ' + props.limit + ' thumbnails'
+        handleRules('error', 'Error', 'thumbnail upload allow only ' + props.limit + ' thumbnails');
         return
     }
     error.status = false
-    createImage(files);
+    createthumbnail(thumbnails);
 }
 
-const checkFileSize = (files) => {
-    for (const element of files) {
+const checkThumbnailSize = (thumbnails) => {
+    for (const element of thumbnails) {
         if (element.size > props.size * 100000) {
             return true;
         }
     }
     return false;
 }
-const createImage = (files) => {
-    if (checkFileSize(files)) {
+const createthumbnail = (thumbnails) => {
+    if (checkThumbnailSize(thumbnails)) {
         error.status = true
-        error.title = 'File too Big, please select a file less than ' + props.size + 'MB'
-        handleRules('error', 'Error', 'File too Big, please select a file less than ' + props.size + 'MB');
+        error.title = 'Thumbnail too Big, please select a thumbnail less than ' + props.size + 'MB'
+        handleRules('error', 'Error', 'Thumbnail too Big, please select a thumbnail less than ' + props.size + 'MB');
         return;
     }
 
-    if (images?.value?.length >= props.limit) {
+    if (thumbnail?.value?.length >= props.limit) {
         error.status = true
-        error.title = 'File upload allow only ' + props.limit + ' files'
-        handleRules('error', 'Error', 'File upload allow only ' + props.limit + ' files');
+        error.title = 'Thumbnail upload allow only ' + props.limit + ' thumbnails'
+        handleRules('error', 'Error', 'Thumbnail upload allow only ' + props.limit + ' thumbnails');
         return;
     }
 
-    for (const element of files) {
+    for (const element of thumbnails) {
         error.status = false
         const name = element.name
         const size = element.size
         const type = element.type
         var reader = new FileReader();
         reader.onload = function (event) {
-            const imageUrl = event.target.result;
-            images.value.push({
-                'url': imageUrl,
+            const thumbnailUrl = event.target.result;
+            thumbnail.value.push({
+                'url': thumbnailUrl,
                 'name': name,
                 'size': size,
                 'type': type,
@@ -163,7 +164,7 @@ const createImage = (files) => {
         }
         reader.readAsDataURL(element);
     }
-    emits('changeFile', images.value);
+    emits('changeThumbnail', thumbnail.value);
 }
 
 // Non-serializable storage for uploads only
@@ -208,7 +209,7 @@ const handleRules = (type, title, detial) => {
     toast.add({ severity: type, summary: title, detail: detial, life: 6000 });
 }
 
-const calImageSize = (size, decimals = 2) => {
+const calthumbnailsize = (size, decimals = 2) => {
     if (!+size) return '0 Bytes'
 
     const k = 1024
@@ -229,9 +230,9 @@ const downloadWithAxios = (url) => {
             if (res.data) {
                 loadingButton.download = false
                 loadingButton.url = ''
-                const fileURL = window.URL.createObjectURL(new Blob([res.data]));
+                const thumbnailURL = window.URL.createObjectURL(new Blob([res.data]));
                 const fURL = document.createElement('a');
-                fURL.href = fileURL;
+                fURL.href = thumbnailURL;
                 fURL.setAttribute('download', url);
                 document.body.appendChild(fURL);
                 fURL.click();
@@ -244,9 +245,9 @@ const downloadWithAxios = (url) => {
 
 const allAttachments = computed(() => {
     if (props.attachments) {
-        images.value = props.attachments
+        thumbnail.value = props.attachments
     }
-    return images.value.sort((a, b) => {
+    return thumbnail.value.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
     })
 })

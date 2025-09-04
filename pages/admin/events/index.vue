@@ -5,9 +5,15 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
+import filesComponent from './items.js'
+import { reactive } from 'vue';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { z } from 'zod';
+import { Textarea } from "primevue";
+import ImagesUpload from "../../../public/event/imagesUpload.vue";
 
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const loading = ref(true); // optional, show loading state
@@ -27,18 +33,7 @@ const fetchEvents = async () => {
         description_detail
         cover
         images
-        created_by
-        created_at
-        updated_by
-        updated_at
-        approved_by
-        approved_at
-        rejected_by
-        rejected_at
-        deleted_by
-        deleted_at
         status
-        approval_status
           }
         }
       `,
@@ -50,14 +45,40 @@ const fetchEvents = async () => {
   } finally {
     loading.value = false;
   }
-};
+}
+
+const changeFile = (file) => {
+  console.log("File")
+  console.log(file)
+  attachments.value = file
+}
+
+const changeThumbnailFile = (file) => {
+  console.log("Thumbnail")
+  console.log(file)
+  thumbnailattachments.value = file
+}
+
+const deleteFile = (index, file) => {
+  if (file?.id) {
+    attachmentsDeleted.value.push(file);
+  }
+  thumbnailattachments.value.splice(index, 1)
+}
+
+
+const deleteThumbnailFile = (index, file) => {
+  if (file?.id) {
+    thumbnailDeleted.value.push(file);
+  }
+  thumbnailDeleted.value.splice(index, 1)
+}
 
 const visible = ref(false);
-const createEvents = async () => {
-  loading.value = true;
-
+const createEvents = async (input) => {
+  loading.value = true
   try {
-    const { data } = await $apollo.query({
+    const { data } = await $apollo.mutate({
       mutation: $gql`
         mutation CreateEvent($input: CreateEventInput!) {
           createEvent(CreateEventInput: $input) {
@@ -69,35 +90,46 @@ const createEvents = async () => {
         description_detail
         cover
         images
-        created_by
-        created_at
-        updated_by
-        updated_at
-        approved_by
-        approved_at
-        rejected_by
-        rejected_at
-        deleted_by
-        deleted_at
         status
-        approval_status
           }
         }
       `,
+      variable: { input },
       fetchPolicy: "network-only", // optional, avoid cache
     });
-    events.value = data.findAll;
+
+    console.log("Created: ", data.createEvents)
+    visible.value = false;
+    toast.add({ severity: 'success', summary: 'Successful to create event.', life: 3000 });
   } catch (error) {
-    console.error("Failed to fetch events:", error);
+    console.error("Failed to create events:", error);
+    toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 3000 });
   } finally {
     loading.value = false;
   }
 };
-// Fetch events when component mounts
-onMounted(async () => {
-  // await syncStaticData()
-  await fetchEvents();
+
+const initialValues = reactive({
+  title: '',
+  sub_title: '',
+  title_detail: '',
+  description_detail: ''
 });
+
+const resolver = zodResolver(
+  z.object({
+    title: z.string().min(1, { message: 'Title field is required.' }),
+    sub_title: z.string().min(1, { message: 'Secondary title is required.' }),
+    title_detail: z.string().min(1, { message: 'Title Detail field is required.' }),
+    description_detail: z.string().min(1, { message: 'Description field is required.' })
+  })
+);
+
+const onFormSubmit = async ({ values, valid }) => {
+  if (!valid) {
+    await createEvents(values)
+  }
+};
 
 const events = ref([]);
 
@@ -140,38 +172,11 @@ const confirmLogout = () => {
   });
 };
 
-import { reactive } from 'vue';
-import { valibotResolver } from '@primevue/forms/resolvers/valibot';
-import { zodResolver } from '@primevue/forms/resolvers/zod';
-import * as v from 'valibot';
-import { z } from 'zod';
-import { Textarea } from "primevue";
-import FileUpload from "../../../public/event/fileUpload.vue";
 
-const initialValues = reactive({
-  details: ''
-});
-
-const resolver = zodResolver(
-  z.object({
-    details: z.string().min(1, { message: 'Details is required via Form Resolver.' })
-  })
-);
-
-
-const valibotTitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Title field is required.')));
-const valibotSub_TitleResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Secondary title is required.')));
-const valibotTitle_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Title Detail field is required.')));
-const valibotDescription_DetailResolver = valibotResolver(v.pipe(v.string(), v.minLength(1, 'Description field is required.')));
-
-const onFormSubmit = ({ valid }) => {
-  if (valid) {
-    toast.add({ severity: 'success', summary: 'Form is submitted.', life: 3000 });
-  }
-};
 const topPos = ref(150);
+
 </script>
-<template >
+<template>
   <dbHeader />
   <section class="relative flex justify-between w-full top-16" :class="{ 'bg-black/20': visible }">
     <div class="fixed flex h-screen bg-white shadow-xl top-16">
@@ -260,14 +265,15 @@ const topPos = ref(150);
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <button @click="visible = true"
                   class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-500 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
-                  <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>New
                 </button>
                 <div class="flex shadow-md">
-                  <input type="text" placeholder="Enter Event Title" class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md" />
+                  <input type="text" placeholder="Enter Event Title"
+                    class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md" />
                   <button class=" border-t-1 border-b-1 border-r-1 rounded-tr-md rounded-br-md" @click="eventSearch()">
                     <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -284,18 +290,17 @@ const topPos = ref(150);
                 <div class="flex items-center justify-between w-full">
                   <span class="font-bold">New Event</span>
                   <div>
-                    <button type="submit"
+                    <button type="submit" @click="$refs.eventForm.submit()"
                       class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
                       Add</button>
-                    <button @click="visible = false"
+                    <button @click=" visible = false"
                       class=" cursor-pointer !p-2 !px-2.5 rounded-tr-md rounded-br-md text-sm text-center bg-gray-100 hover:bg-gray-200  hover:transition hover:duration-300 transition duration-300">
                       Close</button>
                   </div>
                 </div>
               </template>
-              <span class="w-full h-[20px] border-b-1"></span>
               <div class="w-full bg-[#fafafa] rounded-md">
-                <Form :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
+                <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
                   class="grid grid-cols-2 gap-4 sm:w-full !p-3">
                   <FormField v-slot="$field" name="title" initialValue="" :resolver="valibotTitleResolver"
                     class="grid-cols-1 gap-1 ">
@@ -347,16 +352,29 @@ const topPos = ref(150);
                       class="w-[88%] place-self-end">{{
                         $field.error?.message }}</Message>
                   </FormField>
-                  <fileUpload />
+                  <!-- <ImagesUpload label="Attachment" v-model:attachments="attachments" :limit="10" id="file1"
+                    :preFile="attachments?.length" :size="10" :disabled="is_disabled" :errors="errors" :path="'event1/'"
+                    @deleteFile="deleteFile" @changeFile="changeFile" />
+
+                  <ImagesUpload label="Thumbnail" v-model:attachments="thumbnailattachments" :limit="10" id="file1"
+                    :preFile="thumbnailattachments?.length" :size="10" :disabled="is_disabled" :errors="errors"
+                    :path="'event1/'" @[deleteFile]="deleteThumbnailFile" @changeFile="changeThumbnailFile" /> -->
+
+                  <ImagesUpload v-for="(file, index) in filesComponent" :key="index" :label="file.label"
+                    :limit="file.limit" :id="file.id" :size="file.size" :attachments="file.attachments"
+                    :preFile="file.preFile" :disabled="file.is_disabled" :errors="file.errors" :path="file.path"
+                    @[file.deleteFile]="file.onDeleteFile" @[file.changeFile]="file.onChangeFile" />
+
                 </Form>
               </div>
             </Dialog>
 
             <div class="card shadow-md ">
-              <DataTable :value="events" tableStyle="min-width: 50rem" paginator="true" :rows="5"
-                :totalRecords="events?.length"
+              <DataTable :value="fetchEvents" tableStyle="min-width: 50rem" :paginator="true" :rows="5"
+                :totalRecords="fetchEvents?.length"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+
                 <Column header="Thumbnail">
                   <template #body="slotProps">
                     <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
@@ -371,11 +389,31 @@ const topPos = ref(150);
                     </a>
                   </template>
                 </Column>
-                <Column field="created by" header="Created_by">
+
+                <Column field="sub_title" header="Title Detail">
                   <template #body="slotProps">
-                    {{ slotProps.data.created_by }}
+                    {{ slotProps.data.sub_title }}
                   </template>
                 </Column>
+
+                <Column field="desription_detail" header="Description">
+                  <template #body="slotProps">
+                    <p class="truncate">{{ slotProps.data.description_detail }}</p>
+                  </template>
+                </Column>
+
+                <Column field="images" header="Images">
+                  <template #body="slotProps">
+                    {{ slotProps.data.images }}
+                  </template>
+                </Column>
+
+                <Column field="cover" header="Cover">
+                  <template #body="slotProps">
+                    {{ slotProps.data.cover }}
+                  </template>
+                </Column>
+
                 <Column field="status" header="Status">
                   <template #body="slotProps">
                     <Tag :value="slotProps.data.status" />
@@ -420,10 +458,11 @@ const topPos = ref(150);
 
 
 <style scoped>
-.p-inputtext{
+.p-inputtext {
   height: 30px;
 }
-#file_input{
+
+#file_input {
   height: 40px;
 }
 </style>

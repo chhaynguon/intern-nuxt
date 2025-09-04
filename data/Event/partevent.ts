@@ -1,4 +1,5 @@
 export interface EventItem {
+  [x: string]: any;
   id: number;
   cover: string;
   title: string;
