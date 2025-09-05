@@ -14,127 +14,14 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from "primevue";
 import ImagesUpload from "../../../public/event/imagesUpload.vue";
+import Tag from 'primevue/tag';
 
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
-const loading = ref(true); // optional, show loading state
-
-const fetchEvents = async () => {
-  loading.value = true;
-  try {
-    const { data } = await $apollo.query({
-      query: $gql`
-        query FindAll {
-          findAll {
-            id
-        thumbnail
-        title
-        sub_title
-        title_detail
-        description_detail
-        cover
-        images
-        status
-          }
-        }
-      `,
-      fetchPolicy: "network-only", // optional, avoid cache
-    });
-    events.value = data.findAll;
-  } catch (error) {
-    console.error("Failed to fetch events:", error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-const changeFile = (file) => {
-  console.log("File")
-  console.log(file)
-  attachments.value = file
-}
-
-const changeThumbnailFile = (file) => {
-  console.log("Thumbnail")
-  console.log(file)
-  thumbnailattachments.value = file
-}
-
-const deleteFile = (index, file) => {
-  if (file?.id) {
-    attachmentsDeleted.value.push(file);
-  }
-  thumbnailattachments.value.splice(index, 1)
-}
-
-
-const deleteThumbnailFile = (index, file) => {
-  if (file?.id) {
-    thumbnailDeleted.value.push(file);
-  }
-  thumbnailDeleted.value.splice(index, 1)
-}
-
-const visible = ref(false);
-const createEvents = async (input) => {
-  loading.value = true
-  try {
-    const { data } = await $apollo.mutate({
-      mutation: $gql`
-        mutation CreateEvent($input: CreateEventInput!) {
-          createEvent(CreateEventInput: $input) {
-            id
-        thumbnail
-        title
-        sub_title
-        title_detail
-        description_detail
-        cover
-        images
-        status
-          }
-        }
-      `,
-      variable: { input },
-      fetchPolicy: "network-only", // optional, avoid cache
-    });
-
-    console.log("Created: ", data.createEvents)
-    visible.value = false;
-    toast.add({ severity: 'success', summary: 'Successful to create event.', life: 3000 });
-  } catch (error) {
-    console.error("Failed to create events:", error);
-    toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 3000 });
-  } finally {
-    loading.value = false;
-  }
-};
-
-const initialValues = reactive({
-  title: '',
-  sub_title: '',
-  title_detail: '',
-  description_detail: ''
-});
-
-const resolver = zodResolver(
-  z.object({
-    title: z.string().min(1, { message: 'Title field is required.' }),
-    sub_title: z.string().min(1, { message: 'Secondary title is required.' }),
-    title_detail: z.string().min(1, { message: 'Title Detail field is required.' }),
-    description_detail: z.string().min(1, { message: 'Description field is required.' })
-  })
-);
-
-const onFormSubmit = async ({ values, valid }) => {
-  if (!valid) {
-    await createEvents(values)
-  }
-};
-
+const loading = ref(false); // optional, show loading state
 const events = ref([]);
-
 const toast = useToast();
 const confirm = useConfirm();
+const topPos = ref(150);
 
 const confirmLogout = () => {
   confirm.require({
@@ -172,8 +59,104 @@ const confirmLogout = () => {
   });
 };
 
+const fetchEvents = async () => {
+  loading.value = true;
+  try {
+    const { data } = await $apollo.query({
+      query: $gql`
+        query FindAll {
+          findAll {
+            id
+            title
+            sub_title
+            title_detail
+            description_detail
+            status
+          }
+        }
+      `,
+      fetchPolicy: "network-only"
+    });
+    events.value = data.findAll || [];
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 
-const topPos = ref(150);
+onMounted(() => {
+  fetchEvents();
+})
+
+const getSeverity = (status) => {
+  switch (status) {
+    case 'ACT':
+      return 'pi pi-check';
+    case 'PEN':
+      return 'pi pi-clock';
+    case 'DEL':
+      return 'pi pi-times';
+    default:
+      return '';
+  }
+}
+
+const initialValues = reactive({
+  title: '',
+  sub_title: '',
+  title_detail: '',
+  description_detail: ''
+});
+
+const resolver = zodResolver(
+  z.object({
+    title: z.string().min(1, { message: 'Title field is required.' }),
+    sub_title: z.string().min(1, { message: 'Secondary title is required.' }),
+    title_detail: z.string().min(1, { message: 'Title Detail field is required.' }),
+    description_detail: z.string().min(1, { message: 'Description field is required.' })
+  })
+);
+
+
+const visible = ref(false);
+const createEvents = async (values) => {
+  loading.value = true
+  try {
+    const { data } = await $apollo.mutate({
+      mutation: $gql`
+        mutation CreateEvent($createEventInput: CreateEventInput!) {
+          createEvent(createEventInput: $createEventInput) {
+            id
+        title
+        sub_title
+        title_detail
+        description_detail
+        status
+          }
+        }
+      `,
+      variables: { createEventInput: values },
+      fetchPolicy: "network-only", // optional, avoid cache
+    });
+
+    console.log("Created: ", data.createEvent)
+    visible.value = false;
+    toast.add({ severity: 'success', summary: 'Successful to create event.', life: 3000 });
+  } catch (error) {
+    console.error("Failed to create events:", error);
+    toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 3000 });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const onFormSubmit = async ({ values, valid }) => {
+  if (valid) {
+    await createEvents(values);
+  }
+};
+
 
 </script>
 <template>
@@ -264,17 +247,18 @@ const topPos = ref(150);
               <h1 class="text-center font-bold text-2xl">Events</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
                 <button @click="visible = true"
-                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-500 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
-                  <svg class="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    fill="none" viewBox="0 0 24 24">
+                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
+                  <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>New
                 </button>
                 <div class="flex shadow-md">
                   <input type="text" placeholder="Enter Event Title"
-                    class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md" />
-                  <button class=" border-t-1 border-b-1 border-r-1 rounded-tr-md rounded-br-md" @click="eventSearch()">
+                    class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-400" />
+                  <button class=" border-y-1 border-r-1 border-gray-400 rounded-tr-md rounded-br-md"
+                    @click="eventSearch()">
                     <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
@@ -302,7 +286,7 @@ const topPos = ref(150);
               <div class="w-full bg-[#fafafa] rounded-md">
                 <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
                   class="grid grid-cols-2 gap-4 sm:w-full !p-3">
-                  <FormField v-slot="$field" name="title" initialValue="" :resolver="valibotTitleResolver"
+                  <FormField v-slot="$field" name="title" initialValue=""
                     class="grid-cols-1 gap-1 ">
                     <div class="flex justify-between items-center">
                       <label for="title" class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs">Title</label>
@@ -314,7 +298,7 @@ const topPos = ref(150);
                         $field.error?.message }}</Message>
                   </FormField>
 
-                  <FormField v-slot="$field" name="sub_title" initialValue="" :resolver="valibotSub_TitleResolver"
+                  <FormField v-slot="$field" name="sub_title" initialValue=""
                     class="grid-cols-1 gap-1 ">
                     <div class="flex justify-between items-center">
                       <label for="sub_title" class="w-[25%] text-end !pr-2 text-xs">
@@ -328,7 +312,7 @@ const topPos = ref(150);
                         $field.error?.message }}</Message>
                   </FormField>
 
-                  <FormField v-slot="$field" name="title_detail" initialValue="" :resolver="valibotTitle_DetailResolver"
+                  <FormField v-slot="$field" name="title_detail" initialValue=""
                     class="grid-cols-1 gap-1">
                     <div class="flex justify-between items-center w-full"><label for="title_detail"
                         class="w-[25%] text-end !pr-2 text-xs">Title Detail</label>
@@ -340,8 +324,7 @@ const topPos = ref(150);
                         $field.error?.message }}</Message>
                   </FormField>
 
-                  <FormField v-slot="$field" name="description_detail" initialValue=""
-                    :resolver="valibotDescription_DetailResolver" class="col-span-2">
+                  <FormField v-slot="$field" name="description_detail" initialValue="" class="col-span-2">
                     <div class="flex justify-between">
                       <label for="description_detail" class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
                       <Textarea id="description_detail" type="text"
@@ -360,27 +343,27 @@ const topPos = ref(150);
                     :preFile="thumbnailattachments?.length" :size="10" :disabled="is_disabled" :errors="errors"
                     :path="'event1/'" @[deleteFile]="deleteThumbnailFile" @changeFile="changeThumbnailFile" /> -->
 
-                  <ImagesUpload v-for="(file, index) in filesComponent" :key="index" :label="file.label"
+                  <!-- <ImagesUpload v-for="(file, index) in filesComponent" :key="index" :label="file.label"
                     :limit="file.limit" :id="file.id" :size="file.size" :attachments="file.attachments"
                     :preFile="file.preFile" :disabled="file.is_disabled" :errors="file.errors" :path="file.path"
-                    @[file.deleteFile]="file.onDeleteFile" @[file.changeFile]="file.onChangeFile" />
+                    @[file.deleteFile]="file.onDeleteFile" @[file.changeFile]="file.onChangeFile" /> -->
 
                 </Form>
               </div>
             </Dialog>
 
             <div class="card shadow-md ">
-              <DataTable :value="fetchEvents" tableStyle="min-width: 50rem" :paginator="true" :rows="5"
-                :totalRecords="fetchEvents?.length"
+              <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="5"
+                :totalRecords="events.length" :loading="loading"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
 
-                <Column header="Thumbnail">
+                <!-- <Column header="Thumbnail">
                   <template #body="slotProps">
                     <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
                       class="object-cover w-25 h-25 rounded-lg" />
                   </template>
-                </Column>
+                </Column> -->
 
                 <Column field="title" header="Title">
                   <template #body="slotProps">
@@ -390,47 +373,46 @@ const topPos = ref(150);
                   </template>
                 </Column>
 
-                <Column field="sub_title" header="Title Detail">
+                <Column field="sub_title" header="Sub Title">
                   <template #body="slotProps">
                     {{ slotProps.data.sub_title }}
                   </template>
                 </Column>
 
-                <Column field="desription_detail" header="Description">
+                <Column field="title_detail" header="Title Detail">
                   <template #body="slotProps">
-                    <p class="truncate">{{ slotProps.data.description_detail }}</p>
+                    {{ slotProps.data.title_detail }}
                   </template>
                 </Column>
 
-                <Column field="images" header="Images">
+                <Column field="description_detail" header="Description">
+                  <template #body="slotProps">
+                    <p class="truncate w-48">{{ slotProps.data.description_detail }}</p>
+                  </template>
+                </Column>
+
+                <!-- <Column field="images" header="Images">
                   <template #body="slotProps">
                     {{ slotProps.data.images }}
                   </template>
-                </Column>
+                </Column> -->
 
-                <Column field="cover" header="Cover">
+                <!-- <Column field="cover" header="Cover">
                   <template #body="slotProps">
                     {{ slotProps.data.cover }}
                   </template>
-                </Column>
+                </Column> -->
 
                 <Column field="status" header="Status">
                   <template #body="slotProps">
-                    <Tag :value="slotProps.data.status" />
+                    <Tag :value="slotProps.data.status" :severity="getSeverity(slotProps.data.status)" />
                   </template>
                 </Column>
 
                 <Column field="Action" header="Action">
-                  <template #body>
+                  <template #body="slotProps">
                     <div class="flex">
-                      <button type="button" @click="editEvents" class="text-sm cursor-pointer !px-[5px]">
-                        <svg class="text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
-                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                          viewBox="0 0 24 24">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                        </svg>
-                      </button>
+                      <eventEdit />
                       <button type="button" @click="deleteUser(slotProps.data.id)"
                         class="text-sm !px-[5px] cursor-pointer">
                         <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"

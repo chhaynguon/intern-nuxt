@@ -1,10 +1,10 @@
 <template>
-    <input type="file" name="thumbnail" id="file_uplaod" @change="onThumbnailChange" class="hidden" v-if="!disabled">
+    <input type="file" name="thumbnail" id="file_upload" @change="onThumbnailChange" class="hidden" v-if="!disabled">
     <div class="grid gap-4">
         <div class="col-start-1 col-end-3">
             <div class="p-button-label flex justify-end !pr-13">
                 <div class="w-[100px] h-[40px]">
-                    <label for="file_uplaod" class="flex justify-between">
+                    <label for="file_upload" class="flex justify-between">
                         <div
                             class="flex items-center cursor-pointer !p-2 bg-blue-400 hover:bg-blue-500 text-white place-content-center text-sm font-normal rounded-sm">
                             <i class="pi pi-paperclip !px-1"></i>

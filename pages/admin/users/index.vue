@@ -59,12 +59,12 @@ async function addUser() {
 }
 
 const searchInfo = async () => {
-  const id = data.value.id;
-  if (!id) {
-    return alert('Please enter an ID or Username');
+  const username = data.value.username;
+  if (!username) {
+    return alert('Please enter an Username');
   }
 
-  const url = `http://localhost:8000/api/user/${id}`;
+  const url = `http://localhost:8000/api/user/${username}`;
   try {
     const result = await $fetch(url, {
       method: 'GET',
@@ -209,29 +209,20 @@ const confirmLogout = () => {
             <div class="w-full">
               <h1 class="text-start font-bold text-xl text-[#454545]">Users</h1>
             </div>
-            <button @click="visible = true" class="transition hover:transition hover:duration-300 hover:scale-110">
-              <svg class="w-7 h-7 !m-1 text-black cursor-pointer hover:scale-110 " aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <button @click="visible = true"
+              class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
+              <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              </svg>
+                  d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>New
             </button>
-            <div class="flex shadow-md bg-[white]/100 rounded-lg ">
-              <input v-model="data.id" placeholder="Enter ID" class="w-[150px] !pl-[20px] ">
-              <button class="transition hover:transition hover:duration-300 hover:scale-110 " @click="reloadPage()">
-                <svg
-                  class="w-6.5 h-6.5 text-red-400 !m-1 cursor-pointer hover:scale-120 transition hover:transition hover:duration-300 rounded-full"
-                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                  viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M6 18 17.94 6M18 18 6.06 6" />
-                </svg>
-              </button>
-              <button class="transition hover:transition hover:duration-300 hover:scale-110" @click="searchInfo()">
-                <svg
-                  class="w-6.5 h-6.5 !m-1 text-blue-400 cursor-pointer hover:scale-105 transition hover:transition hover:duration-300 rounded-full"
-                  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                  viewBox="0 0 24 24">
+            <div class="flex shadow-md">
+              <input v-model="data.username" type="text" placeholder="Search..."
+                class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-400" />
+              <button class=" border-y-1 border-r-1 border-gray-400 rounded-tr-md rounded-br-md" @click="searchInfo()">
+                <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                     d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                 </svg>
@@ -304,7 +295,7 @@ const confirmLogout = () => {
                 <td class="text-left !px-3 !py-2">{{ user.email }}</td>
                 <td class="">
                   <div class="flex justify-end bg-white">
-                    <dialogEdit :user="user" />
+                    <userEdit :user="user" />
                     <button type="button" @click="deleteUser(user.id)" class=" text-sm !px-[5px] cursor-pointer ">
                       <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"

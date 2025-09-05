@@ -1,11 +1,11 @@
 <template>
-    <input multiple type="file" name="images" id="file_uplaod" @change="onFileChange" class="hidden" v-if="!disabled">
+    <input multiple type="file" name="images" id="file_upload" @change="onFileChange" class="hidden" v-if="!disabled">
     <div class="grid gap-4">
         <div class="col-start-1 col-end-3">
             <div class="p-button-label flex justify-center !pr-6">
                 <div class="flex text-xs font-normal items-center !pr-2">{{ props.label }}</div>
                 <div class="w-[100px] h-[40px]">
-                    <label for="file_uplaod" class="flex justify-between">
+                    <label for="file_upload" class="flex justify-between">
                         <div
                             class="flex items-center cursor-pointer !p-2 bg-blue-400 hover:bg-blue-500 text-white place-content-center text-sm font-normal rounded-sm">
                             <i class="pi pi-paperclip !px-1"></i>
@@ -63,7 +63,7 @@ import ServiceMaster from '~/request/Service/service.master.js';
 import Button from 'primevue/button';
 import Image from 'primevue/image';
 import { useToast } from "primevue/usetoast";
-import { computed, reactive, ref, defineProps, defineEmits,onMounted } from 'vue';
+import { computed, reactive, ref, defineProps, defineEmits, onMounted } from 'vue';
 
 const images = ref([])
 const toast = useToast();
@@ -219,13 +219,13 @@ const allAttachments = computed(() => {
 })
 
 // const allAttachments = computed(() => {
-//   return (props.attachments || []).slice().sort((a, b) => {
-//     return new Date(b.created_at) - new Date(a.created_at);
-//   })
+//     return (props.attachments || []).slice().sort((a, b) => {
+//         return new Date(b.created_at) - new Date(a.created_at);
+//     })
 // })
 
 // onMounted(() => {
-//   images.value = [...props.attachments]
+//     images.value = [...props.attachments]
 // })
 
 </script>
