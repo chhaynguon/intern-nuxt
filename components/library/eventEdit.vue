@@ -1,19 +1,25 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, defineEmits, onMounted } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
 import { Textarea } from "primevue";
 import Dialog from 'primevue/dialog'; // default import
 import { useToast } from "primevue";
 const { $apollo, $gql } = useNuxtApp();
-
 const toast = useToast();
 const visible = ref(false);
 const loading = ref(false);
 const SelectedEvent = ref(null);
 const topPos = ref(150);
 const props = defineProps({
-    event: Object
+    event: {
+        type: Object,
+        default: {}
+    },
+    openEvent: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const initialValues = reactive({
@@ -26,30 +32,44 @@ const initialValues = reactive({
 });
 
 
-const emit = defineEmits(["update:visible", "updated"]);
-const editDialog = () => {
-    if (!props.event) {
-        return console.warn("No event passed to editDialog!")
-    }
+const emit = defineEmits(["update:visible", "updated", 'closeEvent']);
 
-    visible.value = true;
-    SelectedEvent.value = props.event;
-    Object.assign(initialValues, {
-        id: props.event.id,
-        title: props.event.title || '',
-        sub_title: props.event.sub_title || '',
-        title_detail: props.event.title_detail || '',
-        description_detail: props.event.description_detail || '',
-        status: props.event.status || 'PENDING',
-    })
 
-    console.log("Editing event:", props.event)
+// const editDialog = () => {
+//     if (!props.event) {
+//         return console.warn("No event passed to editDialog!")
+//     }
 
+//     visible.value = true;
+//     SelectedEvent.value = props.event;
+//     Object.assign(initialValues, {
+//         id: props.event.id,
+//         title: props.event.title || '',
+//         sub_title: props.event.sub_title || '',
+//         title_detail: props.event.title_detail || '',
+//         description_detail: props.event.description_detail || '',
+//         status: props.event.status || 'PENDING',
+//     })
+
+//     console.log("Editing event:", props.event)
+
+// }
+
+const initForm = {
+    id: "",
+    title: "",
+    sub_title: "",
+    title_detail:"",
+    description_detail: "",
+    status: ""
 }
+
+const formData = ref({...initForm})
 
 // Close dialog and reset form
 const closeDialog = () => {
-    visible.value = false;
+    // visible.value = false;
+    emit('closeEvent', false)
 };
 
 const updateEvent = async (values) => {
@@ -94,22 +114,29 @@ const onFormSubmit = async ({ values, valid }) => {
     await updateEvent(values)
 }
 
+onMounted(() => {
+    if(props.event){
+        formData.value.id = props.event.id
+        formData.value.title = props.event.title
+    }
+})
+
 </script>
 <template>
-    <button type="button" @click="editDialog(event)" class="text-sm cursor-pointer !px-[5px]">
+    <!-- <button type="button" @click="editDialog(event)" class="text-sm cursor-pointer !px-[5px]">
         <svg class="text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
             viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
         </svg>
-    </button>
+    </button> -->
 
-    <Dialog v-model:visible="visible" class="w-[60%] dynamic-dialog" :dismissable-mask="false" :draggable="false"
+    <Dialog v-model:visible="props.openEvent" class="w-[60%] dynamic-dialog" :dismissable-mask="false" :draggable="false"
         :closable="false" :resizable="false" position="top" :style="{ top: topPos + 50 + 'px' }">
         <template #header>
             <div class="flex items-center justify-between w-full">
-                <span class="font-bold">Update Event</span>
+                <span class="font-bold">Update Event# {{ formData.id }}</span>
                 <div>
                     <button type="submit" @click="$refs.eventForm.submit()"
                         class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
