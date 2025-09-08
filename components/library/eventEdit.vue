@@ -2,8 +2,6 @@
 import { ref, reactive } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
-import { zodResolver } from '@primevue/forms/resolvers/zod';
-import { z } from 'zod';
 import { Textarea } from "primevue";
 import Dialog from 'primevue/dialog'; // default import
 import { useToast } from "primevue";
@@ -14,7 +12,10 @@ const visible = ref(false);
 const loading = ref(false);
 const SelectedEvent = ref(null);
 const topPos = ref(150);
-const nuxtApp = useNuxtApp();
+const props = defineProps({
+    event: Object
+});
+
 const initialValues = reactive({
     id: null,
     title: '',
@@ -24,29 +25,26 @@ const initialValues = reactive({
     status: 'PENDING', // Desfault value
 });
 
-const resolver = zodResolver(
-    z.object({
-        title: z.string().min(1, { message: 'Title field is required.' }),
-        sub_title: z.string().min(1, { message: 'Secondary title is required.' }),
-        title_detail: z.string().min(1, { message: 'Title Detail field is required.' }),
-        description_detail: z.string().min(1, { message: 'Description field is required.' })
-    })
-);
 
 const emit = defineEmits(["update:visible", "updated"]);
+const editDialog = () => {
+    if (!props.event) {
+        return console.warn("No event passed to editDialog!")
+    }
 
-const editDialog = async (event) => {
     visible.value = true;
-    SelectedEvent.value = event;
+    SelectedEvent.value = props.event;
     Object.assign(initialValues, {
-        id: number(event.id),
-        title: event.title || '',
-        sub_title: event.sub_title || '',
-        title_detail: event.title_detail || '',
-        description_detail: event.description_detail || '',
-        status: event.status || 'PENDING',
+        id: props.event.id,
+        title: props.event.title || '',
+        sub_title: props.event.sub_title || '',
+        title_detail: props.event.title_detail || '',
+        description_detail: props.event.description_detail || '',
+        status: props.event.status || 'PENDING',
     })
-    
+
+    console.log("Editing event:", props.event)
+
 }
 
 // Close dialog and reset form
@@ -58,7 +56,7 @@ const updateEvent = async (values) => {
     loading.value = true
     try {
         const { data } = await $apollo.mutate({
-            mutation: nuxtApp.$gql`
+            mutation: $gql`
       mutation UpdateEvent($updateEventInput: UpdateEventInput!){
         updateEvent(updateEventInput: $updateEventInput){
         id
@@ -70,7 +68,12 @@ const updateEvent = async (values) => {
         }
       }
     `,
-            variables: { updateEventInput: values },
+            variables: {
+                updateEventInput: {
+                    ...values,
+                    id: SelectedEvent.value.id,
+                }
+            },
             fetchPolicy: "network-only",
         })
 
@@ -87,10 +90,8 @@ const updateEvent = async (values) => {
 }
 
 const onFormSubmit = async ({ values, valid }) => {
-    if (valid) {
-        values.id = Number(initialValues.id);
-        await updateEvent(values);
-    }
+    if (!valid) return
+    await updateEvent(values)
 }
 
 </script>
@@ -103,6 +104,7 @@ const onFormSubmit = async ({ values, valid }) => {
                 d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
         </svg>
     </button>
+
     <Dialog v-model:visible="visible" class="w-[60%] dynamic-dialog" :dismissable-mask="false" :draggable="false"
         :closable="false" :resizable="false" position="top" :style="{ top: topPos + 50 + 'px' }">
         <template #header>
@@ -119,8 +121,11 @@ const onFormSubmit = async ({ values, valid }) => {
             </div>
         </template>
         <div class="w-full bg-[#fafafa] rounded-md">
-            <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
-                class="grid grid-cols-2 gap-4 sm:w-full !p-3">
+            <Form ref="eventForm" :initial-values="initialValues" @submit="onFormSubmit"
+                class="grid grid-cols-2 gap-4 sm:w-full !p-3 position">
+                <FormField name="id" class="absolute">
+                    <input type="hidden">
+                </FormField>
                 <FormField v-slot="$field" name="title" initialValue="" class="grid-cols-1 gap-1 ">
                     <div class="flex justify-between items-center">
                         <label for="title" class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs">Title</label>

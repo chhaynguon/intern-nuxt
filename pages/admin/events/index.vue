@@ -157,6 +157,27 @@ const onFormSubmit = async ({ values, valid }) => {
   }
 };
 
+// const deleteEvent = async (id) => {
+//   loading.value = false;
+//   try {
+//     const { data } = await $apollo.mutate({
+//       mutation: $gql`
+//       mutation RemoveEvent($id: Int!) {
+//     removeEvent(id: $id) {
+//         title
+//         id
+//     }
+// }
+//       `, 
+//       variables: { id },
+//       fetchPolicy: "network-only"
+//     })
+//     visible.value = false;
+//         toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 3000 });
+//   } catch {
+
+//   }
+// }
 
 </script>
 <template>
@@ -286,8 +307,7 @@ const onFormSubmit = async ({ values, valid }) => {
               <div class="w-full bg-[#fafafa] rounded-md">
                 <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver" @submit="onFormSubmit"
                   class="grid grid-cols-2 gap-4 sm:w-full !p-3">
-                  <FormField v-slot="$field" name="title" initialValue=""
-                    class="grid-cols-1 gap-1 ">
+                  <FormField v-slot="$field" name="title" initialValue="" class="grid-cols-1 gap-1 ">
                     <div class="flex justify-between items-center">
                       <label for="title" class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs">Title</label>
                       <InputText id="title" type="text"
@@ -298,8 +318,7 @@ const onFormSubmit = async ({ values, valid }) => {
                         $field.error?.message }}</Message>
                   </FormField>
 
-                  <FormField v-slot="$field" name="sub_title" initialValue=""
-                    class="grid-cols-1 gap-1 ">
+                  <FormField v-slot="$field" name="sub_title" initialValue="" class="grid-cols-1 gap-1 ">
                     <div class="flex justify-between items-center">
                       <label for="sub_title" class="w-[25%] text-end !pr-2 text-xs">
                         Secondary Title
@@ -312,8 +331,7 @@ const onFormSubmit = async ({ values, valid }) => {
                         $field.error?.message }}</Message>
                   </FormField>
 
-                  <FormField v-slot="$field" name="title_detail" initialValue=""
-                    class="grid-cols-1 gap-1">
+                  <FormField v-slot="$field" name="title_detail" initialValue="" class="grid-cols-1 gap-1">
                     <div class="flex justify-between items-center w-full"><label for="title_detail"
                         class="w-[25%] text-end !pr-2 text-xs">Title Detail</label>
                       <InputText id="title_detail" type="text"
@@ -367,7 +385,8 @@ const onFormSubmit = async ({ values, valid }) => {
 
                 <Column field="title" header="Title">
                   <template #body="slotProps">
-                    <a class="text-blue-500 hover:!underline" :href="`/admin/events/detail-${slotProps.data.id}`">
+                    <a class="text-blue-500 hover:!underline font-semibold"
+                      :href="`/admin/events/detail-${slotProps.data.id}`">
                       {{ slotProps.data.title }}
                     </a>
                   </template>
@@ -412,9 +431,8 @@ const onFormSubmit = async ({ values, valid }) => {
                 <Column field="Action" header="Action">
                   <template #body="slotProps">
                     <div class="flex">
-                      <eventEdit />
-                      <button type="button" @click="deleteUser(slotProps.data.id)"
-                        class="text-sm !px-[5px] cursor-pointer">
+                      <eventEdit :event="slotProps.data" @updated="onUpdated" />
+                      <button type="button" @click="deleteEvent()" class="text-sm !px-[5px] cursor-pointer">
                         <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">

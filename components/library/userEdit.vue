@@ -52,7 +52,11 @@ const updateUser = async () => {
 }
 
 const editDialog = () => {
-  // Populate form with user data
+  Object.keys(user.value).map((item) => newData[item] = user.value[item])
+  newData.password = user.password ? user.password.substring(0, 8) : '********'
+  visible.value = true; // Show dialog
+}
+// Populate form with user data
   //  console.log(newData.age = user.value.age)
   // newData.id = user.value.id || '';
   // newData.username = user.value.user.valuename || '';
@@ -60,11 +64,6 @@ const editDialog = () => {
   // newData.gender = user.value.gender || '';
   // newData.email = user.value.email || '';
   // newData.password = ''; // Password not pre-filled for security
-  Object.keys(user.value).map((item) => newData[item] = user.value[item])
-  // console.log(newData)
-  newData.password = user.password ? user.password.substring(0, 8) : '********'
-  visible.value = true; // Show dialog
-}
 
 function saveUser() {
   updateUser()
@@ -74,7 +73,6 @@ function saveUser() {
 const reloadPage = () => {
   window.location.reload();
 }
-
 
 </script>
 
