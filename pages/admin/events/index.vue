@@ -14,7 +14,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from "primevue";
 import ImagesUpload from "../../../public/event/imagesUpload.vue";
-import Tag from 'primevue/tag';
+import Tag from 'primevue/tag'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -62,7 +62,7 @@ const confirmLogout = () => {
 };
 
 const openEvent = ref(false)
-const editDialog = (id) => {
+const editDialog = () => {
   openEvent.value = true
   // router.replace({ path: `/admin/events/${id}` })
 }
@@ -98,16 +98,17 @@ onMounted(() => {
 
 const getSeverity = (status) => {
   switch (status) {
-    case 'ACT':
-      return 'pi pi-check';
-    case 'PEN':
-      return 'pi pi-clock';
-    case 'DEL':
-      return 'pi pi-times';
+    case 'ACT': // Active
+      return 'success'; // green
+    case 'PEN': // Pending
+      return 'warning'; // yellow/orange
+    case 'DEL': // Deleted
+      return 'danger'; // red
     default:
-      return '';
+      return 'info'; // blue/gray for unknown
   }
-}
+};
+
 
 const initialValues = reactive({
   title: '',
@@ -169,20 +170,19 @@ const deleteEvent = async (id) => {
   try {
     const { data } = await $apollo.mutate({
       mutation: $gql`
-      mutation UpdateEvent($id: Int!, $status: EventStatus!) {
-    updateEvent(updateEventInput((id: $id, status: $status))) {
+      mutation UpdateEvent($updateEventInput: UpdateEventInput!) {
+      updateEvent(updateEventInput: $updateEventInput) {
         id
         title
         status
     }
 }
       `,
-      variables: { id, status: "DELETE" },
+      variables: { updateEventInput: { id, status: "DELETED" } },
       fetchPolicy: "network-only",
     })
     visible.value = false;
     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 3000 });
-    emit("updated", data.updateEvent);
   } catch (error) {
     console.error("Failed to mark event as deleted:", error);
     toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 3000 });
@@ -444,7 +444,7 @@ const deleteEvent = async (id) => {
                       {{ slotProps.data.id }}
                       <eventEdit :openEvent="openEvent" @updated="onUpdated" @closeEvent="(close) => openEvent = close"
                         :event="slotProps.data" />
-                      <button type="button" @click="editDialog(slotProps.data.id)"
+                      <button type="button" @click="editDialog(slotProps.data)"
                         class="text-sm cursor-pointer !px-[5px]">
                         <svg class="text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -453,7 +453,8 @@ const deleteEvent = async (id) => {
                             d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                         </svg>
                       </button>
-                      <button type="button" @click="deleteEvent(events.id)" class="text-sm !px-[5px] cursor-pointer">
+                      <button type="button" @click="deleteEvent(slotProps.data.id)"
+                        class="text-sm !px-[5px] cursor-pointer">
                         <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">

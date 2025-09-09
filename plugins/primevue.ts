@@ -1,16 +1,20 @@
 import { defineNuxtPlugin } from '#imports'
-import { ToastService } from 'primevue'
 import PrimeVue from 'primevue/config'
+import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'
 import ConfirmDialog from 'primevue/confirmdialog'
+import { type NuxtApp } from 'nuxt/app'
 
-export default defineNuxtPlugin((nuxtApp: any) => {
+export default defineNuxtPlugin((nuxtApp: NuxtApp) => {
+  const app = nuxtApp.vueApp
 
+  if (!(app as any)._primeVueInstalled) {
+    app.use(PrimeVue, { ripple: true })
+    app.use(ToastService)
+    app.use(ConfirmationService)
+    app.component('ConfirmDialog', ConfirmDialog)
 
-
-  nuxtApp.vueApp.use(PrimeVue, { ripple: true});
-  nuxtApp.vueApp.use(ConfirmationService)
-  nuxtApp.vueApp.component('ConfirmDialog', ConfirmDialog)
-
-  nuxtApp.vueApp.use(ToastService);
+    // Custom flag to prevent double-install
+    ;(app as any)._primeVueInstalled = true
+  }
 })
