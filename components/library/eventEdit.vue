@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits, onMounted, watch } from "vue";
+import { ref, defineEmits, watch } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
 import { Textarea } from "primevue";
@@ -10,6 +10,8 @@ const toast = useToast();
 const visible = ref(false);
 const loading = ref(false);
 const topPos = ref(150);
+const eventFormRef = ref(null);
+
 const props = defineProps({
     event: {
         type: Object,
@@ -53,13 +55,16 @@ const updateEvent = async (values) => {
             },
             fetchPolicy: "network-only",
         })
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
         visible.value = false;
-        toast.add({ severity: 'success', summary: 'Successful to edit event.', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Successful to edit event.', life: 2000 });
         emit("updated", data.updateEvent);
         closeDialog();
     } catch (error) {
         console.error("Failed to edit event:", error);
-        toast.add({ severity: 'error', summary: 'Failed to edit event', detail: error.message, life: 3000 });
+        toast.add({ severity: 'error', summary: 'Failed to edit event', detail: error.message, life: 2000 });
     } finally {
         loading.value = false;
     }
@@ -79,37 +84,27 @@ const initForm = {
     status: ""
 }
 
-// const formData = ref({ ...initForm });
-
-// onMounted(() => {
-//     if (props.event) {
-//         formData.value.id = props.event.id || ''
-//         formData.value.title = props.event.title || ''
-//         formData.value.sub_title = props.event.sub_title || ''
-//         formData.value.title_detail = props.event.title_detail || ''
-//         formData.value.description_detail = props.event.description_detail || ''
-//         // formData.value = { ...formData.value, ...props.event }; // short line of above code
-//     }
-// });
-
 const formData = ref({ ...initForm });
 
 // Watch for changes in props.event
 watch(
-  () => props.event,
-  (newEvent) => {
-    if (newEvent) {
-      formData.value = {
-        id: newEvent.id || '',
-        title: newEvent.title || '',
-        sub_title: newEvent.sub_title || '',
-        title_detail: newEvent.title_detail || '',
-        description_detail: newEvent.description_detail || '',
-        status: newEvent.status || ''
-      };
-    }
-  },
-  { immediate: true }
+    () => props.event?.id,
+    (newId) => {
+        if (newId) {
+            formData.value.id = props.event.id || ''
+            formData.value.title = props.event.title || ''
+            formData.value.sub_title = props.event.sub_title || ''
+            formData.value.title_detail = props.event.title_detail || ''
+            formData.value.description_detail = props.event.description_detail || ''
+            formData.value.status = props.event.status || 'PENDING'
+
+            eventFormRef.value?.reset();
+        } else {
+            formData.value = { ...initForm };
+            eventFormRef.value?.reset();
+        }
+    },
+    { immediate: true }
 );
 
 

@@ -23,7 +23,7 @@ export const partevents: EventItem[] = [
     cover: "https://www.philliptrustee.com.kh/v2/img/Sunpay_2.jpg",
     title: "MoU with Sunpay",
     description:
-      "Phillip Trustee (Cambodia) sign a Memorandum ofUnderstanding (MoU) on a strategic partnership with Sunpay (Cambodia) PLC to extend our trust service offerings to a wider base of foreign investors interested in the Cambodian real estate market. With many synergies between our firms, we believe this collaboration will provide investors with a more comprehensive and tailored experience in achieving their financial goals.",
+      "Phillip Trustee (Cambodia) sign a Memorandum of Understanding (MoU) on a strategic partnership with Sunpay (Cambodia) PLC to extend our trust service offerings to a wider base of foreign investors interested in the Cambodian real estate market. With many synergies between our firms, we believe this collaboration will provide investors with a more comprehensive and tailored experience in achieving their financial goals.",
     image: [
       "https://www.philliptrustee.com.kh/v2/img/Sunpay_1.jpg",
       "https://www.philliptrustee.com.kh/v2/img/Sunpay_2.jpg",

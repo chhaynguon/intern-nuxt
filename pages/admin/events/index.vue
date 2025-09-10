@@ -23,6 +23,8 @@ const loading = ref(false); // optional, show loading state
 const events = ref([]);
 const toast = useToast();
 const confirm = useConfirm();
+const openEvent = ref(false)
+const selectedEvent = ref(null)
 const topPos = ref(150);
 
 const confirmLogout = () => {
@@ -47,7 +49,7 @@ const confirmLogout = () => {
         severity: "success",
         summary: "Logged Out",
         detail: "You have been successfully logged out.",
-        life: 3000,
+        life: 2000,
       });
     },
     reject: () => {
@@ -61,9 +63,9 @@ const confirmLogout = () => {
   });
 };
 
-const openEvent = ref(false)
-const editDialog = () => {
+const editDialog = (event) => {
   openEvent.value = true
+  selectedEvent.value = { ...event }
   // router.replace({ path: `/admin/events/${id}` })
 }
 const fetchEvents = async () => {
@@ -96,19 +98,33 @@ onMounted(() => {
   fetchEvents();
 })
 
-const getSeverity = (status) => {
+const getStatusLabel = (status) => {
   switch (status) {
-    case 'ACT': // Active
-      return 'success'; // green
-    case 'PEN': // Pending
-      return 'warning'; // yellow/orange
-    case 'DEL': // Deleted
-      return 'danger'; // red
-    default:
-      return 'info'; // blue/gray for unknown
+    case 'ACTIVE': return 'ACTIVE';
+    case 'PENDING': return 'PENDING';
+    case 'DELETED': return 'DELETED';
+    default: return 'PENDING';
   }
 };
 
+const getStatusClass = (status) => {
+  switch (status) {
+    case 'ACTIVE': return 'status-active';
+    case 'PENDING': return 'status-pending';
+    case 'DELETED': return 'status-deleted';
+    default: return 'status-pending';
+  }
+};
+
+
+const getStatusImg = (status) => {
+  switch (status) {
+    case 'ACTIVE': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approve-icon.png';
+    case 'PENDING': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
+    case 'DELETED': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/reject-icon.png';
+    default: return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
+  }
+};
 
 const initialValues = reactive({
   title: '',
@@ -147,13 +163,15 @@ const createEvents = async (values) => {
       variables: { createEventInput: values },
       fetchPolicy: "network-only", // optional, avoid cache
     });
-
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
     console.log("Created: ", data.createEvent)
     visible.value = false;
-    toast.add({ severity: 'success', summary: 'Successful to create event.', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Successful to create event.', life: 2000 });
   } catch (error) {
     console.error("Failed to create events:", error);
-    toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 3000 });
+    toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 2000 });
   } finally {
     loading.value = false;
   }
@@ -165,27 +183,61 @@ const onFormSubmit = async ({ values, valid }) => {
   }
 };
 
-const deleteEvent = async (id) => {
+//remove both front-end and back-end
+// const removeEvent = async (id) => {
+//   loading.value = false;
+//   try {
+//     const { data } = await $apollo.mutate({
+//       mutation: $gql`
+//       mutation RemoveEvent($id: Int!) {
+//       removeEvent(id: $id) {
+//         id
+//         title
+//         sub_title
+//         title_detail
+//         description_detail
+//         status
+//     }
+// }
+//       `,
+//       variables: { id: Number(id) },
+//       fetchPolicy: "network-only",
+//     })
+//     setTimeout(() => {
+//       window.location.reload();
+//     }, 2000);
+//     visible.value = false;
+//     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
+//   } catch (error) {
+//     console.error("Failed to mark event as deleted:", error);
+//     toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
+//   }
+// }
+
+const removeEvent = async (id) => {
   loading.value = false;
   try {
     const { data } = await $apollo.mutate({
       mutation: $gql`
-      mutation UpdateEvent($updateEventInput: UpdateEventInput!) {
-      updateEvent(updateEventInput: $updateEventInput) {
+      mutation RemoveEvent($id: Int!) {
+      removeEvent(id: $id) {
         id
         title
         status
     }
 }
       `,
-      variables: { updateEventInput: { id, status: "DELETED" } },
+      variables: { id, status: 'DELETED' },
       fetchPolicy: "network-only",
     })
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
     visible.value = false;
-    toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
   } catch (error) {
     console.error("Failed to mark event as deleted:", error);
-    toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 3000 });
+    toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
   }
 }
 
@@ -357,7 +409,7 @@ const deleteEvent = async (id) => {
                       <label for="description_detail" class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
                       <Textarea id="description_detail" type="text"
                         class="w-[90%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300"
-                        rows="6" cols="50" maxlength="1000" />
+                        rows="6" cols="50" maxlength="5000" />
                     </div>
                     <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
                       class="w-[88%] place-self-end">{{
@@ -380,11 +432,12 @@ const deleteEvent = async (id) => {
               </div>
             </Dialog>
 
-            <div class="card shadow-md ">
-              <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="5"
+            <div class="card shadow-md">
+              <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
                 :totalRecords="events.length" :loading="loading"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                @row-dblclick="editDialog($event.data)" :dataKey="events.id" selectionMode="single" v-model:selection="selectedEvent">
 
                 <!-- <Column header="Thumbnail">
                   <template #body="slotProps">
@@ -393,30 +446,35 @@ const deleteEvent = async (id) => {
                   </template>
                 </Column> -->
 
+                <Column field="status" header="">
+                  <template #body="slotProps">
+                    <img :src="getStatusImg(slotProps.data.status)" :alt="slotProps.data.status" class="max-w-6 max-h-6" />
+                  </template>
+                </Column>
+
                 <Column field="title" header="Title">
                   <template #body="slotProps">
-                    <a class="text-blue-500 hover:!underline font-semibold"
-                      :href="`/admin/events/detail-${slotProps.data.id}`">
-                      {{ slotProps.data.title }}
+                    <a class="text-blue-500 font-semibold" :href="`/admin/events/detail-${slotProps.data.id}`">
+                      <p class="truncate inline-block">{{ slotProps.data.title }}</p>
                     </a>
                   </template>
                 </Column>
 
                 <Column field="sub_title" header="Sub Title">
                   <template #body="slotProps">
-                    {{ slotProps.data.sub_title }}
+                    <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.sub_title }}</p>
                   </template>
                 </Column>
 
                 <Column field="title_detail" header="Title Detail">
                   <template #body="slotProps">
-                    {{ slotProps.data.title_detail }}
+                    <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.title_detail }}</p>
                   </template>
                 </Column>
 
                 <Column field="description_detail" header="Description">
                   <template #body="slotProps">
-                    <p class="truncate w-48">{{ slotProps.data.description_detail }}</p>
+                    <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.description_detail }}</p>
                   </template>
                 </Column>
 
@@ -434,26 +492,28 @@ const deleteEvent = async (id) => {
 
                 <Column field="status" header="Status">
                   <template #body="slotProps">
-                    <Tag :value="slotProps.data.status" :severity="getSeverity(slotProps.data.status)" />
+                    <Tag :value="getStatusLabel(slotProps.data.status)"
+                      :class="getStatusClass(slotProps.data.status)" />
                   </template>
                 </Column>
 
                 <Column field="Action" header="Action">
                   <template #body="slotProps">
                     <div class="flex">
-                      {{ slotProps.data.id }}
                       <eventEdit :openEvent="openEvent" @updated="onUpdated" @closeEvent="(close) => openEvent = close"
-                        :event="slotProps.data" />
+                        :event="selectedEvent" />
+
                       <button type="button" @click="editDialog(slotProps.data)"
                         class="text-sm cursor-pointer !px-[5px]">
-                        <svg class="text-gray-800transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
+                        <svg
+                          class="text-gray-800 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
                         </svg>
                       </button>
-                      <button type="button" @click="deleteEvent(slotProps.data.id)"
+                      <button type="button" @click="removeEvent(slotProps.data.id)"
                         class="text-sm !px-[5px] cursor-pointer">
                         <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
                           aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
@@ -487,4 +547,30 @@ const deleteEvent = async (id) => {
 #file_input {
   height: 40px;
 }
+
+.status-active {
+  background-color: #d1fae5;
+  color: #008000;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.status-pending {
+  background-color: #e5e7eb;
+  color: #1E293B;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.status-deleted {
+  background-color: #fee2e2;
+  color: #e53e3e;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.p-selectable-row{
+  background-color: red!important;
+}
+
 </style>
