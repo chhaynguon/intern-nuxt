@@ -66,8 +66,7 @@
   --fs-s: clamp(0.875rem, 1.5vw, 1rem);
   /*14px-18px*/
   --blue-font-color: #002E6E;
-
-  
+  --p-highlight-background: var(--p-primary-50);
 }
 
 .social_media a {
@@ -418,6 +417,7 @@
   font-size: var(--fs-l);
   margin-bottom: 1rem;
 }
+
 .circle_thingy_wrap .circle_thingy .circle,
 .escrow_circle_thingy_wrap .circle_thingy .circle {
   position: relative;
@@ -574,11 +574,13 @@
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2.5rem;
 }
+
 .requirement .colla_processes .each_colla_process {
   display: flex;
   position: relative;
   padding: 1rem 0;
 }
+
 .requirement .colla_processes .each_colla_process:after {
   width: 80%;
   background: var(--orange);
@@ -589,6 +591,7 @@
   left: 0;
   content: '';
 }
+
 .requirement .colla_processes .each_colla_process span {
   font-size: var(--fs-l);
   display: inline-block;
@@ -598,6 +601,7 @@
   display: flex;
   align-items: center;
 }
+
 .requirement .colla_processes .each_colla_process .des {
   flex: 1;
   padding: 1rem;
@@ -622,17 +626,20 @@
   grid-gap: 2.5rem;
   margin-bottom: clamp(3rem, 9vw, 8rem);
 }
+
 .requirement .reg_processes .each_reg_process {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
 }
+
 .requirement .reg_processes .each_reg_process img {
   margin-left: auto;
   margin-right: auto;
   width: clamp(4rem, 14vw, 12rem);
 }
+
 .requirement .reg_processes .each_reg_process strong {
   font-size: var(--fs-m);
   display: block;
@@ -640,16 +647,19 @@
   font-weight: normal;
   margin-top: 1.5rem;
 }
+
 .requirement .colla_processes {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2.5rem;
 }
+
 .requirement .colla_processes .each_colla_process {
   display: flex;
   position: relative;
   padding: 1rem 0;
 }
+
 .requirement .colla_processes .each_colla_process:after {
   width: 80%;
   background: var(--orange);
@@ -660,6 +670,7 @@
   left: 0;
   content: '';
 }
+
 .requirement .colla_processes .each_colla_process span {
   font-size: var(--fs-l);
   display: inline-block;
@@ -669,6 +680,7 @@
   display: flex;
   align-items: center;
 }
+
 .requirement .colla_processes .each_colla_process .des {
   flex: 1;
   padding: 1.5rem;
@@ -683,4 +695,24 @@
   justify-content: center;
   align-items: center;
 }
+
 /* reg_processes service webpage end*/
+
+.p-datatable-tbody>tr.p-datatable-row-selected {
+  background: #e5e7eb2c !important;
+  color: black !important;
+
+
+}
+
+.p-datatable-tbody>tr.p-datatable-row-selected:hover {
+  background: white !important;
+}
+
+.p-datatable-tbody>tr.p-datatable-row-selected:focus {
+  outline: 2px solid #45454570 !important;
+  border-color: none !important;
+}
+.p-datatable-row-selected-background{
+  background-color: none !important;
+}

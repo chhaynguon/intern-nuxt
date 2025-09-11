@@ -1,8 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import lara from "@primeuix/themes/lara";
-import css from "~/assets/css/main.css";
-import { fileURLToPath } from 'url'
-
 
 export default defineNuxtConfig({
   devServer: {
@@ -11,9 +8,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
   css: [
-    "~/assets/css/main.css",
     "@/assets/css/tailwind.css",
     "primeicons/primeicons.css",
+    "~/assets/css/main.css",
   ],
   build: { transpile: ["primevue"] },
   components: [
@@ -57,6 +54,6 @@ export default defineNuxtConfig({
     },
   },
   alias: {
-    '@request': '/request/Service/service.master',
-  }
+    "@request": "/request/Service/service.master",
+  },
 });

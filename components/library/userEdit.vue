@@ -42,7 +42,6 @@ const updateUser = async () => {
         password: newData.password,
       }),
     });
-    reloadPage();
     console.log(res)
     visible.value = false;
   } catch (error) {
@@ -52,7 +51,7 @@ const updateUser = async () => {
 }
 
 const editDialog = () => {
-  Object.keys(user.value).map((item) => newData[item] = user.value[item])
+  Object.keys(user.value).map((item) => newData[item] = user.value[item]) 
   newData.password = user.password ? user.password.substring(0, 8) : '********'
   visible.value = true; // Show dialog
 }
@@ -69,9 +68,9 @@ function saveUser() {
   updateUser()
   reloadPage()
 }
-
+const loading = ref(false);
 const reloadPage = () => {
-  window.location.reload();
+  loading.value = true;
 }
 
 </script>
@@ -84,7 +83,7 @@ const reloadPage = () => {
         d="M7 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h1m4-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm7.441 1.559a1.907 1.907 0 0 1 0 2.698l-6.069 6.069L10 19l.674-3.372 6.07-6.07a1.907 1.907 0 0 1 2.697 0Z" />
     </svg>
   </Button>
-  <Dialog v-model:visible="visible" modal header="Edit Profile"
+  <Dialog v-model:visible="visible" modal header="Edit Profile" :loading="loading"
     style="width: 25rem; border-radius: 8px; border-color: var(--color-blue-400);"
     class="!p-[15px] rounded-lg !border-blue-400 !border !bg-white">
     <div class="relative z-0 w-full !my-5 group">

@@ -55,13 +55,11 @@ const updateEvent = async (values) => {
             },
             fetchPolicy: "network-only",
         })
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
+        refresh()
         visible.value = false;
         toast.add({ severity: 'success', summary: 'Successful to edit event.', life: 2000 });
         emit("updated", data.updateEvent);
-        closeDialog();
+        closeDialog()
     } catch (error) {
         console.error("Failed to edit event:", error);
         toast.add({ severity: 'error', summary: 'Failed to edit event', detail: error.message, life: 2000 });
@@ -107,6 +105,35 @@ watch(
     { immediate: true }
 );
 
+const refresh = async () => {
+  try {
+      loading.value = true; 
+    const { data } = await $apollo.query({
+      query: $gql`
+        query FindAll {
+          findAll {
+            id
+            title
+            sub_title
+            title_detail
+            description_detail
+            status
+          }
+        }
+      `,
+      fetchPolicy: "network-only"
+    });
+    events.value = data.findAll || [];
+    await fetchData();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setTimeout(() => {
+        loading.value = false;
+    }, 500)
+  }
+}
+
 
 </script>
 <template>
@@ -114,7 +141,7 @@ watch(
         :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + 50 + 'px' }">
         <template #header>
             <div class="flex items-center justify-between w-full">
-                <span class="font-bold">Update Event</span>
+                <span class="font-bold">Update Event: {{ props.event.id }}</span>
                 <div>
                     <button type="submit" @click="$refs.eventForm.submit()"
                         class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
@@ -171,7 +198,7 @@ watch(
                         <label for="description_detail" class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
                         <Textarea id="description_detail" type="text" v-model="$field.value"
                             class="w-[90%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300"
-                            rows="6" cols="50" maxlength="1000" />
+                            rows="5" cols="50" maxlength="1000" />
                     </div>
                     <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
                         class="w-[88%] place-self-end">{{

@@ -116,16 +116,6 @@ const getStatusClass = (status) => {
   }
 };
 
-
-const getStatusImg = (status) => {
-  switch (status) {
-    case 'ACTIVE': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approve-icon.png';
-    case 'PENDING': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
-    case 'DELETED': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/reject-icon.png';
-    default: return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
-  }
-};
-
 const initialValues = reactive({
   title: '',
   sub_title: '',
@@ -145,7 +135,7 @@ const resolver = zodResolver(
 
 const visible = ref(false);
 const createEvents = async (values) => {
-  loading.value = true
+
   try {
     const { data } = await $apollo.mutate({
       mutation: $gql`
@@ -164,8 +154,8 @@ const createEvents = async (values) => {
       fetchPolicy: "network-only", // optional, avoid cache
     });
     setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+      refresh();
+    }, 1000);
     console.log("Created: ", data.createEvent)
     visible.value = false;
     toast.add({ severity: 'success', summary: 'Successful to create event.', life: 2000 });
@@ -231,8 +221,8 @@ const removeEvent = async (id) => {
       fetchPolicy: "network-only",
     })
     setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+      refresh();
+    }, 500);
     visible.value = false;
     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
   } catch (error) {
@@ -241,10 +231,42 @@ const removeEvent = async (id) => {
   }
 }
 
+const refresh = async () => {
+  try {
+    loading.value = true;
+
+    // start loading
+    // your async task here, e.g. fetching data
+    const { data } = await $apollo.query({
+      query: $gql`
+        query FindAll {
+          findAll {
+            id
+            title
+            sub_title
+            title_detail
+            description_detail
+            status
+          }
+        }
+      `,
+      fetchPolicy: "network-only"
+    });
+    events.value = data.findAll || [];
+    await fetchData();
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setTimeout(() => {
+      loading.value = false;
+    }, 500)
+  }
+}
+
 </script>
 <template>
   <dbHeader />
-  <section class="relative flex justify-between w-full top-16" :class="{ 'bg-black/20': visible }">
+  <section class="relative flex justify-between w-full h-screen top-16">
     <div class="fixed flex h-screen bg-white shadow-xl top-16">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center">
@@ -300,6 +322,19 @@ const removeEvent = async (id) => {
             </a>
           </li>
 
+          <li class="transition hover:transition hover:duration-300 hover:bg-[#454545] hover:text-white">
+            <a href="/admin/approval"
+              class="w-[135px] h-[44px] flex place-self-center items-center !pl-[10px] group"><svg
+                class="w-6 h-6 text-gray-800 group-hover:text-white" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m8.032 12 1.984 1.984 4.96-4.96m4.55 5.272.893-.893a1.984 1.984 0 0 0 0-2.806l-.893-.893a1.984 1.984 0 0 1-.581-1.403V7.04a1.984 1.984 0 0 0-1.984-1.984h-1.262a1.983 1.983 0 0 1-1.403-.581l-.893-.893a1.984 1.984 0 0 0-2.806 0l-.893.893a1.984 1.984 0 0 1-1.403.581H7.04A1.984 1.984 0 0 0 5.055 7.04v1.262c0 .527-.209 1.031-.581 1.403l-.893.893a1.984 1.984 0 0 0 0 2.806l.893.893c.372.372.581.876.581 1.403v1.262a1.984 1.984 0 0 0 1.984 1.984h1.262c.527 0 1.031.209 1.403.581l.893.893a1.984 1.984 0 0 0 2.806 0l.893-.893a1.985 1.985 0 0 1 1.403-.581h1.262a1.984 1.984 0 0 0 1.984-1.984V15.7c0-.527.209-1.031.581-1.403Z" />
+              </svg>
+
+              <span class="!pl-[8px]">Approval</span>
+            </a>
+          </li>
+
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
@@ -329,15 +364,7 @@ const removeEvent = async (id) => {
             <div class="flex justify-between w-full !mt-5">
               <h1 class="text-center font-bold text-2xl">Events</h1>
               <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                <button @click="visible = true"
-                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
-                  <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>New
-                </button>
-                <div class="flex shadow-md">
+                <div class="flex shadow-sm">
                   <input type="text" placeholder="Enter Event Title"
                     class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-400" />
                   <button class=" border-y-1 border-r-1 border-gray-400 rounded-tr-md rounded-br-md"
@@ -349,6 +376,18 @@ const removeEvent = async (id) => {
                     </svg>
                   </button>
                 </div>
+                <button @click="visible = true"
+                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mx-2 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-md">
+                  <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>New
+                </button>
+                <button @click="refresh"
+                  class="transition items-center hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-md">
+                  <span class="pi pi pi-fw pi-refresh"></span>Refresh
+                </button>
               </div>
             </div>
             <Dialog v-model:visible="visible" class="w-[60%] dynamic-dialog" :dismissable-mask="false"
@@ -409,7 +448,7 @@ const removeEvent = async (id) => {
                       <label for="description_detail" class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
                       <Textarea id="description_detail" type="text"
                         class="w-[90%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300"
-                        rows="6" cols="50" maxlength="5000" />
+                        rows="5" cols="50" maxlength="5000" />
                     </div>
                     <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
                       class="w-[88%] place-self-end">{{
@@ -432,12 +471,13 @@ const removeEvent = async (id) => {
               </div>
             </Dialog>
 
-            <div class="card shadow-md">
+            <div class="card shadow-sm">
               <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
                 :totalRecords="events.length" :loading="loading"
                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                @row-dblclick="editDialog($event.data)" :dataKey="events.id" selectionMode="single" v-model:selection="selectedEvent">
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" data-p-highlight="true"
+                @row-dblclick="editDialog($event.data)" dataKey="id" selectionMode="single"
+                v-model:selection="selectedEvent">
 
                 <!-- <Column header="Thumbnail">
                   <template #body="slotProps">
@@ -446,9 +486,9 @@ const removeEvent = async (id) => {
                   </template>
                 </Column> -->
 
-                <Column field="status" header="">
+                <Column field="sub_title" header="ID">
                   <template #body="slotProps">
-                    <img :src="getStatusImg(slotProps.data.status)" :alt="slotProps.data.status" class="max-w-6 max-h-6" />
+                    <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.id }}</p>
                   </template>
                 </Column>
 
@@ -460,13 +500,13 @@ const removeEvent = async (id) => {
                   </template>
                 </Column>
 
-                <Column field="sub_title" header="Sub Title">
+                <Column field="sub_title" header="Sub title">
                   <template #body="slotProps">
                     <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.sub_title }}</p>
                   </template>
                 </Column>
 
-                <Column field="title_detail" header="Title Detail">
+                <Column field="title_detail" header="Title detail">
                   <template #body="slotProps">
                     <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.title_detail }}</p>
                   </template>
@@ -568,9 +608,4 @@ const removeEvent = async (id) => {
   font-weight: 500;
   font-size: 12px;
 }
-
-.p-selectable-row{
-  background-color: red!important;
-}
-
 </style>
