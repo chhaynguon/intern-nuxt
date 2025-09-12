@@ -8,8 +8,6 @@ import ConfirmDialog from "primevue/confirmdialog";
 import { ref } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
-import { zodResolver } from '@primevue/forms/resolvers/zod';
-import { z } from 'zod';
 import { Textarea } from "primevue";
 import Tag from 'primevue/tag'
 
@@ -21,6 +19,7 @@ const confirm = useConfirm();
 const openEvent = ref(false)
 const selectedEvent = ref(null)
 const topPos = ref(150);
+const visible = ref(false);
 
 const confirmLogout = () => {
     confirm.require({
@@ -58,11 +57,6 @@ const confirmLogout = () => {
     });
 };
 
-const editDialog = (event) => {
-    openEvent.value = true
-    selectedEvent.value = { ...event }
-    // router.replace({ path: `/admin/events/${id}` })
-}
 const fetchEvents = async () => {
     loading.value = true;
     try {
@@ -93,8 +87,8 @@ onMounted(() => {
     fetchEvents();
 })
 
-const getStatusLabel = (status) => {
-    switch (status) {
+const getStatusLabel = (approval_status) => {
+    switch (approval_status) {
         case 'ACTIVE': return 'ACTIVE';
         case 'PENDING': return 'PENDING';
         case 'DELETED': return 'DELETED';
@@ -102,8 +96,8 @@ const getStatusLabel = (status) => {
     }
 };
 
-const getStatusClass = (status) => {
-    switch (status) {
+const getStatusClass = (approval_status) => {
+    switch (approval_status) {
         case 'ACTIVE': return 'status-active';
         case 'PENDING': return 'status-pending';
         case 'DELETED': return 'status-deleted';
@@ -111,130 +105,33 @@ const getStatusClass = (status) => {
     }
 };
 
+const getActionLabel = (approval_action) => {
+    switch (approval_action) {
+        case 'CREATE': return 'CREATE';
+        case 'UPDATE': return 'UPDATE';
+        case 'UPLOAD': return 'UPLOAD';
+        default: return 'UPLOAD';
+    }
+};
 
-const getStatusImg = (status) => {
-    switch (status) {
+const getActionClass = (approval_action) => {
+    switch (approval_action) {
+        case 'CREATE': return 'status-action';
+        case 'UPDATE': return 'status-action';
+        case 'UPLOAD': return 'status-action';
+        default: return 'status-action';
+    }
+};
+
+
+const getStatusImg = (approval_status) => {
+    switch (approval_status) {
         case 'ACTIVE': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approve-icon.png';
         case 'PENDING': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
         case 'DELETED': return 'https://nano-uat.phillipbank.com.kh/images/placeholders/reject-icon.png';
         default: return 'https://nano-uat.phillipbank.com.kh/images/placeholders/approval-pending.gif';
     }
 };
-
-const initialValues = reactive({
-    title: '',
-    sub_title: '',
-    title_detail: '',
-    description_detail: ''
-});
-
-const resolver = zodResolver(
-    z.object({
-        title: z.string().min(1, { message: 'Title field is required.' }),
-        sub_title: z.string().min(1, { message: 'Secondary title is required.' }),
-        title_detail: z.string().min(1, { message: 'Title Detail field is required.' }),
-        description_detail: z.string().min(1, { message: 'Description field is required.' })
-    })
-);
-
-
-const visible = ref(false);
-const createEvents = async (values) => {
-    loading.value = true
-    try {
-        const { data } = await $apollo.mutate({
-            mutation: $gql`
-        mutation CreateEvent($createEventInput: CreateEventInput!) {
-          createEvent(createEventInput: $createEventInput) {
-            id
-        title
-        sub_title
-        title_detail
-        description_detail
-        status
-          }
-        }
-      `,
-            variables: { createEventInput: values },
-            fetchPolicy: "network-only", // optional, avoid cache
-        });
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-        console.log("Created: ", data.createEvent)
-        visible.value = false;
-        toast.add({ severity: 'success', summary: 'Successful to create event.', life: 2000 });
-    } catch (error) {
-        console.error("Failed to create events:", error);
-        toast.add({ severity: 'error', summary: 'Failed to create event', detail: error.message, life: 2000 });
-    } finally {
-        loading.value = false;
-    }
-};
-
-const onFormSubmit = async ({ values, valid }) => {
-    if (valid) {
-        await createEvents(values);
-    }
-};
-
-//remove both front-end and back-end
-// const removeEvent = async (id) => {
-//   loading.value = false;
-//   try {
-//     const { data } = await $apollo.mutate({
-//       mutation: $gql`
-//       mutation RemoveEvent($id: Int!) {
-//       removeEvent(id: $id) {
-//         id
-//         title
-//         sub_title
-//         title_detail
-//         description_detail
-//         status
-//     }
-// }
-//       `,
-//       variables: { id: Number(id) },
-//       fetchPolicy: "network-only",
-//     })
-//     setTimeout(() => {
-//       window.location.reload();
-//     }, 2000);
-//     visible.value = false;
-//     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
-//   } catch (error) {
-//     console.error("Failed to mark event as deleted:", error);
-//     toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
-//   }
-// }
-
-const removeEvent = async (id) => {
-    loading.value = false;
-    try {
-        const { data } = await $apollo.mutate({
-            mutation: $gql`
-      mutation RemoveEvent($id: Int!) {
-      removeEvent(id: $id) {
-        id
-        title
-        status
-    }
-}
-      `,
-            variables: { id, status: 'DELETED' },
-            fetchPolicy: "network-only",
-        })
-        setTimeout(() => {
-            refresh();
-        }, 1000);
-        visible.value = false;
-        toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
-    } catch (error) {
-        console.error("Failed to mark event as deleted:", error);
-        toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
-    }
-}
 
 const refresh = async () => {
     try {
@@ -264,12 +161,56 @@ const refresh = async () => {
     } finally {
         setTimeout(() => {
             loading.value = false;
-        }, 1000)
+        }, 500)
+    }
+}
+
+openEvent.value = false;
+const closeDialog = () => {
+    // visible.value = false;
+    emit('closeEvent', false)
+};
+
+const viewEvent = async () => {
+    openEvent.value = true
+    try {
+        const { data } = await $apollo.mutate({
+            mutation: $gql`
+        mutation UpdateEvent($updateEventInput: UpdateEventInput!){
+        updateEvent(updateEventInput: $updateEventInput){
+        id
+        title
+        sub_title
+        title_detail
+        description_detail
+        status
+        }
+      }
+    `,
+            variables: {
+                updateEventInput: {
+                    ...values,
+                    id: events.value.id,
+                }
+            },
+            fetchPolicy: "network-only",
+        })
+        refresh()
+        visible.value = false;
+        toast.add({ severity: 'success', summary: 'Successful to edit event.', life: 2000 });
+        emit("updated", data.updateEvent);
+        closeDialog()
+    } catch (error) {
+        console.error("Failed to edit event:", error);
+        toast.add({ severity: 'error', summary: 'Failed to edit event', detail: error.message, life: 2000 });
+    } finally {
+        loading.value = false;
     }
 }
 
 </script>
 <template>
+
     <dbHeader />
     <section class="relative flex justify-between w-full top-16" :class="{ 'bg-black/20': visible }">
         <div class="fixed flex h-screen bg-white shadow-xl top-16">
@@ -370,25 +311,15 @@ const refresh = async () => {
             <div class="w-full place-self-end">
                 <div class="w-full !mx-auto flex justify-between !px-8">
                     <div class="w-full !mx-auto">
-                        <div class="flex justify-between w-full !mt-5">
-                            <h1 class="text-center font-bold text-2xl">Approval</h1>
-                            <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                                <button @click="visible = true"
-                                    class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
-                                    <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>New
-                                </button>
-                                <div class="flex shadow-md">
-                                    <input type="text" placeholder="Enter Event Title"
-                                        class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-400" />
-                                    <button class=" border-y-1 border-r-1 border-gray-400 rounded-tr-md rounded-br-md"
+                        <div class="flex justify-between w-full !my-5">
+                            <h1 class="text-center font-bold text-2xl">Approvals</h1>
+                            <div class="w-[30%] flex justify-end  place-self-end">
+                                <div class="flex shadow-sm rounded-md">
+                                    <input type="text" placeholder="Seach"
+                                        class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-200" />
+                                    <button class=" border-y-1 border-r-1 border-gray-200 rounded-tr-md rounded-br-md"
                                         @click="eventSearch()">
-                                        <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
+                                        <svg class="w-6 h-6 !m-1 text-gray-500 cursor-pointer" aria-hidden="true"
                                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                             viewBox="0 0 24 24">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
@@ -396,23 +327,27 @@ const refresh = async () => {
                                         </svg>
                                     </button>
                                 </div>
+                                <button @click="openEvent = true"
+                                    class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !p-1.5 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
+                                    <span class="pi pi pi-eye !pr-1"></span>View
+                                </button>
                                 <button @click="refresh"
-                                    class="transition items-center hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-md hover:bg-gray-200 rounded-md">
-                                    <span class="pi pi pi-fw pi-refresh"></span>Refresh
+                                    class="transition items-center hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-tr-md rounded-br-md">
+                                    <span class="pi pi pi-fw pi-refresh "></span>Refresh
                                 </button>
                             </div>
                         </div>
-                        <Dialog v-model:visible="visible" class="w-[60%] dynamic-dialog" :dismissable-mask="false"
+                        <Dialog v-model:visible="openEvent" class="w-[60%] dynamic-dialog" :dismissable-mask="false"
                             :draggable="false" :closable="false" :resizable="false" position="top"
                             :style="{ top: topPos + '50px' }">
                             <template #header>
                                 <div class="flex items-center justify-between w-full">
-                                    <span class="font-bold">New Event</span>
+                                    <span class="font-bold">New Request</span>
                                     <div>
                                         <button type="submit" @click="$refs.eventForm.submit()"
                                             class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
                                             Add</button>
-                                        <button @click=" visible = false"
+                                        <button @click=" openEvent = false"
                                             class=" cursor-pointer !p-2 !px-2.5 rounded-tr-md rounded-br-md text-sm text-center bg-gray-100 hover:bg-gray-200  hover:transition hover:duration-300 transition duration-300">
                                             Close</button>
                                     </div>
@@ -420,13 +355,13 @@ const refresh = async () => {
                             </template>
                             <div class="w-full bg-[#fafafa] rounded-md">
                                 <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver"
-                                    @submit="onFormSubmit" class="grid grid-cols-2 gap-4 sm:w-full !p-3">
+                                    @submit="onFormSubmit" class="grid grid-cols-2 gap-4 sm:w-full !p-3"
+                                    v-for="event in events" :key="event.id">
                                     <FormField v-slot="$field" name="title" initialValue="" class="grid-cols-1 gap-1 ">
                                         <div class="flex justify-between items-center">
                                             <label for="title"
                                                 class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs">Title</label>
-                                            <InputText id="title" type="text"
-                                                class="p-inputtext-sm w-[75%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300" />
+                                            <p class="text-start">{{ event.title }}</p>
                                         </div>
                                         <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
                                             class="w-[75%] place-self-end ">{{
@@ -472,128 +407,80 @@ const refresh = async () => {
                                             class="w-[88%] place-self-end">{{
                                                 $field.error?.message }}</Message>
                                     </FormField>
-                                    <!-- <ImagesUpload label="Attachment" v-model:attachments="attachments" :limit="10" id="file1"
-                    :preFile="attachments?.length" :size="10" :disabled="is_disabled" :errors="errors" :path="'event1/'"
-                    @deleteFile="deleteFile" @changeFile="changeFile" />
-
-                  <ImagesUpload label="Thumbnail" v-model:attachments="thumbnailattachments" :limit="10" id="file1"
-                    :preFile="thumbnailattachments?.length" :size="10" :disabled="is_disabled" :errors="errors"
-                    :path="'event1/'" @[deleteFile]="deleteThumbnailFile" @changeFile="changeThumbnailFile" /> -->
-
-                                    <!-- <ImagesUpload v-for="(file, index) in filesComponent" :key="index" :label="file.label"
-                    :limit="file.limit" :id="file.id" :size="file.size" :attachments="file.attachments"
-                    :preFile="file.preFile" :disabled="file.is_disabled" :errors="file.errors" :path="file.path"
-                    @[file.deleteFile]="file.onDeleteFile" @[file.changeFile]="file.onChangeFile" /> -->
-
                                 </Form>
                             </div>
                         </Dialog>
 
-                        <div class="card shadow-md">
+                        <div class="card shadow-sm">
                             <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
                                 :totalRecords="events.length" :loading="loading"
                                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                                data-p-highlight="true" @row-dblclick="editDialog($event.data)" dataKey="id"
+                                data-p-highlight="true" @row-dblclick="viewEvent(events.id)" dataKey="id"
                                 selectionMode="single" v-model:selection="selectedEvent">
-
-                                <!-- <Column header="Thumbnail">
-                  <template #body="slotProps">
-                    <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
-                      class="object-cover w-25 h-25 rounded-lg" />
-                  </template>
-                </Column> -->
 
                                 <Column field="status" header="">
                                     <template #body="slotProps">
-                                        <img :src="getStatusImg(slotProps.data.status)" :alt="slotProps.data.status"
-                                            class="max-w-6 max-h-6" />
+                                        <img :src="getStatusImg(slotProps.data.approval_status)"
+                                            :alt="slotProps.data.approval_status" class="max-w-6 max-h-6" />
                                     </template>
                                 </Column>
 
-                                <Column field="sub_title" header="ID">
+                                <Column field="id" header="ID">
                                     <template #body="slotProps">
                                         <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.id }}</p>
                                     </template>
                                 </Column>
 
-                                <Column field="title" header="Title">
+                                <Column field="subject" header="Subject">
                                     <template #body="slotProps">
                                         <a class="text-blue-500 font-semibold"
                                             :href="`/admin/events/detail-${slotProps.data.id}`">
-                                            <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.title }}
+                                            <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.subject }}
                                             </p>
                                         </a>
                                     </template>
                                 </Column>
 
-                                <Column field="sub_title" header="Sub Title">
-                                    <template #body="slotProps">
-                                        <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.sub_title }}
-                                        </p>
-                                    </template>
-                                </Column>
-
-                                <Column field="title_detail" header="Title Detail">
-                                    <template #body="slotProps">
-                                        <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.title_detail }}
-                                        </p>
-                                    </template>
-                                </Column>
-
-                                <Column field="description_detail" header="Description">
-                                    <template #body="slotProps">
-                                        <p class="truncate inline-block max-w-[12rem]">{{
-                                            slotProps.data.description_detail }}</p>
-                                    </template>
-                                </Column>
-
-                                <!-- <Column field="images" header="Images">
-                  <template #body="slotProps">
-                    {{ slotProps.data.images }}
-                  </template>
-                </Column> -->
-
-                                <!-- <Column field="cover" header="Cover">
-                  <template #body="slotProps">
-                    {{ slotProps.data.cover }}
-                  </template>
-                </Column> -->
-
                                 <Column field="status" header="Status">
                                     <template #body="slotProps">
-                                        <Tag :value="getStatusLabel(slotProps.data.status)"
-                                            :class="getStatusClass(slotProps.data.status)" />
+                                        <Tag :value="getStatusLabel(slotProps.data.approval_status)"
+                                            :class="getStatusClass(slotProps.data.approval_status)" />
                                     </template>
                                 </Column>
 
-                                <Column field="Action" header="Action">
+                                <Column field="created_at" header="Created date">
                                     <template #body="slotProps">
-                                        <div class="flex">
-                                            <eventEdit :openEvent="openEvent" @updated="onUpdated"
-                                                @closeEvent="(close) => openEvent = close" :event="selectedEvent" />
+                                        <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.created_at }}
+                                        </p>
+                                    </template>
+                                </Column>
 
-                                            <button type="button" @click="editDialog(slotProps.data)"
-                                                class="text-sm cursor-pointer !px-[5px]">
-                                                <svg class="text-gray-800 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
-                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                                </svg>
-                                            </button>
-                                            <button type="button" @click="removeEvent(slotProps.data.id)"
-                                                class="text-sm !px-[5px] cursor-pointer">
-                                                <svg class="text-red-600 transition w-7 h-7 hover:scale-120 hover:transition hover:duration-300"
-                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                                    height="24" fill="none" viewBox="0 0 24 24">
-                                                    <path stroke="currentColor" stroke-linecap="round"
-                                                        stroke-linejoin="round" stroke-width="2"
-                                                        d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
-                                                </svg>
-                                            </button>
-                                        </div>
+                                <Column field="created_by" header="Created by">
+                                    <template #body="slotProps">
+                                        <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.created_by }}
+                                        </p>
+                                    </template>
+                                </Column>
+
+                                <Column field="approved_at" header="Approved date">
+                                    <template #body="slotProps">
+                                        <p class="truncate inline-block max-w-[12rem]">
+                                            {{ slotProps.data.approved_at }}</p>
+                                    </template>
+                                </Column>
+
+                                <Column field="approved_at" header="Approved by">
+                                    <template #body="slotProps">
+                                        <p class="truncate inline-block max-w-[12rem]">
+                                            {{ slotProps.data.approved_by }}</p>
+                                    </template>
+                                </Column>
+
+                                <Column field="ction" header="Action">
+                                    <template #body="slotProps">
+                                        <Tag :value="getActionLabel(slotProps.data.approval_action)"
+                                            :class="getActionClass(slotProps.data.approval_action)" />
                                     </template>
                                 </Column>
 
@@ -638,5 +525,13 @@ const refresh = async () => {
     color: #e53e3e;
     font-weight: 500;
     font-size: 12px;
+}
+
+.status-action {
+    background: none;
+    color: #1E293B;
+    font-weight: 500;
+    font-size: 14px;
+    padding-left: 3px;
 }
 </style>

@@ -47,8 +47,8 @@ export default defineNuxtConfig({
       },
       warmup: {
         clientFiles: [
-          "./components/LargeComponent.vue",
-          "./utils/complex-helper.js",
+          "~/components/LargeComponent.vue",
+          "~/utils/complex-helper.js",
         ],
       },
     },

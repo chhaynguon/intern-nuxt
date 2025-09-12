@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <header class="w-full bg-white shadow-md fixed z-20 flex justify-between !p-0 sm:!p-[5px] md:!p-[7px] lg:!p-[10px]">
+    <header class="w-full bg-white shadow-sm fixed z-20 flex justify-between !p-0 sm:!p-[5px] md:!p-[7px] lg:!p-[10px]">
         <div class="flex justify-between w-full place-self-center">
             <!-- Profile Section -->
             <div class="cursor-pointer">

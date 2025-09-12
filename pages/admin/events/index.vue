@@ -13,10 +13,8 @@ import { reactive } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from "primevue";
-import ImagesUpload from "../../../public/event/imagesUpload.vue";
 import Tag from 'primevue/tag'
 import { useRouter } from 'vue-router'
-const router = useRouter()
 
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const loading = ref(false); // optional, show loading state
@@ -103,7 +101,7 @@ const getStatusLabel = (status) => {
     case 'ACTIVE': return 'ACTIVE';
     case 'PENDING': return 'PENDING';
     case 'DELETED': return 'DELETED';
-    default: return 'PENDING';
+    default: return 'ACTIVE';
   }
 };
 
@@ -112,7 +110,7 @@ const getStatusClass = (status) => {
     case 'ACTIVE': return 'status-active';
     case 'PENDING': return 'status-pending';
     case 'DELETED': return 'status-deleted';
-    default: return 'status-pending';
+    default: return 'status-active';
   }
 };
 
@@ -267,7 +265,7 @@ const refresh = async () => {
 <template>
   <dbHeader />
   <section class="relative flex justify-between w-full h-screen top-16">
-    <div class="fixed flex h-screen bg-white shadow-xl top-16">
+    <div class="fixed flex h-screen bg-white shadow-sm top-16">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center">
           <!-- home menu -->
@@ -361,15 +359,15 @@ const refresh = async () => {
       <div class="w-full place-self-end">
         <div class="w-full !mx-auto flex justify-between !px-8">
           <div class="w-full !mx-auto">
-            <div class="flex justify-between w-full !mt-5">
+            <div class="flex justify-between w-full !my-5">
               <h1 class="text-center font-bold text-2xl">Events</h1>
-              <div class="w-[30%] flex justify-end !mb-[15px] place-self-end">
-                <div class="flex shadow-sm">
-                  <input type="text" placeholder="Enter Event Title"
-                    class="w-[150px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-400" />
-                  <button class=" border-y-1 border-r-1 border-gray-400 rounded-tr-md rounded-br-md"
+              <div class="w-[30%] flex justify-end  place-self-end">
+                <div class="flex shadow-sm rounded-md">
+                  <input type="text" placeholder="Search"
+                    class="w-[160px] !pl-[8px] rounded-tl-md rounded-bl-md border-gray-200" />
+                  <button class=" border-y-1 border-r-1 border-gray-200 rounded-tr-md rounded-br-md"
                     @click="eventSearch()">
-                    <svg class="w-6 h-6 !m-1 text-blue-400 cursor-pointer" aria-hidden="true"
+                    <svg class="w-6 h-6 !m-1 text-gray-500 cursor-pointer" aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
                         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
@@ -377,16 +375,24 @@ const refresh = async () => {
                   </button>
                 </div>
                 <button @click="visible = true"
-                  class="transition hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mx-2 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-md">
-                  <svg class="w-5 h-5 text-black !mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
+                  <svg class="w-5 h-5 text-white !mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                    height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>New
                 </button>
+                <button @click="openEvent = true"
+                  class="transition items-center hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200">
+                  <span class="pi pi pi-eye !mr-1.5"></span>View
+                </button>
                 <button @click="refresh"
-                  class="transition items-center hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-400 !mr-2 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-md">
-                  <span class="pi pi pi-fw pi-refresh"></span>Refresh
+                  class="transition items-center hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200">
+                  <span class="pi pi pi-fw pi-refresh !mr-1"></span>Refresh
+                </button>
+                <button @click="Column"
+                  class="transition items-center hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-tr-md rounded-br-md">
+                  <span class="pi pi-ellipsis-h"></span>
                 </button>
               </div>
             </div>
@@ -486,7 +492,7 @@ const refresh = async () => {
                   </template>
                 </Column> -->
 
-                <Column field="sub_title" header="ID">
+                <Column field="id" header="ID">
                   <template #body="slotProps">
                     <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.id }}</p>
                   </template>
