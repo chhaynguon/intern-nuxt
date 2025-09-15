@@ -80,7 +80,6 @@ const { data } = await $apollo.query({
 })
 </script>
 <template>
-    <dbHeader />
     <section class="relative flex justify-between w-full top-16">
 
         <div class="fixed flex h-screen bg-white shadow-xl top-16">

@@ -128,7 +128,6 @@ const confirmLogout = () => {
 </script>
 <template>
   <div>
-    <dbHeader />
     <section class="relative flex justify-between top-16">
       <div class="fixed flex min-h-screen bg-white shadow-xl top-16">
         <aside class="w-[100%] text-black flex flex-col">

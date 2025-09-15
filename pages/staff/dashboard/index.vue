@@ -62,7 +62,6 @@ const events = listEvents.length
 const services = keyService.length
 </script>
 <template>
-    <dbHeader />
     <section class="relative flex justify-between w-full top-16">
         <!-- <dbMenu /> -->
         <div class="fixed flex min-h-screen bg-white shadow-xl top-16">

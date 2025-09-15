@@ -1,12 +1,30 @@
 <script setup>
 import { listEvents } from '~/data/Event/event'
 import { ref } from 'vue';
+const events = ref([])
 const menuOpen = ref(false)
 // Sort ascending by ID
 // events.sort((a, b) => a.id - b.id)
 
 // Or descending
 const event = listEvents.sort((a, b) => b.id - a.id)
+const { $apollo, $gql } = useNuxtApp();
+const { data } = await $apollo.query({
+  query: $gql`
+        query FindAll {
+          findAll {
+            id
+            title
+            sub_title
+            title_detail
+            description_detail
+            status
+          }
+        }
+      `,
+  fetchPolicy: "network-only"
+});
+events.value = data.findAll || [] || event;
 
 </script>
 <template>
@@ -44,7 +62,8 @@ const event = listEvents.sort((a, b) => b.id - a.id)
             <a href="/" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Home</a>
             <a href="/about"
               class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Profile</a>
-            <a href="/services" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Services</a>
+            <a href="/services"
+              class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">Services</a>
             <a href="/events" class="font-medium rounded-lg bg-white/10 !py-3 !px-2 text-[#F15A22]">Event</a>
             <a href="/faqs" class="font-medium rounded-lg hover:bg-white/10 !py-3 !px-2 hover:text-[#F15A22]">FAQs</a>
           </div>
@@ -69,7 +88,7 @@ const event = listEvents.sort((a, b) => b.id - a.id)
       <!-- Event Grid -->
       <div class="lg:w-[50%] md:w-[60%] !mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px]">
 
-        <div class="!m-[8px] relative" v-for="event in listEvents" :key="event.id">
+        <div class="!m-[8px] relative" v-for="event in events" :key="event.id">
           <NuxtLink :to="`/events/${event.id}`">
             <div
               class="relative w-full h-[200px] sm:h-[180px] md:h-[200px] lg:h-[200px] overflow-hidden cursor-pointer rounded-xl hover:scale-105 hover:transition hover:duration-300 group hover:shadow-xl">

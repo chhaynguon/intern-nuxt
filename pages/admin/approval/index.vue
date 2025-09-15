@@ -7,10 +7,10 @@ import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import { ref } from "vue";
 import { Form } from "@primevue/forms";
-import { FormField } from '@primevue/forms';
-import { Textarea } from "primevue";
 import Tag from 'primevue/tag'
+import { LogarithmicScale } from "chart.js";
 
+const initialValues = ref({})
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const loading = ref(false); // optional, show loading state
 const events = ref([]);
@@ -87,20 +87,20 @@ onMounted(() => {
     fetchEvents();
 })
 
-const getStatusLabel = (approval_status) => {
-    switch (approval_status) {
-        case 'ACTIVE': return 'ACTIVE';
+const getStatusLabel = (status) => {
+    switch (status) {
+        case 'APPROVED': return 'APPROVED';
         case 'PENDING': return 'PENDING';
-        case 'DELETED': return 'DELETED';
+        case 'REJECTED': return 'REJECTED';
         default: return 'PENDING';
     }
 };
 
-const getStatusClass = (approval_status) => {
-    switch (approval_status) {
-        case 'ACTIVE': return 'status-active';
+const getStatusClass = (status) => {
+    switch (status) {
+        case 'APPROVED': return 'status-active';
         case 'PENDING': return 'status-pending';
-        case 'DELETED': return 'status-deleted';
+        case 'REJECTED': return 'status-deleted';
         default: return 'status-pending';
     }
 };
@@ -165,55 +165,110 @@ const refresh = async () => {
     }
 }
 
-openEvent.value = false;
 const closeDialog = () => {
-    // visible.value = false;
-    emit('closeEvent', false)
+    setTimeout(() => {
+        refresh()
+    }, 500);
+    openEvent.value = false
 };
 
 const viewEvent = async () => {
     openEvent.value = true
     try {
+        // start loading
+        // your async task here, e.g. fetching data
+        const { data } = await $apollo.query({
+            query: $gql`
+        query FindAll {
+          findAll {
+            id
+            title
+            sub_title
+            title_detail
+            description_detail
+            status
+          }
+        }
+      `,
+            fetchPolicy: "network-only"
+        });
+        events.value = data.findAll || [];
+        console.log(events.value)
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setTimeout(() => {
+            loading.value = false;
+        }, 500)
+    }
+}
+
+const approveEvent = async () => {
+    if (!selectedEvent.value) return
+    await updateEventStatus("ACTIVE")
+    toast.add({
+        severity: "success",
+        summary: "Approved Successfully",
+        detail: "The request has been approved.",
+        life: 2000,
+    });
+    setTimeout(() => {
+        refresh();
+    }, 500);
+}
+
+const rejectEvent = async () => {
+
+    if (!selectedEvent.value) return
+    await updateEventStatus("DELETED")
+    toast.add({
+        severity: "error",
+        summary: "Request Cancelled",
+        detail: "The request has been cancelled.",
+        life: 2000,
+    })
+    setTimeout(() => {
+        refresh();
+    }, 500);
+}
+
+const updateEventStatus = async (status) => {
+    try {
         const { data } = await $apollo.mutate({
             mutation: $gql`
-        mutation UpdateEvent($updateEventInput: UpdateEventInput!){
-        updateEvent(updateEventInput: $updateEventInput){
-        id
-        title
-        sub_title
-        title_detail
-        description_detail
-        status
+        mutation UpdateEvent($input: UpdateEventInput!) {
+          updateEvent(updateEventInput: $input) {
+            id
+            status
+          }
         }
-      }
-    `,
+      `,
             variables: {
-                updateEventInput: {
-                    ...values,
-                    id: events.value.id,
-                }
-            },
-            fetchPolicy: "network-only",
+                input: { id: selectedEvent.value.id, status }
+            }
         })
-        refresh()
-        visible.value = false;
-        toast.add({ severity: 'success', summary: 'Successful to edit event.', life: 2000 });
-        emit("updated", data.updateEvent);
-        closeDialog()
-    } catch (error) {
-        console.error("Failed to edit event:", error);
-        toast.add({ severity: 'error', summary: 'Failed to edit event', detail: error.message, life: 2000 });
+        // update UI, close dialog, toast, etc.
+        openEvent.value = false
+
+    } catch (err) {
+        console.error("Approval failed:", err)
+
     } finally {
-        loading.value = false;
+        setTimeout(() => {
+            loading.value = false;
+        }, 500)
     }
+}
+
+const viewDBClick = (event) => {
+    selectedEvent.value = event.data   // <- capture row data
+    openEvent.value = true
 }
 
 </script>
 <template>
-
-    <dbHeader />
-    <section class="relative flex justify-between w-full top-16" :class="{ 'bg-black/20': visible }">
-        <div class="fixed flex h-screen bg-white shadow-xl top-16">
+    <section class="relative flex justify-between w-full">
+        <div class="fixed flex h-screen bg-white shadow-xl !z-1102">
             <aside class="w-[100%] text-black flex flex-col">
                 <ul class="w-[135px] text-center">
                     <!-- home menu -->
@@ -327,7 +382,7 @@ const viewEvent = async () => {
                                         </svg>
                                     </button>
                                 </div>
-                                <button @click="openEvent = true"
+                                <button @click="viewEvent"
                                     class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !p-1.5 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
                                     <span class="pi pi pi-eye !pr-1"></span>View
                                 </button>
@@ -337,77 +392,94 @@ const viewEvent = async () => {
                                 </button>
                             </div>
                         </div>
-                        <Dialog v-model:visible="openEvent" class="w-[60%] dynamic-dialog" :dismissable-mask="false"
-                            :draggable="false" :closable="false" :resizable="false" position="top"
-                            :style="{ top: topPos + '50px' }">
+                        <Dialog v-model:visible="openEvent" modal :dismissable-mask="false" :draggable="false"
+                            :closable="false" :resizable="false" position="top" :style="{ top: topPos + '50px' }"
+                            pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden"
+                            pt:mask:class="!bg-black/50 !backdrop-blur-2xs" class="w-[70%] dynamic-dialog">
                             <template #header>
                                 <div class="flex items-center justify-between w-full">
-                                    <span class="font-bold">New Request</span>
-                                    <div>
-                                        <button type="submit" @click="$refs.eventForm.submit()"
-                                            class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
-                                            Add</button>
-                                        <button @click=" openEvent = false"
-                                            class=" cursor-pointer !p-2 !px-2.5 rounded-tr-md rounded-br-md text-sm text-center bg-gray-100 hover:bg-gray-200  hover:transition hover:duration-300 transition duration-300">
-                                            Close</button>
+                                    <span class="font-bold">Approval Detail</span>
+                                    <div class="flex">
+                                        <button type="submit" @click="approveEvent()"
+                                            class="flex text-black shadow-sm cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm border-gray-300 hover:bg-gray-100 transition hover:duration-200">
+                                            <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
+                                                <path
+                                                    d="M21 41C10.0667 41 1 31.9333 1 21C1 10.0667 10.0667 1 21 1C31.9333 1 41 10.0667 41 21C41 31.9333 31.9333 41 21 41ZM21 3.39998C11.4 3.39998 3.40007 11.1333 3.40007 21C3.40007 30.8667 11.1333 38.5999 21 38.5999C30.8667 38.5999 38.6 30.8667 38.6 21C38.6 11.1333 30.6 3.39998 21 3.39998Z"
+                                                    fill="#00CA42" stroke="#00CA42" stroke-width="0.5"
+                                                    stroke-miterlimit="10"></path>
+                                                <path
+                                                    d="M18.0669 28.2001L11.6669 21.8001L14.0669 19.1334L18.3335 23.1334L28.4669 14.6L30.8669 17.2667L18.0669 28.2001Z"
+                                                    fill="#00CA42"></path>
+                                            </svg>
+                                            <p class="!pl-1">Approve</p>
+                                        </button>
+                                        <button type="submit" @click="rejectEvent()"
+                                            class="flex justify-between text-black shadow-sm cursor-pointer !p-2 text-sm text-center border-gray-300 hover:bg-gray-100 transition hover:duration-200">
+                                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
+                                                <path
+                                                    d="M20 2.40002C29.8 2.40002 37.6 10.2 37.6 20C37.6 29.8 29.8 37.6 20 37.6C10.2 37.6 2.39996 29.8 2.39996 20C2.39996 10.2 10.2 2.40002 20 2.40002ZM20 0C9 0 0 9 0 20C0 31 9 40 20 40C31 40 40 31 40 20C40 9 31 0 20 0Z"
+                                                    fill="#E93841"></path>
+                                                <path d="M14 14L26 26" stroke="#E93841" stroke-width="4"
+                                                    stroke-miterlimit="10"></path>
+                                                <path d="M14 26L26 14" stroke="#E93841" stroke-width="4"
+                                                    stroke-miterlimit="10"></path>
+                                            </svg>
+                                            <p class="!pl-1">Reject</p>
+                                        </button>
+                                        <button @click="closeDialog()"
+                                            class=" cursor-pointer !p-2 rounded-tr-md rounded-br-md text-sm text-center items-center border-gray-300 shadow-sm hover:bg-gray-100 transition hover:duration-200">
+                                            <span class="pi pi pi-fw pi-times"></span>Close
+                                        </button>
                                     </div>
                                 </div>
                             </template>
                             <div class="w-full bg-[#fafafa] rounded-md">
-                                <Form ref="eventForm" :initial-values="initialValues" :resolver="resolver"
-                                    @submit="onFormSubmit" class="grid grid-cols-2 gap-4 sm:w-full !p-3"
-                                    v-for="event in events" :key="event.id">
-                                    <FormField v-slot="$field" name="title" initialValue="" class="grid-cols-1 gap-1 ">
-                                        <div class="flex justify-between items-center">
-                                            <label for="title"
-                                                class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs">Title</label>
-                                            <p class="text-start">{{ event.title }}</p>
-                                        </div>
-                                        <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
-                                            class="w-[75%] place-self-end ">{{
-                                                $field.error?.message }}</Message>
-                                    </FormField>
+                                <div class="grid grid-cols-2 gap-4 sm:w-full !p-3">
 
-                                    <FormField v-slot="$field" name="sub_title" initialValue=""
-                                        class="grid-cols-1 gap-1 ">
-                                        <div class="flex justify-between items-center">
-                                            <label for="sub_title" class="w-[25%] text-end !pr-2 text-xs">
+                                    <div name="id" initialValue="" class="grid-cols-1 gap-1 hidden">
+                                        <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.id }}</p>
+                                    </div>
+
+                                    <div name="title" initialValue="" class="grid-cols-1 gap-1 ">
+                                        <div class="flex items-center">
+                                            <label for="title"
+                                                class="p-inputtext-sm w-[25%] text-end !pr-2 text-xs text-gray-500 font-semibold">Title</label>
+                                            <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.title }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div name="sub_title" initialValue="" class="grid-cols-1 gap-1 ">
+                                        <div class="flex items-center">
+                                            <label for="sub_title"
+                                                class="w-[25%] text-end !pr-2 text-xs text-gray-500 font-semibold">
                                                 Secondary Title
                                             </label>
-                                            <InputText id="sub_title" type="text"
-                                                class="w-[75%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300" />
+                                            <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.sub_title
+                                                }}</p>
                                         </div>
-                                        <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
-                                            class="w-[75%] place-self-end">{{
-                                                $field.error?.message }}</Message>
-                                    </FormField>
+                                    </div>
 
-                                    <FormField v-slot="$field" name="title_detail" initialValue=""
-                                        class="grid-cols-1 gap-1">
-                                        <div class="flex justify-between items-center w-full"><label for="title_detail"
-                                                class="w-[25%] text-end !pr-2 text-xs">Title Detail</label>
-                                            <InputText id="title_detail" type="text"
-                                                class="w-[75%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300" />
+                                    <div name="title_detail" initialValue="" class="grid-cols-1 gap-1">
+                                        <div class="flex items-center"><label for="title_detail"
+                                                class="w-[25%] text-end !pr-2 text-xs text-gray-500 font-semibold">Title
+                                                Detail</label>
+                                            <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.title }}
+                                            </p>
                                         </div>
-                                        <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
-                                            class="w-[75%] place-self-end">{{
-                                                $field.error?.message }}</Message>
-                                    </FormField>
+                                    </div>
 
-                                    <FormField v-slot="$field" name="description_detail" initialValue=""
-                                        class="col-span-2">
-                                        <div class="flex justify-between">
+                                    <div name="description_detail" initialValue="" class="col-span-2">
+                                        <div class="flex">
                                             <label for="description_detail"
-                                                class="w-[12.5%] text-end !pr-2 text-xs">Description</label>
-                                            <Textarea id="description_detail" type="text"
-                                                class="w-[90%] border border-gray-300 rounded-lg focus:!ring-1 focus:!ring-gray-300 focus:!border-gray-300 hover:!border-gray-300"
-                                                rows="6" cols="50" maxlength="5000" />
+                                                class="w-[12.5%] text-end !pr-2 text-xs text-gray-500 font-semibold">Description</label>
+                                            <p class="text-xs max-w-[20rem] font-semibold">{{
+                                                selectedEvent?.description_detail }}</p>
                                         </div>
-                                        <Message v-if="$field?.invalid" severity="error" size="small" variant="simple"
-                                            class="w-[88%] place-self-end">{{
-                                                $field.error?.message }}</Message>
-                                    </FormField>
-                                </Form>
+                                    </div>
+                                </div>
                             </div>
                         </Dialog>
 
@@ -416,13 +488,13 @@ const viewEvent = async () => {
                                 :totalRecords="events.length" :loading="loading"
                                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                                data-p-highlight="true" @row-dblclick="viewEvent(events.id)" dataKey="id"
-                                selectionMode="single" v-model:selection="selectedEvent">
+                                data-p-highlight="true" @row-dblclick="viewDBClick" Key="id" selectionMode="single"
+                                v-model:selection="selectedEvent">
 
                                 <Column field="status" header="">
                                     <template #body="slotProps">
-                                        <img :src="getStatusImg(slotProps.data.approval_status)"
-                                            :alt="slotProps.data.approval_status" class="max-w-6 max-h-6" />
+                                        <img :src="getStatusImg(slotProps.data.status)" :alt="slotProps.data.status"
+                                            class="max-w-6 max-h-6" />
                                     </template>
                                 </Column>
 
@@ -444,8 +516,8 @@ const viewEvent = async () => {
 
                                 <Column field="status" header="Status">
                                     <template #body="slotProps">
-                                        <Tag :value="getStatusLabel(slotProps.data.approval_status)"
-                                            :class="getStatusClass(slotProps.data.approval_status)" />
+                                        <Tag :value="getStatusLabel(slotProps.data.status)"
+                                            :class="getStatusClass(slotProps.data.status)" />
                                     </template>
                                 </Column>
 
@@ -477,7 +549,7 @@ const viewEvent = async () => {
                                     </template>
                                 </Column>
 
-                                <Column field="ction" header="Action">
+                                <Column field="action" header="Action">
                                     <template #body="slotProps">
                                         <Tag :value="getActionLabel(slotProps.data.approval_action)"
                                             :class="getActionClass(slotProps.data.approval_action)" />

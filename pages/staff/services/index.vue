@@ -1,5 +1,4 @@
 <template>
-  <dbHeader />
   <section class="w-full flex justify-between relative top-22.5">
     <dbMenu />
     <div class="w-full h-screen !pl-[135px] bg-[#f9fafb]">
