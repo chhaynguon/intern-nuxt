@@ -6,9 +6,7 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import { ref } from "vue";
-import { Form } from "@primevue/forms";
 import Tag from 'primevue/tag'
-import { LogarithmicScale } from "chart.js";
 
 const initialValues = ref({})
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
@@ -110,7 +108,7 @@ const getActionLabel = (approval_action) => {
         case 'CREATE': return 'CREATE';
         case 'UPDATE': return 'UPDATE';
         case 'UPLOAD': return 'UPLOAD';
-        default: return 'UPLOAD';
+        default: return 'CREATE';
     }
 };
 
@@ -466,7 +464,8 @@ const viewDBClick = (event) => {
                                         <div class="flex items-center"><label for="title_detail"
                                                 class="w-[25%] text-end !pr-2 text-xs text-gray-500 font-semibold">Title
                                                 Detail</label>
-                                            <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.title }}
+                                            <p class="text-xs max-w-[15rem] font-semibold">{{
+                                                selectedEvent?.title_detail }}
                                             </p>
                                         </div>
                                     </div>

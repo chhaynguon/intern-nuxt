@@ -13,6 +13,8 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from "primevue";
 import Tag from 'primevue/tag'
+import { navigateTo } from "#imports";
+import { useRoute, useRouter } from 'vue-router'
 
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const loading = ref(false); // optional, show loading state
@@ -22,6 +24,8 @@ const confirm = useConfirm();
 const openEvent = ref(false)
 const selectedEvent = ref(null)
 const topPos = ref(150);
+const router = useRouter();
+const route = useRoute();
 
 const confirmLogout = () => {
   confirm.require({
@@ -61,9 +65,17 @@ const confirmLogout = () => {
 
 const editDialog = (event) => {
   openEvent.value = true
-  selectedEvent.value = { ...event }
-  // router.replace({ path: `/admin/events/${id}` })
+  selectedEvent.value = event
+  router.push({
+    query: { ...route.query, eventId: event.id }
+  })
 }
+
+const closeDialog = () => {
+  visible.value = false;
+  const { eventId, ...rest } = route.query
+  router.push({ query: rest })
+};
 const fetchEvents = async () => {
   loading.value = true;
   try {
@@ -99,7 +111,7 @@ const getStatusLabel = (status) => {
     case 'ACTIVE': return 'ACTIVE';
     case 'PENDING': return 'PENDING';
     case 'DELETED': return 'DELETED';
-    default: return 'ACTIVE';
+    default: return 'PENDING';
   }
 };
 
@@ -108,7 +120,7 @@ const getStatusClass = (status) => {
     case 'ACTIVE': return 'status-active';
     case 'PENDING': return 'status-pending';
     case 'DELETED': return 'status-deleted';
-    default: return 'status-active';
+    default: return 'status-pending';
   }
 };
 
@@ -223,7 +235,7 @@ const removeEvent = async (id) => {
     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
   } catch (error) {
     console.error("Failed to mark event as deleted:", error);
-    toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
+    toast.add({ severity: 'error', summary: 'Failed to delete event.', life: 2000, closable: true });
   }
 }
 
@@ -259,16 +271,11 @@ const refresh = async () => {
   }
 }
 
-const closeDialog = () => {
-  // visible.value = false;
-  emit('closeEvent', false)
-};
-
 </script>
 <template>
   <dbHeader />
   <section class="relative flex justify-between w-full h-screen top-16">
-    <div class="fixed flex h-screen bg-white shadow-sm top-16 !z-1102">
+    <div class="fixed flex h-screen bg-white shadow-sm top-16 !z-1107">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center">
           <!-- home menu -->
@@ -399,9 +406,10 @@ const closeDialog = () => {
                 </button>
               </div>
             </div>
-            <Dialog v-model:visible="visible" class="w-[60%] dynamic-dialog " :dismissable-mask="false"
+            <Dialog v-model:visible="visible" class="w-[70%] dynamic-dialog " :dismissable-mask="false"
               :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + '50px' }"
-              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" pt:mask:class="!bg-black/50 !backdrop-blur-2xs">
+              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" 
+              pt:mask:class="!bg-black/50 !backdrop-blur-2xs">
               <template #header>
                 <div class="flex items-center justify-between w-full">
                   <span class="font-bold">New Event</span>
@@ -409,7 +417,7 @@ const closeDialog = () => {
                     <button type="submit" @click="$refs.eventForm.submit()"
                       class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center shadow-sm hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
                       Add</button>
-                    <button @click="closeDialog()"
+                    <button @click="closeDialog"
                       class="cursor-pointer !p-2 rounded-tr-md rounded-br-md text-sm text-center items-center shadow-sm hover:bg-gray-100 hover:transition hover:duration-300 transition duration-300">
                       Close
                     </button>
