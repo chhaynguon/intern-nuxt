@@ -134,9 +134,6 @@ const getStatusImg = (approval_status) => {
 const refresh = async () => {
     try {
         loading.value = true;
-
-        // start loading
-        // your async task here, e.g. fetching data
         const { data } = await $apollo.query({
             query: $gql`
         query FindAll {
@@ -155,7 +152,7 @@ const refresh = async () => {
         events.value = data.findAll || [];
         await fetchData();
     } catch (err) {
-        console.error(err);
+        console.error("Refresh failed", err);
     } finally {
         setTimeout(() => {
             loading.value = false;
@@ -456,7 +453,7 @@ const viewDBClick = (event) => {
                                                 Secondary Title
                                             </label>
                                             <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.sub_title
-                                                }}</p>
+                                            }}</p>
                                         </div>
                                     </div>
 
