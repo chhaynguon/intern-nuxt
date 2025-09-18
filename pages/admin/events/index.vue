@@ -83,14 +83,14 @@ const fetchEvents = async () => {
       query: $gql`
         query FindAll {
           findAll {
-            id
-            title
-            sub_title
-            title_detail
-            description_detail
-            status
-          }
+          id
+          title
+          sub_title
+          title_detail
+          description_detail
+          status
         }
+      }
       `,
       fetchPolicy: "network-only"
     });
@@ -98,7 +98,7 @@ const fetchEvents = async () => {
   } catch (error) {
     console.error("Failed to fetch events:", error);
   } finally {
-    loading.value = false;
+    setTimeout(() => (loading.value = false), 200)
   }
 };
 
@@ -111,7 +111,7 @@ const getStatusLabel = (status) => {
     case 'ACTIVE': return 'ACTIVE';
     case 'PENDING': return 'PENDING';
     case 'DELETED': return 'DELETED';
-    default: return 'PENDING';
+    default: return 'ACTIVE';
   }
 };
 
@@ -120,7 +120,7 @@ const getStatusClass = (status) => {
     case 'ACTIVE': return 'status-active';
     case 'PENDING': return 'status-pending';
     case 'DELETED': return 'status-deleted';
-    default: return 'status-pending';
+    default: return 'status-active';
   }
 };
 
@@ -180,37 +180,6 @@ const onFormSubmit = async ({ values, valid }) => {
     await createEvents(values);
   }
 };
-
-//remove both front-end and back-end
-// const removeEvent = async (id) => {
-//   loading.value = false;
-//   try {
-//     const { data } = await $apollo.mutate({
-//       mutation: $gql`
-//       mutation RemoveEvent($id: Int!) {
-//       removeEvent(id: $id) {
-//         id
-//         title
-//         sub_title
-//         title_detail
-//         description_detail
-//         status
-//     }
-// }
-//       `,
-//       variables: { id: Number(id) },
-//       fetchPolicy: "network-only",
-//     })
-//     setTimeout(() => {
-//       window.location.reload();
-//     }, 2000);
-//     visible.value = false;
-//     toast.add({ severity: 'success', summary: 'Successful to Delete event.', life: 2000, closable: true });
-//   } catch (error) {
-//     console.error("Failed to mark event as deleted:", error);
-//     toast.add({ severity: 'error', summary: 'Failed to Delete event.', life: 2000, closable: true });
-//   }
-// }
 
 const removeEvent = async (id) => {
   loading.value = false;
@@ -408,8 +377,7 @@ const refresh = async () => {
             </div>
             <Dialog v-model:visible="visible" class="w-[70%] dynamic-dialog " :dismissable-mask="false"
               :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + '50px' }"
-              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" 
-              pt:mask:class="!bg-black/50 !backdrop-blur-2xs">
+              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" pt:mask:class="!bg-black/50 !backdrop-blur-2xs">
               <template #header>
                 <div class="flex items-center justify-between w-full">
                   <span class="font-bold">New Event</span>

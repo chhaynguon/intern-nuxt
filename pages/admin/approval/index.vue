@@ -1,23 +1,21 @@
-<script setup>
+<script setup >
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Tag from 'primevue/tag'
+import { gql } from "@apollo/client/core";
 
 const initialValues = ref({})
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
-const loading = ref(false); // optional, show loading state
 const events = ref([]);
 const toast = useToast();
 const confirm = useConfirm();
 const openEvent = ref(false)
-const selectedEvent = ref(null)
 const topPos = ref(150);
-const visible = ref(false);
 
 const confirmLogout = () => {
     confirm.require({
@@ -134,23 +132,32 @@ const getStatusImg = (approval_status) => {
 const refresh = async () => {
     try {
         loading.value = true;
-        const { data } = await $apollo.query({
+         const { data } = await $apollo.query({
             query: $gql`
-        query FindAll {
-          findAll {
-            id
-            title
-            sub_title
-            title_detail
-            description_detail
-            status
-          }
-        }
-      `,
+             query Approval ($id: Int!) {
+                approval(id: $id) {
+                    id
+                  key
+                  value
+                  original
+                  new
+                  module
+                  approval_status
+                  status
+                  created_by
+                  created_at
+                  approved_by
+                  approved_at
+                  rejected_by
+                  rejected_at
+                  approval_action
+                }
+            }
+            `,
+            variables: { id },
             fetchPolicy: "network-only"
         });
-        events.value = data.findAll || [];
-        await fetchData();
+        await data.approval ?? null;
     } catch (err) {
         console.error("Refresh failed", err);
     } finally {
@@ -259,6 +266,92 @@ const viewDBClick = (event) => {
     selectedEvent.value = event.data   // <- capture row data
     openEvent.value = true
 }
+
+// const fetchApprovals = async () => {
+//     try {
+//         loading.value = true;
+//         const { data } = await $apollo.query({
+//             query: $gql`
+//              query Approval ($id: Int!) {
+//                 approval(id: $id) {
+//                     id
+//                   key
+//                   value
+//                   original
+//                   new
+//                   module
+//                   approval_status
+//                   status
+//                   created_by
+//                   created_at
+//                   approved_by
+//                   approved_at
+//                   rejected_by
+//                   rejected_at
+//                   approval_action
+//                 }
+//             }
+//             `,
+//             variables: { id },
+//             fetchPolicy: "network-only",
+//         });
+//         return data.approval ?? null;
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+// onMounted(() => {
+//     fetchApprovals()
+// })
+
+const approvals = ref<any[]>([]);
+const loading = ref(false);
+const selectedEvent = ref(null);
+
+const { client: apollo } = useApolloClient();
+
+const fetchApprovals = async (id) => {
+  loading.value = true;
+  try {
+    const { data } = await apollo.query({
+      query: $gql`
+        query Approval($id: Int) {
+          approval(id: $id) {
+            id
+            key
+            value
+            original
+            new
+            module
+            approval_status
+            status
+            created_by
+            created_at
+            approved_by
+            approved_at
+            rejected_by
+            rejected_at
+            approval_action
+          }
+        }
+      `,
+      variables: { id },
+      fetchPolicy: 'network-only',
+    });
+
+    // Ensure it's always an array
+    approvals.valueOf = data.approval ? [data.approval] : [];
+  } catch (err) {
+    console.error('Failed to fetch approvals:', err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchApprovals(); // load all approvals on mount
+});
 
 </script>
 <template>
@@ -480,14 +573,14 @@ const viewDBClick = (event) => {
                         </Dialog>
 
                         <div class="card shadow-sm">
-                            <DataTable :value="events" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
-                                :totalRecords="events.length" :loading="loading"
+                            <DataTable :value="approvals" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
+                                :totalRecords="approvals.length" :loading="loading"
                                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
                                 data-p-highlight="true" @row-dblclick="viewDBClick" Key="id" selectionMode="single"
                                 v-model:selection="selectedEvent">
 
-                                <Column field="status" header="">
+                                <Column field="approval_status" header="">
                                     <template #body="slotProps">
                                         <img :src="getStatusImg(slotProps.data.status)" :alt="slotProps.data.status"
                                             class="max-w-6 max-h-6" />
@@ -553,7 +646,7 @@ const viewDBClick = (event) => {
                                 </Column>
 
                                 <template #footer>
-                                    In total there are {{ events ? events.length : 0 }} events.
+                                    In total there are {{ approvals ? approvals.length : 0 }} requests.
                                 </template>
                             </DataTable>
                         </div>
