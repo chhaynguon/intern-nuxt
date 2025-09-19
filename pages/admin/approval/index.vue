@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Toast from "primevue/toast";
@@ -7,9 +7,11 @@ import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
 import { ref, onMounted } from "vue";
 import Tag from 'primevue/tag'
-import { gql } from "@apollo/client/core";
 
-const initialValues = ref({})
+const approvals = ref([]);
+const loading = ref(false);
+const selectedEvent = ref(null);
+const selectedApproval = ref(null);
 const { $apollo, $gql } = useNuxtApp(); // reactive variable for DataTable
 const events = ref([]);
 const toast = useToast();
@@ -129,13 +131,13 @@ const getStatusImg = (approval_status) => {
     }
 };
 
-const refresh = async () => {
+const fetchApprovals = async () => {
     try {
         loading.value = true;
-         const { data } = await $apollo.query({
+        const { data } = await $apollo.query({
             query: $gql`
-             query Approval ($id: Int!) {
-                approval(id: $id) {
+             query FindAll {
+                findAllApprovals {
                     id
                   key
                   value
@@ -154,18 +156,22 @@ const refresh = async () => {
                 }
             }
             `,
-            variables: { id },
             fetchPolicy: "network-only"
         });
-        await data.approval ?? null;
+        approvals.value = data.findAllApprovals || [];
+        console.log(approvals.value)
     } catch (err) {
-        console.error("Refresh failed", err);
+        console.error(err);
     } finally {
         setTimeout(() => {
             loading.value = false;
         }, 500)
     }
 }
+
+onMounted(() => {
+    fetchApprovals();
+})
 
 const closeDialog = () => {
     setTimeout(() => {
@@ -174,11 +180,47 @@ const closeDialog = () => {
     openEvent.value = false
 };
 
+const refresh = async () => {
+    try {
+        loading.value = true;
+        const { data } = await $apollo.query({
+            query: $gql`
+             query FindAll {
+                findAllApprovals {
+                    id
+                  key
+                  value
+                  original
+                  new
+                  module
+                  approval_status
+                  status
+                  created_by
+                  created_at
+                  approved_by
+                  approved_at
+                  rejected_by
+                  rejected_at
+                  approval_action
+                }
+            }
+            `,
+            fetchPolicy: "network-only"
+        });
+        approvals.value = data.findAllApprovals || [];
+        console.log(approvals.value)
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setTimeout(() => {
+            loading.value = false;
+        }, 500)
+    }
+}
+
 const viewEvent = async () => {
     openEvent.value = true
     try {
-        // start loading
-        // your async task here, e.g. fetching data
         const { data } = await $apollo.query({
             query: $gql`
         query FindAll {
@@ -205,19 +247,37 @@ const viewEvent = async () => {
     }
 }
 
-const approveEvent = async () => {
-    if (!selectedEvent.value) return
-    await updateEventStatus("ACTIVE")
-    toast.add({
-        severity: "success",
-        summary: "Approved Successfully",
-        detail: "The request has been approved.",
-        life: 2000,
-    });
-    setTimeout(() => {
-        refresh();
-    }, 500);
-}
+// Approve selected approval
+const approveApproval = async (id) => {
+    try {
+        loading.value = true;
+        const { data } = await $apollo.mutate({
+            mutation: $gql`
+        mutation ApproveApproval($id: Int!) {
+          approve(id: $id) {
+            id
+            status
+            approval_status
+            approved_at
+            approved_by
+          }
+        }
+      `,
+            variables: { id },
+        });
+
+        const index = approvals.value.findIndex(a => a.id === id);
+        if (index !== -1) {
+            approvals.value[index] = { ...approvals.value[index], ...data.approve };
+        }
+        openEvent.value = false
+        console.log('Approval approved:', data.approve);
+    } catch (err) {
+        console.error('Failed to approve:', err);
+    } finally {
+        loading.value = false;
+    }
+};
 
 const rejectEvent = async () => {
 
@@ -267,91 +327,6 @@ const viewDBClick = (event) => {
     openEvent.value = true
 }
 
-// const fetchApprovals = async () => {
-//     try {
-//         loading.value = true;
-//         const { data } = await $apollo.query({
-//             query: $gql`
-//              query Approval ($id: Int!) {
-//                 approval(id: $id) {
-//                     id
-//                   key
-//                   value
-//                   original
-//                   new
-//                   module
-//                   approval_status
-//                   status
-//                   created_by
-//                   created_at
-//                   approved_by
-//                   approved_at
-//                   rejected_by
-//                   rejected_at
-//                   approval_action
-//                 }
-//             }
-//             `,
-//             variables: { id },
-//             fetchPolicy: "network-only",
-//         });
-//         return data.approval ?? null;
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-// onMounted(() => {
-//     fetchApprovals()
-// })
-
-const approvals = ref<any[]>([]);
-const loading = ref(false);
-const selectedEvent = ref(null);
-
-const { client: apollo } = useApolloClient();
-
-const fetchApprovals = async (id) => {
-  loading.value = true;
-  try {
-    const { data } = await apollo.query({
-      query: $gql`
-        query Approval($id: Int) {
-          approval(id: $id) {
-            id
-            key
-            value
-            original
-            new
-            module
-            approval_status
-            status
-            created_by
-            created_at
-            approved_by
-            approved_at
-            rejected_by
-            rejected_at
-            approval_action
-          }
-        }
-      `,
-      variables: { id },
-      fetchPolicy: 'network-only',
-    });
-
-    // Ensure it's always an array
-    approvals.valueOf = data.approval ? [data.approval] : [];
-  } catch (err) {
-    console.error('Failed to fetch approvals:', err);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  fetchApprovals(); // load all approvals on mount
-});
 
 </script>
 <template>
@@ -471,11 +446,11 @@ onMounted(() => {
                                     </button>
                                 </div>
                                 <button @click="viewEvent"
-                                    class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !p-1.5 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
+                                    class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
                                     <span class="pi pi pi-eye !pr-1"></span>View
                                 </button>
                                 <button @click="refresh"
-                                    class="transition items-center hover:transition hover:duration-300 scale-100 flex !p-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-tr-md rounded-br-md">
+                                    class="transition items-center hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200 rounded-tr-md rounded-br-md">
                                     <span class="pi pi pi-fw pi-refresh "></span>Refresh
                                 </button>
                             </div>
@@ -488,8 +463,8 @@ onMounted(() => {
                                 <div class="flex items-center justify-between w-full">
                                     <span class="font-bold">Approval Detail</span>
                                     <div class="flex">
-                                        <button type="submit" @click="approveEvent()"
-                                            class="flex text-black shadow-sm cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm border-gray-300 hover:bg-gray-100 transition hover:duration-200">
+                                        <button type="submit" @click="approveApproval()"
+                                            class="flex text-black shadow-sm cursor-pointer !px-2 !py-1 rounded-tl-md rounded-bl-md text-sm border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
                                                 <path
@@ -503,7 +478,7 @@ onMounted(() => {
                                             <p class="!pl-1">Approve</p>
                                         </button>
                                         <button type="submit" @click="rejectEvent()"
-                                            class="flex justify-between text-black shadow-sm cursor-pointer !p-2 text-sm text-center border-gray-300 hover:bg-gray-100 transition hover:duration-200">
+                                            class="flex justify-between text-black shadow-sm cursor-pointer !px-2 !py-1 text-sm text-center border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
                                                 <path
@@ -517,7 +492,7 @@ onMounted(() => {
                                             <p class="!pl-1">Reject</p>
                                         </button>
                                         <button @click="closeDialog()"
-                                            class=" cursor-pointer !p-2 rounded-tr-md rounded-br-md text-sm text-center items-center border-gray-300 shadow-sm hover:bg-gray-100 transition hover:duration-200">
+                                            class=" cursor-pointer !px-2 !py-1 rounded-tr-md rounded-br-md text-sm text-center items-center border-gray-300 shadow-sm hover:bg-gray-100 transition hover:duration-200">
                                             <span class="pi pi pi-fw pi-times"></span>Close
                                         </button>
                                     </div>
@@ -546,7 +521,7 @@ onMounted(() => {
                                                 Secondary Title
                                             </label>
                                             <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.sub_title
-                                            }}</p>
+                                                }}</p>
                                         </div>
                                     </div>
 
@@ -572,13 +547,13 @@ onMounted(() => {
                             </div>
                         </Dialog>
 
-                        <div class="card shadow-sm">
+                        <div class="card shadow-sm text-sm">
                             <DataTable :value="approvals" tableStyle="min-width: 50rem" :paginator="true" :rows="10"
                                 :totalRecords="approvals.length" :loading="loading"
                                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                                data-p-highlight="true" @row-dblclick="viewDBClick" Key="id" selectionMode="single"
-                                v-model:selection="selectedEvent">
+                                data-p-highlight="true" @row-dblclick="viewDBClick" dataKey="id" selectionMode="single"
+                                v-model:selection="selectedApproval">
 
                                 <Column field="approval_status" header="">
                                     <template #body="slotProps">
@@ -593,13 +568,20 @@ onMounted(() => {
                                     </template>
                                 </Column>
 
-                                <Column field="subject" header="Subject">
+                                <Column field="module" header="Subject">
                                     <template #body="slotProps">
                                         <a class="text-blue-500 font-semibold"
                                             :href="`/admin/events/detail-${slotProps.data.id}`">
-                                            <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.subject }}
+                                            <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.module }}
                                             </p>
                                         </a>
+                                    </template>
+                                </Column>
+
+                                <Column field="approval_status" header="Approval status">
+                                    <template #body="slotProps">
+                                        <Tag :value="getStatusLabel(slotProps.data.approval_status)"
+                                            :class="getStatusClass(slotProps.data.approval_status)" />
                                     </template>
                                 </Column>
 
@@ -612,7 +594,7 @@ onMounted(() => {
 
                                 <Column field="created_at" header="Created date">
                                     <template #body="slotProps">
-                                        <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.created_at }}
+                                        <p class="truncate inline-block max-w-[10rem]">{{ slotProps.data.created_at }}
                                         </p>
                                     </template>
                                 </Column>
@@ -626,12 +608,12 @@ onMounted(() => {
 
                                 <Column field="approved_at" header="Approved date">
                                     <template #body="slotProps">
-                                        <p class="truncate inline-block max-w-[12rem]">
+                                        <p class="truncate inline-block max-w-[10rem]">
                                             {{ slotProps.data.approved_at }}</p>
                                     </template>
                                 </Column>
 
-                                <Column field="approved_at" header="Approved by">
+                                <Column field="approved_by" header="Approved by">
                                     <template #body="slotProps">
                                         <p class="truncate inline-block max-w-[12rem]">
                                             {{ slotProps.data.approved_by }}</p>

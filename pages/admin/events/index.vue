@@ -77,28 +77,31 @@ const closeDialog = () => {
   router.push({ query: rest })
 };
 const fetchEvents = async () => {
-  loading.value = true;
+  openEvent.value = true
   try {
     const { data } = await $apollo.query({
       query: $gql`
-        query FindAll {
-          findAll {
-          id
-          title
-          sub_title
-          title_detail
-          description_detail
-          status
-        }
+      query Events{
+      Events {
+        id
+        title
+        sub_title
+        title_detail
+        description_detail
+        status
       }
+    }
       `,
       fetchPolicy: "network-only"
     });
-    events.value = data.findAll || [];
+    events.value = data.findAllEvents || [];
+    console.log(events.value)
   } catch (error) {
-    console.error("Failed to fetch events:", error);
+    console.error(error);
   } finally {
-    setTimeout(() => (loading.value = false), 200)
+    setTimeout(() => {
+      loading.value = false;
+    }, 500)
   }
 };
 
@@ -111,7 +114,7 @@ const getStatusLabel = (status) => {
     case 'ACTIVE': return 'ACTIVE';
     case 'PENDING': return 'PENDING';
     case 'DELETED': return 'DELETED';
-    default: return 'ACTIVE';
+    default: return 'PENDING';
   }
 };
 
@@ -120,7 +123,7 @@ const getStatusClass = (status) => {
     case 'ACTIVE': return 'status-active';
     case 'PENDING': return 'status-pending';
     case 'DELETED': return 'status-deleted';
-    default: return 'status-active';
+    default: return 'status-pending';
   }
 };
 
@@ -211,25 +214,22 @@ const removeEvent = async (id) => {
 const refresh = async () => {
   try {
     loading.value = true;
-
-    // start loading
-    // your async task here, e.g. fetching data
     const { data } = await $apollo.query({
       query: $gql`
-        query FindAll {
-          findAll {
-            id
-            title
-            sub_title
-            title_detail
-            description_detail
-            status
-          }
-        }
+        query Events{
+      Events {
+        id
+        title
+        sub_title
+        title_detail
+        description_detail
+        status
+      }
+    }
       `,
       fetchPolicy: "network-only"
     });
-    events.value = data.findAll || [];
+    events.value = data.findAllEvents || [];
     await fetchData();
   } catch (err) {
     console.error(err);
@@ -242,9 +242,8 @@ const refresh = async () => {
 
 </script>
 <template>
-  <dbHeader />
-  <section class="relative flex justify-between w-full h-screen top-16">
-    <div class="fixed flex h-screen bg-white shadow-sm top-16 !z-1107">
+  <section class="relative flex justify-between w-full h-screen">
+    <div class="fixed flex h-screen bg-white shadow-sm !z-1107">
       <aside class="w-[100%] text-black flex flex-col">
         <ul class="w-[135px] text-center">
           <!-- home menu -->
