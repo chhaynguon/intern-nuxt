@@ -5,10 +5,9 @@ import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import ConfirmDialog from "primevue/confirmdialog";
-import { ref } from "vue";
+import { ref, defineEmits, reactive } from "vue";
 import { Form } from "@primevue/forms";
 import { FormField } from '@primevue/forms';
-import { reactive } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from "primevue";
@@ -63,19 +62,23 @@ const confirmLogout = () => {
   });
 };
 
+const emit = defineEmits(['closeDialog']);
+
 const editDialog = (event) => {
-  openEvent.value = true
-  selectedEvent.value = event
-  router.push({
-    query: { ...route.query, eventId: event.id }
-  })
-}
+  if (!event?.id) return;   // prevent null id error
+  selectedEvent.value = event;
+  openEvent.value = true;   // opens the edit dialog
+  router.push({ query: { ...route.query, eventId: event.id } });
+};
 
 const closeDialog = () => {
   visible.value = false;
-  const { eventId, ...rest } = route.query
-  router.push({ query: rest })
+  selectedEvent.value = null;   // important!
+  const { eventId, ...rest } = route.query;
+  router.push({ query: rest });
 };
+
+
 const fetchEvents = async () => {
   openEvent.value = true
   try {
@@ -88,14 +91,12 @@ const fetchEvents = async () => {
         sub_title
         title_detail
         description_detail
-        status
       }
     }
       `,
       fetchPolicy: "network-only"
     });
-    events.value = data.findAllEvents || [];
-    console.log(events.value)
+    events.value = data.Events || [];
   } catch (error) {
     console.error(error);
   } finally {
@@ -146,7 +147,7 @@ const resolver = zodResolver(
 
 const visible = ref(false);
 const createEvents = async (values) => {
-
+  visible.value = false;
   try {
     const { data } = await $apollo.mutate({
       mutation: $gql`
@@ -168,7 +169,7 @@ const createEvents = async (values) => {
       refresh();
     }, 1000);
     console.log("Created: ", data.createEvent)
-    visible.value = false;
+    emit('closeEvent', false);
     toast.add({ severity: 'success', summary: 'Successful to create event.', life: 2000 });
   } catch (error) {
     console.error("Failed to create events:", error);
@@ -197,7 +198,7 @@ const removeEvent = async (id) => {
     }
 }
       `,
-      variables: { id, status: 'DELETED' },
+      variables: { id, status: DELETED },
       fetchPolicy: "network-only",
     })
     setTimeout(() => {
@@ -229,8 +230,8 @@ const refresh = async () => {
       `,
       fetchPolicy: "network-only"
     });
-    events.value = data.findAllEvents || [];
-    await fetchData();
+    events.value = data.Events || [];
+    await fetchEvents();
   } catch (err) {
     console.error(err);
   } finally {
@@ -314,6 +315,8 @@ const refresh = async () => {
           <!-- Logout menu -->
           <li
             class="transition hover:bg-red-400 hover:transition hover:duration-300 hover:text-white hover:border-red-400">
+            <confirmDialog />
+            <Toast />
             <button @click="confirmLogout"
               class="w-[135px] h-[44px] flex place-self-center !pl-[10px] items-center group">
               <svg
@@ -324,8 +327,6 @@ const refresh = async () => {
                   d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
               </svg>
               <span class="!pl-[8px] cursor-pointer">Logout</span>
-              <confirmDialog />
-              <Toast />
             </button>
           </li>
         </ul>
@@ -376,7 +377,7 @@ const refresh = async () => {
             </div>
             <Dialog v-model:visible="visible" class="w-[70%] dynamic-dialog " :dismissable-mask="false"
               :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + '50px' }"
-              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" pt:mask:class="!bg-black/50 !backdrop-blur-2xs">
+              pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" pt:mask:class="!bg-black/10 !backdrop-blur-2xs">
               <template #header>
                 <div class="flex items-center justify-between w-full">
                   <span class="font-bold">New Event</span>
@@ -465,13 +466,6 @@ const refresh = async () => {
                 @row-dblclick="editDialog($event.data)" dataKey="id" selectionMode="single"
                 v-model:selection="selectedEvent">
 
-                <!-- <Column header="Thumbnail">
-                  <template #body="slotProps">
-                    <img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" alt="Thumbnail"
-                      class="object-cover w-25 h-25 rounded-lg" />
-                  </template>
-                </Column> -->
-
                 <Column field="id" header="ID">
                   <template #body="slotProps">
                     <p class="truncate inline-block max-w-[12rem]">{{ slotProps.data.id }}</p>
@@ -504,18 +498,6 @@ const refresh = async () => {
                   </template>
                 </Column>
 
-                <!-- <Column field="images" header="Images">
-                  <template #body="slotProps">
-                    {{ slotProps.data.images }}
-                  </template>
-                </Column> -->
-
-                <!-- <Column field="cover" header="Cover">
-                  <template #body="slotProps">
-                    {{ slotProps.data.cover }}
-                  </template>
-                </Column> -->
-
                 <Column field="status" header="Status">
                   <template #body="slotProps">
                     <Tag :value="getStatusLabel(slotProps.data.status)"
@@ -523,11 +505,11 @@ const refresh = async () => {
                   </template>
                 </Column>
 
-                <Column field="Action" header="Action">
+                <Column field="action" header="Action">
                   <template #body="slotProps">
                     <div class="flex">
-                      <eventEdit :openEvent="openEvent" @updated="onUpdated" @closeEvent="(close) => openEvent = close"
-                        :event="selectedEvent" />
+                      <eventEdit v-if="selectedEvent" :openEvent="openEvent" @updated="onUpdated"
+                        @closeEvent="(close) => openEvent = close" :event="selectedEvent" />
 
                       <button type="button" @click="editDialog(slotProps.data)"
                         class="text-sm cursor-pointer !px-[5px]">

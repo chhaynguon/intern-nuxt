@@ -60,8 +60,8 @@ const fetchEvents = async () => {
     try {
         const { data } = await $apollo.query({
             query: $gql`
-        query FindAll {
-          findAll {
+        query Events {
+          Events {
             id
             title
             sub_title
@@ -73,7 +73,7 @@ const fetchEvents = async () => {
       `,
             fetchPolicy: "network-only"
         });
-        events.value = data.findAll || [];
+        events.value = data.Events || [];
     } catch (error) {
         console.error("Failed to fetch events:", error);
     } finally {
@@ -136,8 +136,8 @@ const fetchApprovals = async () => {
         loading.value = true;
         const { data } = await $apollo.query({
             query: $gql`
-             query FindAll {
-                findAllApprovals {
+             query Approvals {
+                Approvals {
                     id
                   key
                   value
@@ -158,7 +158,7 @@ const fetchApprovals = async () => {
             `,
             fetchPolicy: "network-only"
         });
-        approvals.value = data.findAllApprovals || [];
+        approvals.value = data.Approvals || [];
         console.log(approvals.value)
     } catch (err) {
         console.error(err);
@@ -175,7 +175,7 @@ onMounted(() => {
 
 const closeDialog = () => {
     setTimeout(() => {
-        refresh()
+        loading.value = false;
     }, 500);
     openEvent.value = false
 };
@@ -218,37 +218,18 @@ const refresh = async () => {
     }
 }
 
-const viewEvent = async () => {
-    openEvent.value = true
-    try {
-        const { data } = await $apollo.query({
-            query: $gql`
-        query FindAll {
-          findAll {
-            id
-            title
-            sub_title
-            title_detail
-            description_detail
-            status
-          }
-        }
-      `,
-            fetchPolicy: "network-only"
-        });
-        events.value = data.findAll || [];
-        console.log(events.value)
-    } catch (err) {
-        console.error(err);
-    } finally {
-        setTimeout(() => {
-            loading.value = false;
-        }, 500)
-    }
-}
-
 // Approve selected approval
 const approveApproval = async (id) => {
+    if (!id) {
+        toast.add({
+            severity: "warn",
+            summary: "No approval selected",
+            detail: "Please select an approval first.",
+            life: 2000,
+        });
+        return;
+    }
+
     try {
         loading.value = true;
         const { data } = await $apollo.mutate({
@@ -265,34 +246,73 @@ const approveApproval = async (id) => {
       `,
             variables: { id },
         });
-
+        // Update the approvals list
         const index = approvals.value.findIndex(a => a.id === id);
+        console.log(data.approve)
         if (index !== -1) {
-            approvals.value[index] = { ...approvals.value[index], ...data.approve };
+            approvals.value.slice(index, 1);
+            selectedApproval.value = null;
         }
-        openEvent.value = false
-        console.log('Approval approved:', data.approve);
+
+        toast.add({
+            severity: "success",
+            summary: "Approved",
+            detail: `Approval #${id} has been approved.`,
+            life: 2000,
+        });
+
+        openEvent.value = false;
     } catch (err) {
-        console.error('Failed to approve:', err);
+        console.error("Failed to approve:", err);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to approve the request.",
+            life: 2000,
+        });
     } finally {
         loading.value = false;
     }
 };
 
-const rejectEvent = async () => {
+// Reject selected approval
+const rejectApproval = async () => {
+    const id = selectedApproval.value?.id;
+    if (!id) {
+        toast.add({
+            severity: "warn",
+            summary: "No approval selected",
+            detail: "Please select an approval first.",
+            life: 2000,
+        });
+        return;
+    }
 
-    if (!selectedEvent.value) return
-    await updateEventStatus("DELETED")
-    toast.add({
-        severity: "error",
-        summary: "Request Cancelled",
-        detail: "The request has been cancelled.",
-        life: 2000,
-    })
-    setTimeout(() => {
-        refresh();
-    }, 500);
-}
+    try {
+        loading.value = true;
+        await updateEventStatus("DELETED"); // keep your existing mutation logic
+        toast.add({
+            severity: "error",
+            summary: "Rejected",
+            detail: `Approval #${id} has been rejected.`,
+            life: 2000,
+        });
+
+        refresh(); // optional: refresh list
+    } catch (err) {
+        console.error("Failed to reject:", err);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to reject the request.",
+            life: 2000,
+        });
+    } finally {
+        loading.value = false;
+        openEvent.value = false;
+    }
+};
+
 
 const updateEventStatus = async (status) => {
     try {
@@ -322,10 +342,16 @@ const updateEventStatus = async (status) => {
     }
 }
 
-const viewDBClick = (event) => {
-    selectedEvent.value = event.data   // <- capture row data
-    openEvent.value = true
+const viewClick = (event) => {
+    // Check if event.data.new is a string or object
+    if (typeof event.data.new === 'string') {
+        selectedEvent.value = JSON.parse(event.data.new);
+    } else {
+        selectedEvent.value = event.data.new;
+    }
+    openEvent.value = true;
 }
+
 
 
 </script>
@@ -445,7 +471,7 @@ const viewDBClick = (event) => {
                                         </svg>
                                     </button>
                                 </div>
-                                <button @click="viewEvent"
+                                <button @click="viewClick({ data: selectedApproval })"
                                     class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
                                     <span class="pi pi pi-eye !pr-1"></span>View
                                 </button>
@@ -463,7 +489,7 @@ const viewDBClick = (event) => {
                                 <div class="flex items-center justify-between w-full">
                                     <span class="font-bold">Approval Detail</span>
                                     <div class="flex">
-                                        <button type="submit" @click="approveApproval()"
+                                        <button type="submit" @click="approveApproval(selectedApproval.value.id)"
                                             class="flex text-black shadow-sm cursor-pointer !px-2 !py-1 rounded-tl-md rounded-bl-md text-sm border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
@@ -477,7 +503,7 @@ const viewDBClick = (event) => {
                                             </svg>
                                             <p class="!pl-1">Approve</p>
                                         </button>
-                                        <button type="submit" @click="rejectEvent()"
+                                        <button type="submit" @click="rejectApproval(selectedApproval.value.id)"
                                             class="flex justify-between text-black shadow-sm cursor-pointer !px-2 !py-1 text-sm text-center border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
@@ -521,7 +547,7 @@ const viewDBClick = (event) => {
                                                 Secondary Title
                                             </label>
                                             <p class="text-xs max-w-[15rem] font-semibold">{{ selectedEvent?.sub_title
-                                                }}</p>
+                                            }}</p>
                                         </div>
                                     </div>
 
@@ -552,7 +578,7 @@ const viewDBClick = (event) => {
                                 :totalRecords="approvals.length" :loading="loading"
                                 template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                                data-p-highlight="true" @row-dblclick="viewDBClick" dataKey="id" selectionMode="single"
+                                data-p-highlight="true" @row-dblclick="viewClick" dataKey="id" selectionMode="single"
                                 v-model:selection="selectedApproval">
 
                                 <Column field="approval_status" header="">

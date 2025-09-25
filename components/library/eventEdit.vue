@@ -15,7 +15,7 @@ const eventFormRef = ref(null);
 const props = defineProps({
     event: {
         type: Object,
-        default: {}
+        default: null
     },
     openEvent: {
         type: Boolean,
@@ -32,6 +32,10 @@ const closeDialog = () => {
     emit('closeEvent', false)
 };
 const updateEvent = async (values) => {
+    if (!props.event?.id) {
+        toast.add({ severity: 'error', summary: 'No event selected', life: 2000 });
+        return;
+    }
     loading.value = true
     try {
         const { data } = await $apollo.mutate({
@@ -50,7 +54,7 @@ const updateEvent = async (values) => {
             variables: {
                 updateEventInput: {
                     ...values,
-                    id: props.event.id,
+                    id: props.event?.id,
                 }
             },
             fetchPolicy: "network-only",
@@ -84,19 +88,13 @@ const initForm = {
 
 const formData = ref({ ...initForm });
 
-// Watch for changes in props.event
+// Watch props.event and reset form
 watch(
-    () => props.event?.id,
-    (newId) => {
-        if (newId) {
-            formData.value.id = props.event.id || ''
-            formData.value.title = props.event.title || ''
-            formData.value.sub_title = props.event.sub_title || ''
-            formData.value.title_detail = props.event.title_detail || ''
-            formData.value.description_detail = props.event.description_detail || ''
-            formData.value.status = props.event.status || 'PENDING'
-
-            eventFormRef.value?.reset();
+    () => props.event,
+    (newEvent) => {
+        if (newEvent?.id) {
+            formData.value = { ...newEvent };
+            eventFormRef.value?.reset({ ...formData.value });
         } else {
             formData.value = { ...initForm };
             eventFormRef.value?.reset();
@@ -106,12 +104,12 @@ watch(
 );
 
 const refresh = async () => {
-  try {
-      loading.value = true; 
-    const { data } = await $apollo.query({
-      query: $gql`
-        query FindAll {
-          findAll {
+    try {
+        loading.value = true;
+        const { data } = await $apollo.query({
+            query: $gql`
+        query Events {
+          Events {
             id
             title
             sub_title
@@ -121,27 +119,28 @@ const refresh = async () => {
           }
         }
       `,
-      fetchPolicy: "network-only"
-    });
-    events.value = data.findAll || [];
-    await fetchData();
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setTimeout(() => {
-        loading.value = false;
-    }, 500)
-  }
+            fetchPolicy: "network-only"
+        });
+        events.value = data.Events || [];
+        await fetchData();
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setTimeout(() => {
+            loading.value = false;
+        }, 500)
+    }
 }
 
 
 </script>
 <template>
-    <Dialog v-model:visible="props.openEvent" class="w-[60%] dynamic-dialog" :dismissable-mask="false"
-        :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + 50 + 'px' }">
+    <Dialog v-model:visible="props.openEvent" class="w-[70%] dynamic-dialog" :dismissable-mask="false"
+        :draggable="false" :closable="false" :resizable="false" position="top" :style="{ top: topPos + 50 + 'px' }"
+        pt:root:class="!rounded-2xl !shadow-2xs !overflow-hidden" pt:mask:class="!bg-black/10 !backdrop-blur-2xs">
         <template #header>
             <div class="flex items-center justify-between w-full">
-                <span class="font-bold">Update Event: {{ props.event.id }}</span>
+                <span class="font-bold">Update Event: {{ props.event?.id || '' }}</span>
                 <div>
                     <button type="submit" @click="$refs.eventForm.submit()"
                         class=" bg-blue-300 text-white cursor-pointer !p-2 rounded-tl-md rounded-bl-md text-sm text-center hover:text-white hover:bg-blue-400 hover:transition hover:duration-300 transition duration-300">
@@ -153,7 +152,7 @@ const refresh = async () => {
             </div>
         </template>
         <div class="w-full bg-[#fafafa] rounded-md">
-            <Form ref="eventForm" :initial-values="formData" @submit="onFormSubmit"
+            <Form ref="eventFormRef" @submit="onFormSubmit" :initial-values="formData"
                 class="grid grid-cols-2 gap-4 sm:w-full !p-3 position">
                 <FormField v-slot="$field" name="id" class="absolute">
                     <InputText type="hidden" v-model="$field.value" />
@@ -205,6 +204,7 @@ const refresh = async () => {
                             $field.error?.message }}</Message>
                 </FormField>
             </Form>
+
         </div>
     </Dialog>
 </template>
