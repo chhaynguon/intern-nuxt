@@ -361,7 +361,7 @@ const refresh = async () => {
                       d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>New
                 </button>
-                <button @click="openEvent = true"
+                <button @click="openEvent = true" :disabled="!selectedEvent"
                   class="transition items-center hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 border-1 border-gray-200 cursor-pointer group shadow-sm hover:bg-gray-200">
                   <span class="pi pi pi-eye !mr-1.5"></span>View
                 </button>

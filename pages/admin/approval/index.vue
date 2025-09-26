@@ -218,41 +218,46 @@ const refresh = async () => {
     }
 }
 
-// Approve selected approval
-const approveApproval = async (id) => {
+
+const Approve = async () => {
+    const id = selectedApproval.value?.id;
     if (!id) {
-        toast.add({
-            severity: "warn",
-            summary: "No approval selected",
-            detail: "Please select an approval first.",
-            life: 2000,
-        });
+        toast.add({ severity: "warn", summary: "No approval selected", detail: "Select an approval.", life: 2000 });
         return;
     }
 
     try {
         loading.value = true;
+
         const { data } = await $apollo.mutate({
             mutation: $gql`
-        mutation ApproveApproval($id: Int!) {
-          approve(id: $id) {
-            id
-            status
-            approval_status
-            approved_at
-            approved_by
-          }
-        }
-      `,
+                mutation Approve($id: Int!) {
+                    approve(id: $id) {
+                        id
+                        approval_status
+                        approved_at
+                        approved_by
+                        module
+                        value
+                        new
+                    }
+                }
+            `,
             variables: { id },
         });
-        // Update the approvals list
+
+        const approved = data.approve;
+
+        // Remove from approvals table
         const index = approvals.value.findIndex(a => a.id === id);
-        console.log(data.approve)
-        if (index !== -1) {
-            approvals.value.slice(index, 1);
-            selectedApproval.value = null;
+        if (index !== -1) approvals.value.splice(index, 1);
+
+        // If it's an event, push to events table
+        if (approved.module?.toLowerCase() === "event") {
+            events.value = [approved.new, ...events.value];
         }
+
+        selectedApproval.value = null;
 
         toast.add({
             severity: "success",
@@ -261,24 +266,62 @@ const approveApproval = async (id) => {
             life: 2000,
         });
 
-        openEvent.value = false;
+        await fetchApprovals(); // refresh approvals
+        await fetchEvents();    // refresh events
+
     } catch (err) {
         console.error("Failed to approve:", err);
-        toast.add({
-            severity: "error",
-            summary: "Error",
-            detail: "Failed to approve the request.",
-            life: 2000,
-        });
+        toast.add({ severity: "error", summary: "Error", detail: "Failed to approve the request.", life: 2000 });
     } finally {
         loading.value = false;
+        openEvent.value = false;
     }
 };
 
+
+
 // Reject selected approval
-const rejectApproval = async () => {
-    const id = selectedApproval.value?.id;
-    if (!id) {
+// const Reject = async () => {
+//     const id = selectedApproval.value?.id;
+//     if (!id) {
+//         toast.add({
+//             severity: "warn",
+//             summary: "No approval selected",
+//             detail: "Please select an approval first.",
+//             life: 2000,
+//         });
+//         return;
+//     }
+
+//     try {
+//         loading.value = true;
+//         await updateEventStatus("DELETED"); // keep your existing mutation logic
+//         toast.add({
+//             severity: "error",
+//             summary: "Rejected",
+//             detail: `Approval #${id} has been rejected.`,
+//             life: 2000,
+//         });
+
+//         loading.value = true;
+//     } catch (err) {
+//         console.error("Failed to reject:", err);
+//         toast.add({
+//             severity: "error",
+//             summary: "Error",
+//             detail: "Failed to reject the request.",
+//             life: 2000,
+//         });
+//     } finally {
+//         loading.value = false;
+//         openEvent.value = false;
+//     }
+// };
+
+
+const Reject = async () => {
+    const approval = selectedApproval.value;
+    if (!approval) {
         toast.add({
             severity: "warn",
             summary: "No approval selected",
@@ -290,26 +333,43 @@ const rejectApproval = async () => {
 
     try {
         loading.value = true;
-        await updateEventStatus("DELETED"); // keep your existing mutation logic
+        await updateEventStatus("DELETED");
+        await $apollo.mutate({
+            mutation: $gql`
+                mutation Reject($id: Int!) {
+                    reject(id: $id) {
+                        id
+                        approval_status
+                        rejected_at
+                        rejected_by
+                    }
+                }
+            `,
+            variables: { id: approval.id },
+        });
+
+        // Remove from approvals table
+        approvals.value = approvals.value.filter(a => a.id !== approval.id);
+
         toast.add({
-            severity: "error",
+            severity: "warn",
             summary: "Rejected",
-            detail: `Approval #${id} has been rejected.`,
+            detail: `Approval #${approval.id} has been rejected.`,
             life: 2000,
         });
 
-        refresh(); // optional: refresh list
     } catch (err) {
         console.error("Failed to reject:", err);
         toast.add({
             severity: "error",
             summary: "Error",
-            detail: "Failed to reject the request.",
+            detail: "Failed to reject request.",
             life: 2000,
         });
     } finally {
         loading.value = false;
         openEvent.value = false;
+        selectedApproval.value = null;
     }
 };
 
@@ -343,14 +403,36 @@ const updateEventStatus = async (status) => {
 }
 
 const viewClick = (event) => {
-    // Check if event.data.new is a string or object
-    if (typeof event.data.new === 'string') {
-        selectedEvent.value = JSON.parse(event.data.new);
-    } else {
-        selectedEvent.value = event.data.new;
+    const approval = event.data;
+    if (!approval) {
+        toast.add({
+            severity: "warn",
+            summary: "No approval selected",
+            detail: "Please select an approval first.",
+            life: 2000,
+        });
+        return;
     }
-    openEvent.value = true;
-}
+
+    try {
+        if (typeof approval.new === 'string') {
+            selectedEvent.value = JSON.parse(approval.new);
+        } else {
+            selectedEvent.value = approval.new;
+        }
+        selectedApproval.value = approval;
+        openEvent.value = true;
+    } catch (err) {
+        console.error("Failed to parse approval data:", err);
+        toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to open approval details.",
+            life: 2000,
+        });
+    }
+};
+
 
 
 
@@ -471,7 +553,7 @@ const viewClick = (event) => {
                                         </svg>
                                     </button>
                                 </div>
-                                <button @click="viewClick({ data: selectedApproval })"
+                                <button @click="viewClick({ data: selectedApproval })" :disabled="!selectedApproval"
                                     class="bg-[#60a5fa] items-center text-white transition hover:transition hover:duration-300 scale-100 flex !px-2 !py-1 !ml-2 cursor-pointer group shadow-sm hover:bg-blue-500 rounded-tl-md rounded-bl-md">
                                     <span class="pi pi pi-eye !pr-1"></span>View
                                 </button>
@@ -489,7 +571,7 @@ const viewClick = (event) => {
                                 <div class="flex items-center justify-between w-full">
                                     <span class="font-bold">Approval Detail</span>
                                     <div class="flex">
-                                        <button type="submit" @click="approveApproval(selectedApproval.value.id)"
+                                        <button type="submit" @click="Approve"
                                             class="flex text-black shadow-sm cursor-pointer !px-2 !py-1 rounded-tl-md rounded-bl-md text-sm border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="42" height="42" viewBox="0 0 42 42" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
@@ -503,7 +585,7 @@ const viewClick = (event) => {
                                             </svg>
                                             <p class="!pl-1">Approve</p>
                                         </button>
-                                        <button type="submit" @click="rejectApproval(selectedApproval.value.id)"
+                                        <button type="submit" @click="Reject"
                                             class="flex justify-between text-black shadow-sm cursor-pointer !px-2 !py-1 text-sm text-center border-gray-300 hover:bg-gray-100 transition hover:duration-200">
                                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg" class="p-menuitem-icon h-5 w-5">
